@@ -1,0 +1,95 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum QuoteStatus {
+  PENDING
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id           String   @id @default(uuid())
+  slug         String   @unique
+  title        String
+  description  String
+  content      String   // Detailed description (markdown supported)
+  category     String   // Cloud, Software, Cybersecurity, IT Consulting
+  benefits     String[] // List of benefits
+  technologies String[] // Technology names/icons
+  faqs         Json     // Accordion list of FAQ items: [{question, answer}]
+  imageUrl     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Product {
+  id              String   @id @default(uuid())
+  slug            String   @unique
+  title           String
+  description     String
+  features        String[] // Checklist of features
+  specifications  Json     // Key-value pairs for technical specs table
+  priceBasic      Float
+  pricePro        Float
+  priceEnterprise Float
+  images          String[] // List of image URLs
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Quote {
+  id                 String      @id @default(uuid())
+  projectTypes       String[]    // Selected project types (Software, Cloud, etc.)
+  budgetRange        String
+  timeline           String
+  projectDescription String
+  attachmentUrl      String?     // For uploaded SRS/Briefs
+  clientName         String
+  clientEmail        String
+  clientPhone        String
+  companyName        String?
+  status             QuoteStatus @default(PENDING)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  clientName  String
+  designation String
+  company     String
+  rating      Int      // 1-5 stars
+  title       String?
+  reviewText  String
+  logoUrl     String?
+  imageUrl    String?
+  isApproved  Boolean  @default(false) // Admin must approve before going live
+  createdAt   DateTime @default(now())
+}
+
+model Subscription {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
