@@ -167,54 +167,14 @@ export default function Header() {
               </AnimatePresence>
             </div>
 
-            {/* Products Dropdown */}
-            <div className="relative">
-              <button
-                onMouseEnter={() => setProductsDropdownOpen(true)}
-                onMouseLeave={() => setProductsDropdownOpen(false)}
-                onClick={() => setProductsDropdownOpen(!productsDropdownOpen)}
-                className="flex items-center gap-1 text-sm font-medium text-slate-900 dark:text-slate-300 hover:text-blue-500 transition-colors cursor-pointer py-2"
-              >
-                Products <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${productsDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              <AnimatePresence>
-                {productsDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    onMouseEnter={() => setProductsDropdownOpen(true)}
-                    onMouseLeave={() => setProductsDropdownOpen(false)}
-                    className="absolute left-0 mt-1 w-64 rounded-2xl glass-card p-2 shadow-xl border border-slate-200/80 dark:border-slate-800/80"
-                  >
-                    <div className="grid gap-1">
-                      <Link
-                        href="/products"
-                        className="p-3 rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 transition-colors block"
-                      >
-                        <div className="text-sm font-semibold text-indigo-500">All Products →</div>
-                        <div className="text-[10px] text-slate-500">Browse our full product catalog</div>
-                      </Link>
-                      <Link
-                        href="/products/servixo-erp"
-                        className="p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors block"
-                      >
-                        <div className="text-sm font-semibold">Servixo CoreERP</div>
-                        <div className="text-[10px] text-slate-500">Enterprise resource & inventory management</div>
-                      </Link>
-                      <Link
-                        href="/products/guardx-security"
-                        className="p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors block"
-                      >
-                        <div className="text-sm font-semibold">GuardX Cyber Sentinel</div>
-                        <div className="text-[10px] text-slate-500">Real-time endpoint antivirus agent</div>
-                      </Link>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            <Link
+              href="/products"
+              className={`text-sm font-medium hover:text-blue-500 transition-colors ${
+                pathname === '/products' || pathname.startsWith('/products/') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-slate-300'
+              }`}
+            >
+              Products
+            </Link>
 
             <Link
               href="/reviews"
@@ -315,21 +275,12 @@ export default function Header() {
                 </Link>
               </div>
 
-              <div className="border-t border-slate-200/30 dark:border-slate-800/30 my-2 pt-2">
-                <span className="block px-3 text-xs font-bold uppercase tracking-wider text-slate-400">Products</span>
-                <Link
-                  href="/products/servixo-erp"
-                  className="block px-6 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 text-sm"
-                >
-                  Servixo CoreERP
-                </Link>
-                <Link
-                  href="/products/guardx-security"
-                  className="block px-6 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 text-sm"
-                >
-                  GuardX Sentinel
-                </Link>
-              </div>
+              <Link
+                href="/products"
+                className="block px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 text-base font-semibold"
+              >
+                Products
+              </Link>
 
               <Link
                 href="/reviews"
