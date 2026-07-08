@@ -37,8 +37,13 @@ async function buildClient(): Promise<PrismaClientType> {
 
   const { PrismaClient } = await import('@prisma/client');
   const { PrismaPg } = await import('@prisma/adapter-pg');
+  const { Pool } = await import('pg');
 
-  const adapter = new PrismaPg({ connectionString: url });
+  const pool = new Pool({
+    connectionString: url,
+    ssl: { rejectUnauthorized: false },
+  });
+  const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter } as any);
 }
 
@@ -63,7 +68,14 @@ function getPrisma(): PrismaClientType {
     const { PrismaClient } = require('@prisma/client');
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { PrismaPg } = require('@prisma/adapter-pg');
-    const adapter = new PrismaPg({ connectionString: url });
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { Pool } = require('pg');
+
+    const pool = new Pool({
+      connectionString: url,
+      ssl: { rejectUnauthorized: false },
+    });
+    const adapter = new PrismaPg(pool);
     _prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
     if (process.env.NODE_ENV !== 'production') {
       globalForPrisma.prisma = _prisma;
