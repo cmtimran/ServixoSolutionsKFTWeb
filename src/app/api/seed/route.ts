@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { MOCK_SERVICES } from '@/lib/mockData';
 
 export async function GET() {
   try {
@@ -18,35 +19,22 @@ export async function GET() {
     });
 
     // 2. Services
-    const service1 = await prisma.service.upsert({
-      where: { slug: 'cloud-migration' },
-      update: {},
-      create: {
-        title: 'Cloud Migration',
-        slug: 'cloud-migration',
-        description: 'Seamless migration of your infrastructure to AWS, Azure, or GCP.',
-        content: 'Our cloud migration services ensure zero downtime and maximum security...',
-        category: 'Cloud',
-        benefits: ['Zero Downtime', 'Cost Optimization', 'High Availability'],
-        technologies: ['AWS', 'Docker', 'Kubernetes'],
-        faqs: [{ question: 'How long does it take?', answer: 'Usually 2-4 weeks depending on scale.' }]
-      }
-    });
-
-    const service2 = await prisma.service.upsert({
-      where: { slug: 'custom-software' },
-      update: {},
-      create: {
-        title: 'Custom Software Development',
-        slug: 'custom-software',
-        description: 'Bespoke web and mobile applications tailored to your business needs.',
-        content: 'We build scalable and robust applications using modern tech stacks...',
-        category: 'Software',
-        benefits: ['Scalable Architecture', 'Agile Delivery', 'Post-Launch Support'],
-        technologies: ['React', 'Node.js', 'PostgreSQL'],
-        faqs: [{ question: 'Do you offer support?', answer: 'Yes, we provide 6 months of free post-launch support.' }]
-      }
-    });
+    for (const service of MOCK_SERVICES) {
+      await prisma.service.upsert({
+        where: { slug: service.slug },
+        update: {},
+        create: {
+          title: service.title,
+          slug: service.slug,
+          description: service.description,
+          content: service.content,
+          category: service.category,
+          benefits: service.benefits,
+          technologies: service.technologies,
+          faqs: service.faqs
+        }
+      });
+    }
 
     // 3. Products
     const product1 = await prisma.product.upsert({
