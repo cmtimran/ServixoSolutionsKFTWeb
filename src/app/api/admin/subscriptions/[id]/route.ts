@@ -3,27 +3,19 @@ import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
 import type { NextRequest } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const token = request.cookies.get('auth_token')?.value;
     if (!token || !(await verifyToken(token))) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
-      orderBy: { createdAt: 'desc' }
-    });
+    await prisma.subscription.delete({ where: { id } });
 
-    return NextResponse.json({ success: true, data: users });
+    return NextResponse.json({ success: true, message: 'Subscription deleted' });
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Error deleting subscription:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

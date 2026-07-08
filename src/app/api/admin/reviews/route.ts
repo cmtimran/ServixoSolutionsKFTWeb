@@ -10,20 +10,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
+    const reviews = await prisma.review.findMany({
       orderBy: { createdAt: 'desc' }
     });
 
-    return NextResponse.json({ success: true, data: users });
+    return NextResponse.json({ success: true, data: reviews });
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Error fetching reviews:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

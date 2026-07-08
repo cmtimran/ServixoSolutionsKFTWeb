@@ -1,45 +1,22 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { verifyToken } from '@/lib/auth';
+import type { NextRequest } from 'next/server';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    let quotesList: any[] = [];
-
-    if (process.env.DATABASE_URL) {
-      quotesList = await prisma.quote.findMany({
-        orderBy: { createdAt: 'desc' },
-      });
+    const token = request.cookies.get('auth_token')?.value;
+    if (!token || !(await verifyToken(token))) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    return NextResponse.json({ success: true, data: quotesList });
-  } catch (error: any) {
-    return NextResponse.json({ message: error.message || 'Internal Server Error' }, { status: 500 });
-  }
-}
-
-export async function PATCH(request: Request) {
-  try {
-    const { id, status } = await request.json();
-
-    if (!id || !status) {
-      return NextResponse.json({ message: 'Quote ID and status are required' }, { status: 400 });
-    }
-
-    let updatedQuote = null;
-
-    if (process.env.DATABASE_URL) {
-      updatedQuote = await prisma.quote.update({
-        where: { id },
-        data: { status },
-      });
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Quote status updated successfully',
-      data: updatedQuote || { id, status },
+    const quotes = await prisma.quote.findMany({
+      orderBy: { createdAt: 'desc' }
     });
-  } catch (error: any) {
-    return NextResponse.json({ message: error.message || 'Internal Server Error' }, { status: 500 });
+
+    return NextResponse.json({ success: true, data: quotes });
+  } catch (error) {
+    console.error('Error fetching quotes:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

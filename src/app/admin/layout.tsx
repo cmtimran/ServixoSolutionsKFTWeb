@@ -8,9 +8,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard },
+  { href: '/admin/quotes', label: 'Quotes', icon: FileText },
   { href: '/admin/services', label: 'Services', icon: Package },
   { href: '/admin/products', label: 'Products', icon: Package },
   { href: '/admin/queries', label: 'Contact Queries', icon: Mail },
+  { href: '/admin/subscriptions', label: 'Subscriptions', icon: Star },
+  { href: '/admin/reviews', label: 'Reviews', icon: Star },
   { href: '/admin/users', label: 'Users', icon: Star },
   { href: '/admin/settings', label: 'Settings', icon: FileText },
 ];
