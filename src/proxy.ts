@@ -5,23 +5,23 @@ import { verifyToken } from '@/lib/auth';
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect /admin routes (except /admin/login)
-  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
+  // Protect /admin routes
+  if (pathname.startsWith('/admin')) {
     const token = request.cookies.get('admin_token')?.value;
 
     if (!token) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
 
     const payload = await verifyToken(token);
     
     if (!payload || payload.role !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
   // If already logged in, redirect away from login page
-  if (pathname.startsWith('/admin/login')) {
+  if (pathname.startsWith('/login')) {
     const token = request.cookies.get('admin_token')?.value;
     if (token) {
       const payload = await verifyToken(token);
@@ -35,5 +35,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/login'],
 };

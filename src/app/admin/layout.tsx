@@ -19,13 +19,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
-  if (pathname === '/admin/login') {
+  if (pathname === '/login') {
     return <>{children}</>;
   }
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    window.location.href = '/admin/login';
+    window.location.href = '/login';
   };
 
   return (
