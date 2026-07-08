@@ -132,6 +132,32 @@ export const MOCK_SERVICES: ServiceMock[] = [
       }
     ],
     imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    id: 's5',
+    slug: 'environmental-services',
+    title: 'ETP, EIA & Waste Management',
+    description: 'Comprehensive Environmental Treatment Plant, Environmental Impact Assessment, and Waste Management solutions.',
+    content: 'We provide end-to-end environmental services. This includes designing and building Environmental Treatment Plants (ETP), conducting thorough Environmental Impact Assessments (EIA), and developing sustainable Waste Management systems tailored to your industry.',
+    category: 'Environmental',
+    benefits: [
+      'Regulatory compliance and certification',
+      'Sustainable and efficient waste reduction',
+      'Custom-designed treatment plants',
+      'Comprehensive environmental risk analysis'
+    ],
+    technologies: ['ETP Design', 'EIA Reporting', 'Recycling Systems', 'Pollution Control', 'Sustainability Auditing'],
+    faqs: [
+      {
+        question: 'Do you handle the complete EIA process?',
+        answer: 'Yes, we manage the entire Environmental Impact Assessment process from initial scoping to final reporting and approval.'
+      },
+      {
+        question: 'Can you upgrade existing treatment plants?',
+        answer: 'Absolutely. We evaluate existing ETPs and implement modern upgrades to improve efficiency and meet new regulations.'
+      }
+    ],
+    imageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=600&auto=format&fit=crop'
   }
 ];
 

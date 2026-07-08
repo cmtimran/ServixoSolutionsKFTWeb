@@ -3,11 +3,11 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
-import { CheckCircle2, ChevronDown, ArrowRight, Cloud, Code2, ShieldCheck, LineChart } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ArrowRight, Cloud, Code2, ShieldCheck, LineChart, Leaf } from 'lucide-react';
 import Link from 'next/link';
 
 const ICON_MAP: Record<string, React.ElementType> = {
-  Cloud: Cloud, Software: Code2, Cybersecurity: ShieldCheck, 'IT Consulting': LineChart,
+  Cloud: Cloud, Software: Code2, Cybersecurity: ShieldCheck, 'IT Consulting': LineChart, Environmental: Leaf,
 };
 
 const COLOR_MAP: Record<string, string> = {
@@ -15,6 +15,7 @@ const COLOR_MAP: Record<string, string> = {
   Software: 'text-indigo-500 bg-indigo-500/10',
   Cybersecurity: 'text-emerald-500 bg-emerald-500/10',
   'IT Consulting': 'text-amber-500 bg-amber-500/10',
+  Environmental: 'text-green-500 bg-green-500/10',
 };
 
 export const revalidate = 60;

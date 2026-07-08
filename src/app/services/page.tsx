@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import { prisma } from '@/lib/prisma';
-import { Cloud, Code2, ShieldCheck, LineChart, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Cloud, Code2, ShieldCheck, LineChart, ArrowRight, CheckCircle2, Leaf } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -16,6 +16,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Software: Code2,
   Cybersecurity: ShieldCheck,
   'IT Consulting': LineChart,
+  Environmental: Leaf,
 };
 
 const GRADIENT_MAP: Record<string, string> = {
@@ -23,6 +24,7 @@ const GRADIENT_MAP: Record<string, string> = {
   Software: 'from-indigo-500 to-purple-500',
   Cybersecurity: 'from-emerald-500 to-teal-500',
   'IT Consulting': 'from-amber-500 to-orange-500',
+  Environmental: 'from-green-500 to-emerald-600',
 };
 
 const COLOR_MAP: Record<string, string> = {
@@ -30,6 +32,7 @@ const COLOR_MAP: Record<string, string> = {
   Software: 'text-indigo-500 bg-indigo-500/10',
   Cybersecurity: 'text-emerald-500 bg-emerald-500/10',
   'IT Consulting': 'text-amber-500 bg-amber-500/10',
+  Environmental: 'text-green-500 bg-green-500/10',
 };
 
 export const revalidate = 60;
