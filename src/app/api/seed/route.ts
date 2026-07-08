@@ -28,6 +28,8 @@ export async function GET() {
         content: 'Our cloud migration services ensure zero downtime and maximum security...',
         category: 'Cloud',
         benefits: ['Zero Downtime', 'Cost Optimization', 'High Availability'],
+        technologies: ['AWS', 'Docker', 'Kubernetes'],
+        faqs: [{ question: 'How long does it take?', answer: 'Usually 2-4 weeks depending on scale.' }]
       }
     });
 
@@ -41,6 +43,8 @@ export async function GET() {
         content: 'We build scalable and robust applications using modern tech stacks...',
         category: 'Software',
         benefits: ['Scalable Architecture', 'Agile Delivery', 'Post-Launch Support'],
+        technologies: ['React', 'Node.js', 'PostgreSQL'],
+        faqs: [{ question: 'Do you offer support?', answer: 'Yes, we provide 6 months of free post-launch support.' }]
       }
     });
 
@@ -56,7 +60,8 @@ export async function GET() {
         pricePro: 999,
         priceEnterprise: 2499,
         features: ['Custom Domain', 'Landing Page', 'Contact Form', 'Analytics Dashboard'],
-        specifications: { 'Hosting': '1 Year Included', 'Support': 'Email Support' }
+        specifications: { 'Hosting': '1 Year Included', 'Support': 'Email Support' },
+        images: []
       }
     });
 
@@ -71,7 +76,8 @@ export async function GET() {
         pricePro: 9999,
         priceEnterprise: 19999,
         features: ['HR Module', 'Finance Tracking', 'Asset Management', 'Custom Reporting'],
-        specifications: { 'Deployment': 'Cloud or On-Premise', 'Support': '24/7 Dedicated' }
+        specifications: { 'Deployment': 'Cloud or On-Premise', 'Support': '24/7 Dedicated' },
+        images: []
       }
     });
 
