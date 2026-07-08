@@ -8,6 +8,7 @@ import { Product } from '@prisma/client';
 
 export default function ProductsList({ products }: { products: any[] }) {
   const [interval, setInterval] = useState<'month' | 'year'>('month');
+  const [selectedTiers, setSelectedTiers] = useState<Record<string, 'Basic' | 'Pro' | 'Enterprise'>>({});
 
   // Multiplier for pricing
   const multiplier = interval === 'year' ? 12 : 1;
@@ -96,26 +97,47 @@ export default function ProductsList({ products }: { products: any[] }) {
                     ))}
                   </div>
 
-                  {/* Pricing tiers mini */}
-                  <div className="grid grid-cols-3 gap-3 pt-2">
-                    {[
-                      { tier: 'Basic', price: product.priceBasic * multiplier },
-                      { tier: 'Pro', price: product.pricePro * multiplier },
-                      { tier: 'Enterprise', price: product.priceEnterprise * multiplier },
-                    ].map(({ tier, price }) => (
-                      <div key={tier} className="text-center p-3 rounded-xl" style={{ background: 'var(--bg-inset)', border: '1px solid var(--border)' }}>
-                        <div className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>{tier}</div>
-                        <div className="text-lg font-extrabold text-gradient">${price}</div>
-                        <div className="text-[9px]" style={{ color: 'var(--text-subtle)' }}>{intervalLabel}</div>
-                      </div>
-                    ))}
+                  {/* Pricing Tier Selector */}
+                  <div className="pt-2">
+                    <label className="text-sm font-semibold mb-2 block" style={{ color: 'var(--text-secondary)' }}>Select Plan Tier:</label>
+                    <div className="flex bg-[var(--bg-inset)] border border-[var(--border)] rounded-xl p-1 gap-1">
+                      {(['Basic', 'Pro', 'Enterprise'] as const).map((tier) => (
+                        <button
+                          key={tier}
+                          onClick={() => setSelectedTiers({ ...selectedTiers, [product.id]: tier })}
+                          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
+                            (selectedTiers[product.id] || 'Basic') === tier 
+                              ? 'bg-[var(--brand-indigo)] text-white shadow-md' 
+                              : 'text-[var(--text-secondary)] hover:text-white hover:bg-[var(--bg-surface)]'
+                          }`}
+                        >
+                          {tier}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex items-end gap-2">
+                      <span className="text-3xl font-extrabold text-gradient">
+                        ${((selectedTiers[product.id] || 'Basic') === 'Basic' ? product.priceBasic : 
+                           (selectedTiers[product.id] || 'Basic') === 'Pro' ? product.pricePro : 
+                           product.priceEnterprise) * multiplier}
+                      </span>
+                      <span className="text-sm pb-1" style={{ color: 'var(--text-subtle)' }}>{intervalLabel}</span>
+                    </div>
                   </div>
 
-                  <div className="flex gap-3 pt-2">
-                    <Link href={`/products/${product.slug}`} className="btn-primary">
-                      See Full Details <ArrowRight className="w-4 h-4" />
+                  <div className="flex gap-3 pt-4">
+                    <CheckoutButton
+                      productName={product.title}
+                      planTier={selectedTiers[product.id] || 'Basic'}
+                      price={((selectedTiers[product.id] || 'Basic') === 'Basic' ? product.priceBasic : 
+                           (selectedTiers[product.id] || 'Basic') === 'Pro' ? product.pricePro : 
+                           product.priceEnterprise) * multiplier}
+                      interval={interval}
+                      className="btn-primary"
+                    />
+                    <Link href={`/products/${product.slug}`} className="btn-outline">
+                      See Full Details <ArrowRight className="w-4 h-4 ml-1" />
                     </Link>
-                    <Link href="/quote" className="btn-outline">Request Demo</Link>
                   </div>
                 </div>
               </div>
