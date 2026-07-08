@@ -39,8 +39,10 @@ async function buildClient(): Promise<PrismaClientType> {
   const { PrismaPg } = await import('@prisma/adapter-pg');
   const { Pool } = await import('pg');
 
+  const connectionString = url.replace('?sslmode=require', '?').replace('&sslmode=require', '');
+
   const pool = new Pool({
-    connectionString: url,
+    connectionString,
     ssl: { rejectUnauthorized: false },
   });
   const adapter = new PrismaPg(pool);
@@ -71,8 +73,10 @@ function getPrisma(): PrismaClientType {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { Pool } = require('pg');
 
+    const connectionString = url.replace('?sslmode=require', '?').replace('&sslmode=require', '');
+
     const pool = new Pool({
-      connectionString: url,
+      connectionString,
       ssl: { rejectUnauthorized: false },
     });
     const adapter = new PrismaPg(pool);
