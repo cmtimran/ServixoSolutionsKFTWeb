@@ -1,25 +1,62 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { DollarSign, FileText, Mail, Users, ArrowUpRight, TrendingUp, CheckCircle, Clock } from 'lucide-react';
+import { DollarSign, FileText, Mail, Users, ArrowUpRight, TrendingUp, CheckCircle, Clock, Package, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+type DashboardData = {
+  counts: {
+    totalProducts: number;
+    totalServices: number;
+    totalUsers: number;
+    unreadQueries: number;
+  };
+  recentQueries: Array<{
+    id: string;
+    name: string;
+    subject: string | null;
+    isRead: boolean;
+    createdAt: string;
+  }>;
+};
 
 export default function AdminOverview() {
-  const cards = [
-    { label: 'Total Sales Revenue', value: '€184,500', change: '+14.2% from last month', icon: DollarSign, color: 'text-emerald-500 bg-emerald-500/10' },
-    { label: 'Total Quotes Submitted', value: '38', change: '+8 this week', icon: FileText, color: 'text-blue-500 bg-blue-500/10' },
-    { label: 'Newsletter Subscribers', value: '412', change: '+24 new entries', icon: Users, color: 'text-indigo-500 bg-indigo-500/10' },
-    { label: 'Active Service Inquiries', value: '14', change: '4 pending response', icon: Mail, color: 'text-amber-500 bg-amber-500/10' },
-  ];
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const recentQuotes = [
-    { id: 'q1', client: 'Máté Kovács', company: 'Budapest FinTech Labs', types: 'Cloud Migration', budget: '50k-100k', status: 'IN_REVIEW' },
-    { id: 'q2', client: 'Anna Szabó', company: 'GreenEnergy HU', types: 'Software, Cloud', budget: '15k-50k', status: 'APPROVED' },
-    { id: 'q3', client: 'David Miller', company: 'Nexus B2B', types: 'Cybersecurity', budget: '100k+', status: 'PENDING' },
+  useEffect(() => {
+    fetch('/api/admin/dashboard')
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          setData(json.data);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+      </div>
+    );
+  }
+
+  const cards = [
+    { label: 'Total Products', value: data?.counts.totalProducts || 0, change: 'Active in catalog', icon: Package, color: 'text-emerald-500 bg-emerald-500/10' },
+    { label: 'Total Services', value: data?.counts.totalServices || 0, change: 'Active in catalog', icon: FileText, color: 'text-blue-500 bg-blue-500/10' },
+    { label: 'Unread Queries', value: data?.counts.unreadQueries || 0, change: 'Awaiting response', icon: Mail, color: 'text-indigo-500 bg-indigo-500/10' },
+    { label: 'Total Users', value: data?.counts.totalUsers || 0, change: 'Admin accounts', icon: Users, color: 'text-amber-500 bg-amber-500/10' },
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header section */}
       <div>
         <h1 className="text-3xl font-extrabold text-white tracking-tight">Dashboard Overview</h1>
@@ -70,17 +107,14 @@ export default function AdminOverview() {
           <div className="h-[200px] flex items-end justify-between gap-3 pt-6 border-b border-slate-800">
             {[40, 55, 45, 60, 80, 95, 75, 90, 110, 130, 120, 145].map((val, idx) => (
               <div key={idx} className="flex-grow flex flex-col items-center gap-2 group">
-                {/* Bar */}
                 <div 
                   className="w-full bg-gradient-to-t from-blue-600 to-indigo-500 rounded-t-lg group-hover:from-blue-500 group-hover:to-indigo-400 transition-all duration-300 relative"
                   style={{ height: `${(val / 160) * 100}%` }}
                 >
-                  {/* Tooltip */}
                   <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 border text-white text-[10px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                     €{val}k
                   </span>
                 </div>
-                {/* Month label */}
                 <span className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
                   {['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'][idx]}
                 </span>
@@ -89,45 +123,44 @@ export default function AdminOverview() {
           </div>
         </div>
 
-        {/* Recent Quotes */}
+        {/* Recent Queries */}
         <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-bold text-white">Recent Quotes</h3>
-            <Link href="/admin/quotes" className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1">
+            <h3 className="text-lg font-bold text-white">Recent Queries</h3>
+            <Link href="/admin/queries" className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1">
               View All
               <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           <div className="divide-y divide-slate-800">
-            {recentQuotes.map((quote) => (
-              <div key={quote.id} className="py-4 first:pt-0 last:pb-0 flex justify-between items-start gap-4 text-xs">
-                <div className="space-y-1">
-                  <div className="font-bold text-slate-200">{quote.client}</div>
-                  <div className="text-[10px] text-slate-500">{quote.company}</div>
-                  <div className="inline-flex px-2 py-0.5 rounded bg-slate-900 border text-[9px] font-medium text-slate-400">
-                    {quote.types}
+            {data?.recentQueries && data.recentQueries.length > 0 ? (
+              data.recentQueries.map((query) => (
+                <div key={query.id} className="py-4 first:pt-0 last:pb-0 flex justify-between items-start gap-4 text-xs">
+                  <div className="space-y-1">
+                    <div className="font-bold text-slate-200">{query.name}</div>
+                    <div className="text-[10px] text-slate-500">{query.subject || 'No Subject'}</div>
+                  </div>
+
+                  <div className="text-right space-y-1 shrink-0">
+                    <div className="text-slate-400 text-[10px]">
+                      {new Date(query.createdAt).toLocaleDateString()}
+                    </div>
+                    {query.isRead ? (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-400">
+                        <CheckCircle className="w-3 h-3" /> Read
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-400">
+                        <Clock className="w-3 h-3" /> Unread
+                      </span>
+                    )}
                   </div>
                 </div>
-
-                <div className="text-right space-y-1 shrink-0">
-                  <div className="font-bold text-slate-300">Est. {quote.budget}</div>
-                  {quote.status === 'APPROVED' ? (
-                    <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-400">
-                      <CheckCircle className="w-3 h-3" /> Approved
-                    </span>
-                  ) : quote.status === 'IN_REVIEW' ? (
-                    <span className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-400">
-                      <Clock className="w-3 h-3" /> In Review
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-400">
-                      <Clock className="w-3 h-3" /> Pending
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="text-center py-8 text-slate-500 text-sm">No recent queries found.</div>
+            )}
           </div>
         </div>
       </div>
