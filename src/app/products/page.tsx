@@ -13,7 +13,12 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function ProductsPage() {
-  const products = await prisma.product.findMany();
+  const dbProducts = await prisma.product.findMany();
+  const products = dbProducts.map(p => ({
+    ...p,
+    createdAt: p.createdAt.toISOString(),
+    updatedAt: p.updatedAt.toISOString(),
+  }));
 
   return (
     <>

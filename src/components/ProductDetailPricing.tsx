@@ -5,7 +5,7 @@ import { CheckCircle2, Star } from 'lucide-react';
 import CheckoutButton from '@/components/CheckoutButton';
 import { Product } from '@prisma/client';
 
-export default function ProductDetailPricing({ product }: { product: Product }) {
+export default function ProductDetailPricing({ product }: { product: any }) {
   const [interval, setInterval] = useState<'month' | 'year'>('month');
   const multiplier = interval === 'year' ? 12 : 1;
   const intervalLabel = interval === 'year' ? '/year' : '/mo';

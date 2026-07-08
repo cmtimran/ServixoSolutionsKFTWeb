@@ -35,6 +35,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   // Prisma returns JSON as Prisma.JsonValue, so we need to assert or parse it
   const specifications = product.specifications as Record<string, string>;
 
+  const serializedProduct = {
+    ...product,
+    createdAt: product.createdAt.toISOString(),
+    updatedAt: product.updatedAt.toISOString(),
+  };
+
   return (
     <>
       <Header />
@@ -131,7 +137,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </section>
 
         {/* Interactive Pricing Section */}
-        <ProductDetailPricing product={product} />
+        <ProductDetailPricing product={serializedProduct} />
 
         {/* Other Products */}
         {otherProducts.length > 0 && (

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import CheckoutButton from '@/components/CheckoutButton';
 import { Product } from '@prisma/client';
 
-export default function ProductsList({ products }: { products: Product[] }) {
+export default function ProductsList({ products }: { products: any[] }) {
   const [interval, setInterval] = useState<'month' | 'year'>('month');
 
   // Multiplier for pricing
