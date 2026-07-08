@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
-import { MOCK_REVIEWS } from '@/lib/mockData';
+import { prisma } from '@/lib/prisma';
 import { Star, Quote, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,40 +11,15 @@ export const metadata: Metadata = {
   description: 'Read what enterprise clients say about working with Servixo Solutions KFT — authentic reviews from CTOs, Directors, and IT leaders across Europe.',
 };
 
-const EXTRA_REVIEWS = [
-  {
-    id: 'r4', clientName: 'Klaus Weber', designation: 'IT Director', company: 'AlphaLogistics GmbH',
-    rating: 5, title: 'Best Technical Partner We\'ve Had',
-    reviewText: 'Servixo delivered our warehouse management system 2 weeks ahead of schedule. Their code quality is exceptional and the documentation was thorough.',
-    logoUrl: 'ALG',
-  },
-  {
-    id: 'r5', clientName: 'Petra Novák', designation: 'Head of Digital', company: 'VivaHealth SK',
-    rating: 5, title: 'Transformed Our Patient Portal',
-    reviewText: 'The custom healthcare portal Servixo built handles 10,000+ concurrent users flawlessly. GDPR compliance was built in from day one — not an afterthought.',
-    logoUrl: 'VH',
-  },
-  {
-    id: 'r6', clientName: 'Marco Bianchi', designation: 'CTO', company: 'Finova Italia',
-    rating: 5, title: 'World-Class Security Audit',
-    reviewText: 'After the penetration test, Servixo patched 11 critical vulnerabilities and trained our development team on secure coding. Our auditors were impressed.',
-    logoUrl: 'FI',
-  },
-];
+export const revalidate = 60;
 
-const ALL_REVIEWS = [...MOCK_REVIEWS, ...EXTRA_REVIEWS];
+export default async function ReviewsPage() {
+  const ALL_REVIEWS = await prisma.review.findMany({
+    where: { isApproved: true },
+    orderBy: { createdAt: 'desc' }
+  });
 
-const GRADIENT_MAP: Record<string, string> = {
-  r1: 'from-blue-600 to-indigo-600',
-  r2: 'from-emerald-600 to-teal-600',
-  r3: 'from-purple-600 to-pink-600',
-  r4: 'from-orange-600 to-amber-600',
-  r5: 'from-rose-600 to-red-600',
-  r6: 'from-cyan-600 to-blue-600',
-};
-
-export default function ReviewsPage() {
-  const avgRating = (ALL_REVIEWS.reduce((acc, r) => acc + r.rating, 0) / ALL_REVIEWS.length).toFixed(1);
+  const avgRating = ALL_REVIEWS.length > 0 ? (ALL_REVIEWS.reduce((acc, r) => acc + r.rating, 0) / ALL_REVIEWS.length).toFixed(1) : '5.0';
 
   return (
     <>
@@ -128,9 +103,9 @@ export default function ReviewsPage() {
                   {/* Client */}
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-xs flex-shrink-0 bg-gradient-to-br ${GRADIENT_MAP[review.id] || 'from-blue-600 to-indigo-600'}`}
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-xs flex-shrink-0 bg-gradient-to-br from-blue-600 to-indigo-600`}
                     >
-                      {review.logoUrl}
+                      {review.clientName.substring(0, 2).toUpperCase()}
                     </div>
                     <div>
                       <div className="text-sm font-bold">{review.clientName}</div>

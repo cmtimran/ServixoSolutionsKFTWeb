@@ -81,6 +81,22 @@ export async function GET() {
       }
     });
 
+    const product3 = await prisma.product.upsert({
+      where: { slug: 'saas-subscription' },
+      update: {},
+      create: {
+        title: 'SaaS Subscription',
+        slug: 'saas-subscription',
+        description: 'Monthly and Yearly plans for our core platform.',
+        priceBasic: 5,
+        pricePro: 10,
+        priceEnterprise: 15,
+        features: ['Up to 5 users', 'Core modules', 'Email support', '99.9% SLA'],
+        specifications: { 'Deployment': 'Cloud', 'Support': 'Standard' },
+        images: []
+      }
+    });
+
     // 4. Quotes (Since Quotes don't have unique non-ID fields naturally, we just count them and add if none exist)
     const quoteCount = await prisma.quote.count();
     if (quoteCount === 0) {

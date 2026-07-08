@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { MOCK_SERVICES } from '@/lib/mockData';
+import { prisma } from '@/lib/prisma';
 import { CheckCircle2, ChevronDown, ArrowRight, Cloud, Code2, ShieldCheck, LineChart } from 'lucide-react';
 import Link from 'next/link';
 
@@ -17,25 +17,31 @@ const COLOR_MAP: Record<string, string> = {
   'IT Consulting': 'text-amber-500 bg-amber-500/10',
 };
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
-  return MOCK_SERVICES.map((s) => ({ slug: s.slug }));
+  const services = await prisma.service.findMany({ select: { slug: true } });
+  return services.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const service = MOCK_SERVICES.find((s) => s.slug === slug);
+  const service = await prisma.service.findUnique({ where: { slug } });
   if (!service) return { title: 'Service Not Found' };
   return { title: service.title, description: service.description };
 }
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const service = MOCK_SERVICES.find((s) => s.slug === slug);
+  const service = await prisma.service.findUnique({ where: { slug } });
   if (!service) notFound();
 
   const Icon = ICON_MAP[service.category] || Code2;
   const color = COLOR_MAP[service.category] || 'text-blue-500 bg-blue-500/10';
-  const otherServices = MOCK_SERVICES.filter((s) => s.slug !== slug).slice(0, 3);
+  const otherServices = await prisma.service.findMany({
+    where: { NOT: { slug } },
+    take: 3
+  });
 
   return (
     <>
@@ -106,7 +112,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 <div>
                   <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
                   <div className="space-y-4">
-                    {service.faqs.map((faq) => (
+                    {service.faqs && Array.isArray(service.faqs) && service.faqs.map((faq: any) => (
                       <div key={faq.question} className="rounded-2xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
                         <details className="group">
                           <summary className="flex items-center justify-between p-5 cursor-pointer font-semibold text-sm list-none" style={{ background: 'var(--bg-inset)' }}>

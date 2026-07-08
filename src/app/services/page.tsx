@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
-import { MOCK_SERVICES } from '@/lib/mockData';
+import { prisma } from '@/lib/prisma';
 import { Cloud, Code2, ShieldCheck, LineChart, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -32,7 +32,11 @@ const COLOR_MAP: Record<string, string> = {
   'IT Consulting': 'text-amber-500 bg-amber-500/10',
 };
 
-export default function ServicesPage() {
+export const revalidate = 60;
+
+export default async function ServicesPage() {
+  const services = await prisma.service.findMany();
+
   return (
     <>
       <Header />
@@ -50,7 +54,7 @@ export default function ServicesPage() {
         <section className="py-20 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--bg-base)' }}>
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {MOCK_SERVICES.map((service) => {
+              {services.map((service) => {
                 const Icon = ICON_MAP[service.category] || Code2;
                 const gradient = GRADIENT_MAP[service.category] || 'from-blue-500 to-indigo-500';
                 const color = COLOR_MAP[service.category] || 'text-blue-500 bg-blue-500/10';
@@ -87,9 +91,8 @@ export default function ServicesPage() {
                       ))}
                     </div>
 
-                    {/* Tech tags */}
                     <div className="flex flex-wrap gap-2">
-                      {service.technologies.map((tech) => (
+                      {service.technologies.map((tech: string) => (
                         <span
                           key={tech}
                           className="px-2.5 py-1 rounded-lg text-[11px] font-semibold"

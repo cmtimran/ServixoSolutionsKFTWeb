@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder'
 
 export async function POST(req: Request) {
   try {
-    const { productName, planTier, price } = await req.json();
+    const { productName, planTier, price, interval = 'month' } = await req.json();
 
     if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'sk_test_placeholder') {
        return NextResponse.json({ 
@@ -28,6 +28,7 @@ export async function POST(req: Request) {
               name: `${productName} - ${planTier} Plan`,
             },
             unit_amount: unitAmount,
+            recurring: { interval },
           },
           quantity: 1,
         },

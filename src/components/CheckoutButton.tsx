@@ -12,6 +12,7 @@ interface CheckoutButtonProps {
   price: string | number;
   featured?: boolean;
   className?: string;
+  interval?: 'month' | 'year';
   children?: React.ReactNode;
 }
 
@@ -21,6 +22,7 @@ export default function CheckoutButton({
   price, 
   featured,
   className,
+  interval = 'month',
   children
 }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
@@ -43,6 +45,7 @@ export default function CheckoutButton({
           productName,
           planTier,
           price,
+          interval,
         }),
       });
 
