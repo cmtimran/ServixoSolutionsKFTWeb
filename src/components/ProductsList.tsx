@@ -97,32 +97,31 @@ export default function ProductsList({ products }: { products: any[] }) {
                     ))}
                   </div>
 
-                  {/* Pricing Tier Selector */}
-                  <div className="pt-2">
-                    <label className="text-sm font-semibold mb-2 block" style={{ color: 'var(--text-secondary)' }}>Select Plan Tier:</label>
-                    <div className="flex bg-[var(--bg-inset)] border border-[var(--border)] rounded-xl p-1 gap-1">
-                      {(['Basic', 'Pro', 'Enterprise'] as const).map((tier) => (
+                  {/* Pricing tiers mini - Selectable */}
+                  <div className="grid grid-cols-3 gap-3 pt-2">
+                    {[
+                      { tier: 'Basic', price: product.priceBasic * multiplier },
+                      { tier: 'Pro', price: product.pricePro * multiplier },
+                      { tier: 'Enterprise', price: product.priceEnterprise * multiplier },
+                    ].map(({ tier, price }) => {
+                      const isSelected = (selectedTiers[product.id] || 'Basic') === tier;
+                      return (
                         <button
                           key={tier}
-                          onClick={() => setSelectedTiers({ ...selectedTiers, [product.id]: tier })}
-                          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
-                            (selectedTiers[product.id] || 'Basic') === tier 
-                              ? 'bg-[var(--brand-indigo)] text-white shadow-md' 
-                              : 'text-[var(--text-secondary)] hover:text-white hover:bg-[var(--bg-surface)]'
+                          onClick={() => setSelectedTiers({ ...selectedTiers, [product.id]: tier as any })}
+                          className={`text-center p-3 rounded-xl transition-all cursor-pointer ${
+                            isSelected 
+                              ? 'bg-[var(--brand-indigo)] text-white shadow-md border-transparent' 
+                              : 'bg-[var(--bg-inset)] border-[var(--border)] hover:border-slate-500'
                           }`}
+                          style={{ borderStyle: 'solid', borderWidth: '1px' }}
                         >
-                          {tier}
+                          <div className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${isSelected ? 'text-blue-200' : 'text-[var(--text-muted)]'}`}>{tier}</div>
+                          <div className={`text-lg font-extrabold ${isSelected ? 'text-white' : 'text-gradient'}`}>${price}</div>
+                          <div className={`text-[9px] ${isSelected ? 'text-blue-200' : 'text-[var(--text-subtle)]'}`}>{intervalLabel}</div>
                         </button>
-                      ))}
-                    </div>
-                    <div className="mt-4 flex items-end gap-2">
-                      <span className="text-3xl font-extrabold text-gradient">
-                        ${((selectedTiers[product.id] || 'Basic') === 'Basic' ? product.priceBasic : 
-                           (selectedTiers[product.id] || 'Basic') === 'Pro' ? product.pricePro : 
-                           product.priceEnterprise) * multiplier}
-                      </span>
-                      <span className="text-sm pb-1" style={{ color: 'var(--text-subtle)' }}>{intervalLabel}</span>
-                    </div>
+                      );
+                    })}
                   </div>
 
                   <div className="flex gap-3 pt-4">
