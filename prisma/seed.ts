@@ -187,7 +187,7 @@ async function main() {
     update: {},
     create: {
       email: 'admin@servixo.com',
-      passwordHash: hashedPassword,
+      password: hashedPassword,
       name: 'Admin User',
       role: 'ADMIN',
     },
