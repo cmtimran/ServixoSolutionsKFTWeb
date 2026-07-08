@@ -250,13 +250,6 @@ export default function Header() {
             >
               Get a Quote
             </Link>
-            {/* Quick Admin panel link */}
-            <Link
-              href="/admin"
-              className="text-xs text-slate-400 hover:text-blue-500 transition-colors border-l pl-4 border-slate-300 dark:border-slate-800"
-            >
-              Admin
-            </Link>
           </div>
 
           {/* Mobile Actions */}
@@ -357,12 +350,6 @@ export default function Header() {
                   className="w-full text-center py-3 font-semibold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
                 >
                   Get a Quote
-                </Link>
-                <Link
-                  href="/admin"
-                  className="w-full text-center py-2 text-xs text-slate-400 font-semibold border border-dashed rounded-xl"
-                >
-                  Go to Admin Panel
                 </Link>
               </div>
             </div>

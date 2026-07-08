@@ -8,15 +8,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard },
-  { href: '/admin/quotes', label: 'Quote Manager', icon: FileText },
-  { href: '/admin/products', label: 'Products & Services', icon: Package },
-  { href: '/admin/reviews', label: 'Client Reviews', icon: Star },
-  { href: '/admin/subscribers', label: 'Subscribers', icon: Mail },
+  { href: '/admin/services', label: 'Services', icon: Package },
+  { href: '/admin/products', label: 'Products', icon: Package },
+  { href: '/admin/queries', label: 'Contact Queries', icon: Mail },
+  { href: '/admin/users', label: 'Users', icon: Star },
+  { href: '/admin/settings', label: 'Settings', icon: FileText },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/admin/login';
+  };
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 flex font-sans">
@@ -71,8 +81,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
         </div>
 
-        {/* Back to Homepage */}
-        <div className="border-t border-slate-800 pt-6">
+        {/* Back to Homepage & Logout */}
+        <div className="border-t border-slate-800 pt-6 space-y-4">
           <Link
             href="/"
             className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
@@ -80,6 +90,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <ArrowLeft className="w-3.5 h-3.5" />
             Return to Homepage
           </Link>
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-2 text-xs font-semibold text-red-400 hover:text-red-300 transition-colors"
+          >
+            Sign out
+          </button>
         </div>
       </aside>
 

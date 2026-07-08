@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
@@ -13,15 +14,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'A valid email address is required.' }, { status: 400 });
     }
 
-    // In production: send to email service (Resend, SendGrid, etc.) or save to DB
-    console.log('[Contact Form Submission]', {
-      name,
-      email,
-      company: body.company || '—',
-      phone: body.phone || '—',
-      department: body.department || 'general',
-      message,
-      timestamp: new Date().toISOString(),
+    // Save to Database
+    await prisma.contactMessage.create({
+      data: {
+        name,
+        email,
+        subject: body.department || 'general',
+        message: `Company: ${body.company || '—'}\nPhone: ${body.phone || '—'}\n\n${message}`,
+      }
     });
 
     return NextResponse.json({
