@@ -30,7 +30,7 @@ function createMockClient(): PrismaClientType {
 }
 
 async function buildClient(): Promise<PrismaClientType> {
-  const url = process.env.DATABASE_URL;
+  const url = process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL;
   if (!url) {
     return createMockClient();
   }
@@ -50,7 +50,7 @@ let _prisma: PrismaClientType | undefined;
 function getPrisma(): PrismaClientType {
   if (_prisma) return _prisma;
 
-  const url = process.env.DATABASE_URL;
+  const url = process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL;
   if (!url) {
     _prisma = createMockClient();
     return _prisma;
