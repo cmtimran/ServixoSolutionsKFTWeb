@@ -6,6 +6,8 @@ export const metadata = {
   title: 'Contact Queries | Admin Panel',
 };
 
+export const dynamic = 'force-dynamic';
+
 async function markAsRead(id: string) {
   'use server';
   await prisma.contactMessage.update({
