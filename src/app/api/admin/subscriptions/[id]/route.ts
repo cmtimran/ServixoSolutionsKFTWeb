@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server';
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const token = request.cookies.get('auth_token')?.value;
+    const token = request.cookies.get('admin_token')?.value;
     if (!token || !(await verifyToken(token))) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
