@@ -13,7 +13,7 @@ export async function POST(req: Request) {
        // Simulate checkout if Stripe isn't configured
        return NextResponse.json({ 
          mock: true,
-         url: `/checkout/success?session_id=mock_session_${Date.now()}`
+         url: `/checkout/mock?session_id=mock_session_${Date.now()}`
        });
     }
 
