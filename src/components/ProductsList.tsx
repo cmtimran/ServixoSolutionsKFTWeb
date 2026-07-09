@@ -145,64 +145,7 @@ export default function ProductsList({ products }: { products: any[] }) {
         </div>
       </section>
 
-      {/* Specs comparison */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--bg-surface)' }}>
-        <div className="max-w-4xl mx-auto text-center">
-          <span className="badge mb-4 inline-block">Transparent Pricing</span>
-          <h2 className="text-3xl font-extrabold mb-4">Simple, Scalable Plans</h2>
-          <p className="text-lg mb-14" style={{ color: 'var(--text-secondary)' }}>
-            All plans include dedicated onboarding support and API access. Pro plan includes a 14-day free trial (credit card required).
-          </p>
-          
-          {saasProduct && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {[
-                { tier: 'Basic', desc: 'For startups and small teams.', price: saasProduct.priceBasic * multiplier, features: ['Up to 5 users', 'Core modules', 'Email support', '99.9% SLA'] },
-                { tier: 'Pro', desc: 'For growing businesses.', price: saasProduct.pricePro * multiplier, features: ['Up to 50 users', 'All modules + API', 'Priority support', '99.95% SLA'], featured: true },
-                { tier: 'Enterprise', desc: 'For large corporations.', price: saasProduct.priceEnterprise * multiplier, features: ['Unlimited users', 'Custom integrations', 'Dedicated success manager', '99.99% SLA'] },
-              ].map((plan) => (
-                <div
-                  key={plan.tier}
-                  className={`rounded-2xl p-6 flex flex-col gap-4 text-left ${plan.featured ? 'text-white' : 'glass-card'}`}
-                  style={plan.featured ? { background: 'linear-gradient(135deg, var(--brand-blue), var(--brand-indigo))', boxShadow: '0 8px 32px var(--glow-blue)' } : {}}
-                >
-                  {plan.featured && (
-                    <div className="flex items-center gap-1 text-xs font-bold text-yellow-300 mb-1">
-                      <Star className="w-3.5 h-3.5 fill-yellow-300" /> Most Popular
-                    </div>
-                  )}
-                  <div>
-                    <div className="text-lg font-extrabold">{plan.tier}</div>
-                    <div className="text-sm mt-1" style={{ color: plan.featured ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>{plan.desc}</div>
-                  </div>
-                  <div className="text-3xl font-extrabold flex items-end gap-1">
-                    ${plan.price} <span className="text-sm font-normal pb-1" style={{ color: plan.featured ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>{intervalLabel}</span>
-                  </div>
-                  <div className="divider" />
-                  <ul className="space-y-2">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-center gap-2 text-sm">
-                        <CheckCircle2 className={`w-4 h-4 flex-shrink-0 ${plan.featured ? 'text-blue-200' : ''}`} style={!plan.featured ? { color: 'var(--brand-emerald)' } : {}} />
-                        <span style={{ color: plan.featured ? 'rgba(255,255,255,0.85)' : 'var(--text-secondary)' }}>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <CheckoutButton
-                    productName={saasProduct.title}
-                    planTier={plan.tier}
-                    price={plan.price}
-                    interval={interval}
-                    featured={plan.featured}
-                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold mt-auto transition-all ${plan.featured ? 'bg-white hover:opacity-90' : 'btn-outline text-center justify-center'}`}
-                  >
-                    {plan.tier === 'Pro' ? 'Start 14-Day Trial' : 'Buy Now'}
-                  </CheckoutButton>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+
     </>
   );
 }
