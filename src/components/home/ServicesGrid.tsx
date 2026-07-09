@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Cpu, Award, ShieldAlert, Briefcase, ArrowRight } from 'lucide-react';
-import { MOCK_SERVICES } from '@/lib/mockData';
+import { Service } from '@prisma/client';
 
 const iconMap: Record<string, any> = {
   'cloud-migration': Cpu,
@@ -12,7 +12,9 @@ const iconMap: Record<string, any> = {
   'it-consulting': Briefcase,
 };
 
-export default function ServicesGrid() {
+export default function ServicesGrid({ services }: { services: Service[] }) {
+  if (!services || services.length === 0) return null;
+
   return (
     <section id="services" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       <div className="text-center space-y-4 max-w-3xl mx-auto">
@@ -28,7 +30,7 @@ export default function ServicesGrid() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {MOCK_SERVICES.map((service, idx) => {
+        {services.slice(0, 4).map((service, idx) => {
           const Icon = iconMap[service.slug] || Cpu;
           return (
             <motion.div

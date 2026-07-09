@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShoppingCart, CheckCircle, ArrowRight } from 'lucide-react';
-import { MOCK_PRODUCTS } from '@/lib/mockData';
+import { Product } from '@prisma/client';
 
-export default function ProductsGrid() {
+export default function ProductsGrid({ products }: { products: Product[] }) {
+  if (!products || products.length === 0) return null;
+
   return (
     <section className="py-24 bg-white dark:bg-slate-950/40 border-y border-slate-100 dark:border-slate-800/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
@@ -23,7 +25,7 @@ export default function ProductsGrid() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {MOCK_PRODUCTS.map((product, idx) => (
+          {products.slice(0, 4).map((product, idx) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, scale: 0.98 }}
@@ -58,7 +60,7 @@ export default function ProductsGrid() {
                     Key Capabilities Included:
                   </span>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {product.features.slice(0, 4).map((feature, fIdx) => (
+                    {Array.isArray(product.features) && (product.features as string[]).slice(0, 4).map((feature, fIdx) => (
                       <li key={fIdx} className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300">
                         <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                         <span>{feature}</span>

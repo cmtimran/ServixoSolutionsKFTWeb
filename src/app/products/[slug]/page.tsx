@@ -23,8 +23,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return { title: product.title, description: product.description };
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProductDetailPage({ 
+  params,
+  searchParams 
+}: { 
+  params: Promise<{ slug: string }>,
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const { slug } = await params;
+  const { buy } = await searchParams;
   const product = await prisma.product.findUnique({ where: { slug } });
   if (!product) notFound();
 
@@ -81,6 +88,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   price={product.priceBasic}
                   interval="month"
                   className="btn-primary w-full justify-center text-center block mb-3 style-override"
+                  autoTrigger={buy === 'true'}
                 >
                   Buy Now
                 </CheckoutButton>

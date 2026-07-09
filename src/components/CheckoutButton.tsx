@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Loader2 } from 'lucide-react';
 
@@ -12,6 +12,7 @@ interface CheckoutButtonProps {
   className?: string;
   interval?: 'month' | 'year';
   children?: React.ReactNode;
+  autoTrigger?: boolean;
 }
 
 export default function CheckoutButton({ 
@@ -21,9 +22,18 @@ export default function CheckoutButton({
   featured,
   className,
   interval = 'month',
-  children
+  children,
+  autoTrigger
 }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
+  const hasTriggered = useRef(false);
+
+  useEffect(() => {
+    if (autoTrigger && !hasTriggered.current) {
+      hasTriggered.current = true;
+      handleCheckout();
+    }
+  }, [autoTrigger]);
 
   const handleCheckout = async () => {
     if (price === 'Custom') {
