@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
 import { Loader2 } from 'lucide-react';
 
 interface CheckoutButtonProps {
@@ -69,21 +68,14 @@ export default function CheckoutButton({
         return;
       }
 
-      if (!data.publicKey) {
-        alert('Stripe public key is missing.');
+      if (data.url) {
+        window.location.href = data.url;
         return;
       }
 
-      const stripe = await loadStripe(data.publicKey);
-      if (!stripe) throw new Error('Stripe failed to load');
+      alert('No checkout URL returned from server.');
 
-      const { error } = await (stripe as any).redirectToCheckout({
-        sessionId: data.sessionId,
-      });
 
-      if (error) {
-        alert(error.message);
-      }
     } catch (err: any) {
       console.error('Checkout error:', err);
       alert(err.message || 'An error occurred during checkout.');

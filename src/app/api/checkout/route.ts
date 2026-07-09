@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/checkout/cancel`,
     });
 
-    return NextResponse.json({ sessionId: session.id, publicKey: stripePublicKey });
+    return NextResponse.json({ sessionId: session.id, url: session.url, publicKey: stripePublicKey });
   } catch (err: any) {
     console.error('Error creating checkout session:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
