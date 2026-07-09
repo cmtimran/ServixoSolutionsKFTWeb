@@ -11,6 +11,8 @@ function CheckoutReturnContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<string | null>(null);
   const [customerEmail, setCustomerEmail] = useState<string | null>(null);
+  const [invoiceUrl, setInvoiceUrl] = useState<string | null>(null);
+  const [invoicePdf, setInvoicePdf] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,6 +24,8 @@ function CheckoutReturnContent() {
         .then((data) => {
           setStatus(data.status);
           setCustomerEmail(data.customer_email);
+          setInvoiceUrl(data.invoice_url);
+          setInvoicePdf(data.invoice_pdf);
           setLoading(false);
         })
         .catch(() => {
@@ -68,9 +72,28 @@ function CheckoutReturnContent() {
             <CheckCircle className="w-10 h-10 text-green-500" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Payment Successful!</h1>
-          <p className="text-slate-400 mb-8">
-            Thank you for your purchase. {customerEmail ? `A confirmation email has been sent to ${customerEmail}.` : ''}
+          <p className="text-slate-400 mb-6">
+            Thank you for your purchase. {customerEmail ? `A confirmation email and invoice have been sent to ${customerEmail}.` : ''}
           </p>
+          
+          {(invoiceUrl || invoicePdf) && (
+            <div className="bg-slate-800/50 rounded-xl p-5 mb-8 border border-slate-700">
+              <h3 className="text-white font-medium mb-3">Your Invoice</h3>
+              <div className="flex flex-col gap-3">
+                {invoiceUrl && (
+                  <a href={invoiceUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded-lg transition-colors">
+                    View Invoice Online
+                  </a>
+                )}
+                {invoicePdf && (
+                  <a href={invoicePdf} className="flex items-center justify-center w-full px-4 py-2 bg-transparent border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white text-sm font-medium rounded-lg transition-colors">
+                    Download PDF Invoice
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="space-y-4">
             <Link href="/client-portal" className="flex items-center justify-center w-full px-6 py-3 bg-brand-indigo hover:bg-brand-indigo/90 text-white font-medium rounded-lg transition-colors">
               Go to Client Portal

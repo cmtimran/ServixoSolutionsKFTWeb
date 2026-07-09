@@ -22,8 +22,10 @@ export async function GET(req: Request) {
       apiVersion: '2026-06-24.dahlia' as any,
     });
 
-    // Retrieve the session from Stripe
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    // Retrieve the session from Stripe and expand the invoice to get the PDF and hosted URL
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['invoice']
+    });
 
     // Update our database Payment record
     const payment = await prisma.payment.findUnique({
@@ -44,7 +46,9 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       status: session.status,
-      customer_email: session.customer_details?.email
+      customer_email: session.customer_details?.email,
+      invoice_url: (session.invoice as Stripe.Invoice)?.hosted_invoice_url,
+      invoice_pdf: (session.invoice as Stripe.Invoice)?.invoice_pdf,
     });
   } catch (err: any) {
     console.error('Error retrieving checkout session:', err);
