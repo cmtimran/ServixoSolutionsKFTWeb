@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { CreditCard, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { CreditCard, CheckCircle, Clock, XCircle, FileText } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -28,12 +28,13 @@ export default async function AdminPaymentsPage() {
                 <th className="p-4 font-semibold">Amount</th>
                 <th className="p-4 font-semibold">Status</th>
                 <th className="p-4 font-semibold">Date</th>
+                <th className="p-4 font-semibold text-right">Action</th>
               </tr>
             </thead>
             <tbody>
               {payments.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-slate-500">
+                  <td colSpan={6} className="p-8 text-center text-slate-500">
                     No payments found.
                   </td>
                 </tr>
@@ -77,6 +78,19 @@ export default async function AdminPaymentsPage() {
                         hour: '2-digit',
                         minute: '2-digit'
                       })}
+                    </td>
+                    <td className="p-4 text-right">
+                      {payment.status === 'complete' && (
+                        <a 
+                          href={`/api/admin/payments/${payment.id}/invoice`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-brand-indigo hover:text-white text-slate-300 text-sm font-medium rounded-lg transition-colors"
+                        >
+                          <FileText className="w-4 h-4" />
+                          Invoice
+                        </a>
+                      )}
                     </td>
                   </tr>
                 ))
