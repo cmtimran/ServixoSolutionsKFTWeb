@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     const unitAmount = parseInt(String(price).replace(/[^0-9]/g, '')) * 100;
 
     const session = await stripe.checkout.sessions.create({
-      ui_mode: 'embedded',
+      ui_mode: 'embedded' as any,
       payment_method_types: ['card'],
       line_items: [
         {
