@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, Package, Star, Mail, ArrowLeft, Menu, X, Cpu } from 'lucide-react';
+import { LayoutDashboard, FileText, Package, Star, Mail, ArrowLeft, Menu, X, Cpu, CreditCard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: '/admin/products', label: 'Products', icon: Package },
   { href: '/admin/queries', label: 'Contact Queries', icon: Mail },
   { href: '/admin/subscriptions', label: 'Subscriptions', icon: Star },
+  { href: '/admin/payments', label: 'Payments', icon: CreditCard },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },
   { href: '/admin/users', label: 'Users', icon: Star },
   { href: '/admin/settings', label: 'Settings', icon: FileText },

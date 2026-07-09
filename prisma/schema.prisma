@@ -109,3 +109,17 @@ model ContactMessage {
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
+model Payment {
+  id              String   @id @default(uuid())
+  sessionId       String   @unique
+  customerEmail   String?
+  customerName    String?
+  productName     String
+  planTier        String
+  amount          Float
+  currency        String
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

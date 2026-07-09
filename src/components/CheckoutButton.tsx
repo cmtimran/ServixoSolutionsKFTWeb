@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface CheckoutButtonProps {
   productName: string;
@@ -19,20 +20,14 @@ export default function CheckoutButton({
   planTier, 
   price, 
   featured,
-  className,
+  className = '',
   interval = 'month',
   children,
   autoTrigger
 }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const hasTriggered = useRef(false);
-
-  useEffect(() => {
-    if (autoTrigger && !hasTriggered.current) {
-      hasTriggered.current = true;
-      handleCheckout();
-    }
-  }, [autoTrigger]);
+  const router = useRouter();
 
   const handleCheckout = async () => {
     if (price === 'Custom') {
@@ -42,47 +37,26 @@ export default function CheckoutButton({
 
     try {
       setLoading(true);
-      
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productName,
-          planTier,
-          price,
-          interval,
-        }),
+      const params = new URLSearchParams({
+        productName,
+        planTier,
+        price: price.toString(),
+        interval
       });
-
-      const data = await response.json();
-
-      if (data.error) {
-        alert(data.error);
-        return;
-      }
-
-      if (data.mock && data.url) {
-        window.location.href = data.url;
-        return;
-      }
-
-      if (data.url) {
-        window.location.href = data.url;
-        return;
-      }
-
-      alert('No checkout URL returned from server.');
-
-
+      router.push(`/checkout/pay?${params.toString()}`);
     } catch (err: any) {
       console.error('Checkout error:', err);
       alert(err.message || 'An error occurred during checkout.');
-    } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (autoTrigger && !hasTriggered.current) {
+      hasTriggered.current = true;
+      handleCheckout();
+    }
+  }, [autoTrigger]);
 
   return (
     <button

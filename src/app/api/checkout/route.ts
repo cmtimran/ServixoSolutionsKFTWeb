@@ -29,6 +29,7 @@ export async function POST(req: Request) {
     const unitAmount = parseInt(String(price).replace(/[^0-9]/g, '')) * 100;
 
     const session = await stripe.checkout.sessions.create({
+      ui_mode: 'embedded',
       payment_method_types: ['card'],
       line_items: [
         {
@@ -43,12 +44,27 @@ export async function POST(req: Request) {
           quantity: 1,
         },
       ],
-      mode: 'subscription', // or 'payment' if it's a one-time charge, but standard SaaS is subscription
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/checkout/cancel`,
+      mode: 'subscription',
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      metadata: {
+        productName,
+        planTier,
+      }
     });
 
-    return NextResponse.json({ sessionId: session.id, url: session.url, publicKey: stripePublicKey });
+    // Create a pending payment record
+    await prisma.payment.create({
+      data: {
+        sessionId: session.id,
+        productName,
+        planTier,
+        amount: unitAmount / 100,
+        currency: 'USD',
+        status: 'pending',
+      }
+    });
+
+    return NextResponse.json({ clientSecret: session.client_secret, publicKey: stripePublicKey });
   } catch (err: any) {
     console.error('Error creating checkout session:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
