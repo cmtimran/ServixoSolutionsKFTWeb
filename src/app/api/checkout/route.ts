@@ -26,8 +26,8 @@ export async function POST(req: Request) {
       apiVersion: '2026-06-24.dahlia' as any,
     });
 
-    // Convert price string/number to cents
-    const unitAmount = parseInt(String(price).replace(/[^0-9]/g, '')) * 100;
+    // Convert price string/number to cents (e.g. 14.99 -> 1499)
+    const unitAmount = Math.round(parseFloat(String(price)) * 100);
 
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded_page',
