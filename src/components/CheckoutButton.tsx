@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Loader2 } from 'lucide-react';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder');
-
 interface CheckoutButtonProps {
   productName: string;
   planTier: string;
@@ -61,7 +59,12 @@ export default function CheckoutButton({
         return;
       }
 
-      const stripe = await stripePromise;
+      if (!data.publicKey) {
+        alert('Stripe public key is missing.');
+        return;
+      }
+
+      const stripe = await loadStripe(data.publicKey);
       if (!stripe) throw new Error('Stripe failed to load');
 
       const { error } = await (stripe as any).redirectToCheckout({
