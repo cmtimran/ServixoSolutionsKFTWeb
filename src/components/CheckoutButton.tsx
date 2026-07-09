@@ -86,7 +86,7 @@ export default function CheckoutButton({
       }
     } catch (err: any) {
       console.error('Checkout error:', err);
-      alert('An error occurred during checkout.');
+      alert(err.message || 'An error occurred during checkout.');
     } finally {
       setLoading(false);
     }
