@@ -56,6 +56,11 @@ export default function CheckoutButton({
         return;
       }
 
+      if (data.mock && data.url) {
+        window.location.href = data.url;
+        return;
+      }
+
       const stripe = await stripePromise;
       if (!stripe) throw new Error('Stripe failed to load');
 
