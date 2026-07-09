@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CheckCircle, XCircle, Loader2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-export default function CheckoutReturnPage() {
+function CheckoutReturnContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<string | null>(null);
   const [customerEmail, setCustomerEmail] = useState<string | null>(null);
@@ -96,5 +98,18 @@ export default function CheckoutReturnPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutReturnPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+        <Loader2 className="w-12 h-12 text-brand-indigo animate-spin mb-4" />
+        <p className="text-slate-400">Loading...</p>
+      </div>
+    }>
+      <CheckoutReturnContent />
+    </Suspense>
   );
 }

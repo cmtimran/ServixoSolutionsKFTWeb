@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+'use client';
+
+import { useState, useEffect, Suspense } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 import { useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 
-export default function CheckoutPayPage() {
+function CheckoutPayContent() {
   const searchParams = useSearchParams();
   const [stripePromise, setStripePromise] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -85,5 +87,18 @@ export default function CheckoutPayPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPayPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+        <Loader2 className="w-12 h-12 text-brand-indigo animate-spin mb-4" />
+        <p className="text-slate-400">Loading checkout...</p>
+      </div>
+    }>
+      <CheckoutPayContent />
+    </Suspense>
   );
 }
