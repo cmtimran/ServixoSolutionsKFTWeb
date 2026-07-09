@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 export async function POST(req: Request) {
   try {
     const { productName, planTier, price, interval = 'month' } = await req.json();
+    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
     // Fetch Stripe keys from the database settings
     const secretKeySetting = await prisma.setting.findUnique({ where: { key: 'stripeSecretKey' } });
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
         },
       ],
       mode: 'subscription',
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
       metadata: {
         productName,
         planTier,
