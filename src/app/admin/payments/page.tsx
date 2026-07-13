@@ -2,15 +2,24 @@ import { prisma } from '@/lib/prisma';
 import { CreditCard, CheckCircle, Clock, XCircle, FileText } from 'lucide-react';
 import SyncPaymentsButton from '@/components/admin/SyncPaymentsButton';
 
+import Link from 'next/link';
+
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export default async function AdminPaymentsPage() {
+export default async function AdminPaymentsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  const params = await searchParams;
+  const currentFilter = params.status || 'all';
+
+  const statusWhere = currentFilter === 'paid' 
+    ? { equals: 'complete' } 
+    : currentFilter === 'canceled' 
+      ? { in: ['expired', 'canceled'] } 
+      : { notIn: ['pending', 'open'] };
+
   const payments = await prisma.payment.findMany({
     where: {
-      status: {
-        notIn: ['pending', 'open']
-      }
+      status: statusWhere
     },
     orderBy: { createdAt: 'desc' }
   });
@@ -23,6 +32,27 @@ export default async function AdminPaymentsPage() {
           <p className="text-slate-400 mt-2">View all customer checkout sessions and payments.</p>
         </div>
         <SyncPaymentsButton />
+      </div>
+
+      <div className="flex gap-4 mb-6">
+        <Link 
+          href="/admin/payments?status=all"
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'all' ? 'bg-brand-indigo text-white' : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'}`}
+        >
+          All
+        </Link>
+        <Link 
+          href="/admin/payments?status=paid"
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'paid' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'}`}
+        >
+          Paid
+        </Link>
+        <Link 
+          href="/admin/payments?status=canceled"
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'canceled' ? 'bg-rose-500/20 text-rose-400' : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'}`}
+        >
+          Canceled
+        </Link>
       </div>
 
       <div className="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
@@ -65,15 +95,15 @@ export default async function AdminPaymentsPage() {
                           <CheckCircle className="w-3.5 h-3.5" />
                           Paid
                         </span>
-                      ) : payment.status === 'open' ? (
+                      ) : payment.status === 'open' || payment.status === 'pending' ? (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
                           <Clock className="w-3.5 h-3.5" />
                           Pending
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
                           <XCircle className="w-3.5 h-3.5" />
-                          {payment.status}
+                          Canceled
                         </span>
                       )}
                     </td>
