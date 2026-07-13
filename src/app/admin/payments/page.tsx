@@ -6,6 +6,11 @@ export const revalidate = 0;
 
 export default async function AdminPaymentsPage() {
   const payments = await prisma.payment.findMany({
+    where: {
+      status: {
+        notIn: ['pending', 'open']
+      }
+    },
     orderBy: { createdAt: 'desc' }
   });
 
