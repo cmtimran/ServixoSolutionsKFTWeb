@@ -9,13 +9,15 @@ export const revalidate = 0;
 
 export default async function AdminPaymentsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
   const params = await searchParams;
-  const currentFilter = params.status || 'all';
+  const currentFilter = params.status || 'paid';
 
   const statusWhere = currentFilter === 'paid' 
     ? { equals: 'complete' } 
     : currentFilter === 'canceled' 
       ? { in: ['expired', 'canceled'] } 
-      : { notIn: ['pending', 'open'] };
+      : currentFilter === 'declined'
+        ? { in: ['failed', 'declined', 'unpaid'] }
+        : { notIn: ['pending', 'open'] };
 
   const payments = await prisma.payment.findMany({
     where: {
@@ -52,6 +54,12 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'canceled' ? 'bg-rose-500/20 text-rose-400' : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'}`}
         >
           Canceled
+        </Link>
+        <Link 
+          href="/admin/payments?status=declined"
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'declined' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'}`}
+        >
+          Declined
         </Link>
       </div>
 
@@ -99,6 +107,11 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
                           <Clock className="w-3.5 h-3.5" />
                           Pending
+                        </span>
+                      ) : payment.status === 'failed' || payment.status === 'declined' ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                          <XCircle className="w-3.5 h-3.5" />
+                          Declined
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
