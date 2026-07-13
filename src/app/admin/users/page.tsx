@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { User as UserIcon, Trash2, Loader2, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { User as UserIcon, Trash2, Edit2, Plus, Loader2, ShieldAlert, ShieldCheck } from 'lucide-react';
+import UserModal from '@/components/admin/UserModal';
 
 type User = {
   id: string;
@@ -15,6 +16,9 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userToEdit, setUserToEdit] = useState<User | null>(null);
 
   const fetchUsers = async () => {
     try {
@@ -64,9 +68,21 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Users & Access</h1>
-        <p className="text-slate-400">Manage administrator accounts and platform users.</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Users & Access</h1>
+          <p className="text-slate-400">Manage administrator accounts and platform users.</p>
+        </div>
+        <button
+          onClick={() => {
+            setUserToEdit(null);
+            setIsModalOpen(true);
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand-indigo hover:bg-brand-indigo/90 text-white font-medium rounded-lg transition-colors shadow-lg shadow-brand-indigo/20"
+        >
+          <Plus className="w-4 h-4" />
+          Add User
+        </button>
       </div>
 
       {error && (
@@ -119,7 +135,17 @@ export default function UsersPage() {
                       )}
                     </td>
                     <td className="px-6 py-4">{new Date(user.createdAt).toLocaleDateString()}</td>
-                    <td className="px-6 py-4 flex justify-end">
+                    <td className="px-6 py-4 flex justify-end gap-2">
+                      <button
+                        onClick={() => {
+                          setUserToEdit(user);
+                          setIsModalOpen(true);
+                        }}
+                        className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors group relative"
+                        title="Edit user"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
                       <button
                         onClick={() => handleDelete(user.id)}
                         className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors group relative"
@@ -135,6 +161,16 @@ export default function UsersPage() {
           </table>
         </div>
       </div>
+
+      <UserModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        userToEdit={userToEdit}
+        onSuccess={() => {
+          setIsModalOpen(false);
+          fetchUsers();
+        }}
+      />
     </div>
   );
 }
