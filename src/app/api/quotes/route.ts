@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     let savedQuote = null;
 
     // Check if database url is present before attempting database write
-    if (process.env.DATABASE_URL) {
+    if (process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL) {
       try {
         savedQuote = await prisma.quote.create({
           data: {

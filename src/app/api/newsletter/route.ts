@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
     let savedSubscription = null;
 
-    if (process.env.DATABASE_URL) {
+    if (process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL) {
       try {
         savedSubscription = await prisma.subscription.create({
           data: { email },
