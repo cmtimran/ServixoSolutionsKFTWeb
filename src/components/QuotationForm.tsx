@@ -16,6 +16,7 @@ const BUDGET_RANGES = [
   { value: '15k-50k', label: '€15,000 - €50,000' },
   { value: '50k-100k', label: '€50,000 - €100,000' },
   { value: '100k+', label: '€100,000+' },
+  { value: 'custom', label: 'Custom Amount...' },
 ];
 
 const TIMELINES = [
@@ -30,6 +31,7 @@ export default function QuotationForm() {
   const [formData, setFormData] = useState({
     projectTypes: [] as string[],
     budgetRange: '',
+    customBudget: '',
     timeline: '',
     projectDescription: '',
     clientName: '',
@@ -100,6 +102,10 @@ export default function QuotationForm() {
         setErrorMsg('Please choose your budget range.');
         return false;
       }
+      if (formData.budgetRange === 'custom' && !formData.customBudget.trim()) {
+        setErrorMsg('Please enter your custom budget amount.');
+        return false;
+      }
       if (!formData.timeline) {
         setErrorMsg('Please choose your project timeline.');
         return false;
@@ -147,10 +153,16 @@ export default function QuotationForm() {
     setIsSubmitting(true);
     // Simulate API request to submit quote
     try {
+      const finalBudget = formData.budgetRange === 'custom' ? formData.customBudget : formData.budgetRange;
+      
       const response = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, attachmentName: attachedFile?.name }),
+        body: JSON.stringify({ 
+          ...formData, 
+          budgetRange: finalBudget,
+          attachmentName: attachedFile?.name 
+        }),
       });
       
       // Simulate database success even if backend route not fully running
@@ -218,6 +230,7 @@ export default function QuotationForm() {
                   setFormData({
                     projectTypes: [],
                     budgetRange: '',
+                    customBudget: '',
                     timeline: '',
                     projectDescription: '',
                     clientName: '',
@@ -313,6 +326,29 @@ export default function QuotationForm() {
                         <option key={b.value} value={b.value}>{b.label}</option>
                       ))}
                     </select>
+                    
+                    {/* Custom Budget Input */}
+                    <AnimatePresence>
+                      {formData.budgetRange === 'custom' && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                          animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
+                          exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <input
+                            type="text"
+                            value={formData.customBudget}
+                            onChange={(e) => {
+                              setFormData({ ...formData, customBudget: e.target.value });
+                              setErrorMsg('');
+                            }}
+                            placeholder="e.g. €120,000 or specific amount"
+                            className="w-full px-4 py-3.5 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm transition-colors"
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
 
                   {/* Timeline Dropdown */}
