@@ -1,32 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+
 import { Loader2, Save, FileText } from 'lucide-react';
-import 'react-quill/dist/quill.snow.css';
 
-// Dynamically import ReactQuill to prevent SSR issues (document is not defined)
-const ReactQuill = dynamic(() => import('react-quill'), { 
-  ssr: false,
-  loading: () => <div className="h-64 flex items-center justify-center bg-slate-800 rounded-xl"><Loader2 className="w-6 h-6 animate-spin text-slate-500" /></div>
-});
-
-const modules = {
-  toolbar: [
-    [{ 'header': [1, 2, 3, false] }],
-    ['bold', 'italic', 'underline', 'strike'],
-    [{'list': 'ordered'}, {'list': 'bullet'}],
-    ['link'],
-    ['clean']
-  ],
-};
-
-const formats = [
-  'header',
-  'bold', 'italic', 'underline', 'strike',
-  'list', 'bullet',
-  'link'
-];
 
 export default function LegalSettingsPage() {
   const [settings, setSettings] = useState({
@@ -106,14 +83,12 @@ export default function LegalSettingsPage() {
           </div>
           <p className="text-sm text-slate-400 mb-6">This content will be displayed on the public /privacy-policy page.</p>
           
-          <div className="bg-white text-slate-900 rounded-xl overflow-hidden">
-            <ReactQuill 
-              theme="snow"
+          <div className="bg-slate-900/50 rounded-xl overflow-hidden">
+            <textarea 
               value={settings.privacy_policy_content}
-              onChange={(val) => setSettings({ ...settings, privacy_policy_content: val })}
-              modules={modules}
-              formats={formats}
-              className="h-[400px] pb-10"
+              onChange={(e) => setSettings({ ...settings, privacy_policy_content: e.target.value })}
+              className="w-full h-[400px] p-4 bg-transparent text-slate-100 focus:outline-none resize-none font-mono text-sm"
+              placeholder="Enter HTML content for Privacy Policy..."
             />
           </div>
         </div>
@@ -126,14 +101,12 @@ export default function LegalSettingsPage() {
           </div>
           <p className="text-sm text-slate-400 mb-6">This content will be displayed on the public /terms-and-policies page.</p>
           
-          <div className="bg-white text-slate-900 rounded-xl overflow-hidden">
-            <ReactQuill 
-              theme="snow"
+          <div className="bg-slate-900/50 rounded-xl overflow-hidden">
+            <textarea 
               value={settings.terms_and_policies_content}
-              onChange={(val) => setSettings({ ...settings, terms_and_policies_content: val })}
-              modules={modules}
-              formats={formats}
-              className="h-[400px] pb-10"
+              onChange={(e) => setSettings({ ...settings, terms_and_policies_content: e.target.value })}
+              className="w-full h-[400px] p-4 bg-transparent text-slate-100 focus:outline-none resize-none font-mono text-sm"
+              placeholder="Enter HTML content for Terms and Policies..."
             />
           </div>
         </div>
