@@ -119,7 +119,7 @@ export default function QuotesPage() {
         ) : (
           quotes.map((quote) => (
             <div key={quote.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col md:flex-row">
-              <div className="p-6 md:w-1/3 bg-slate-950/50 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col gap-4">
+              <div className="p-6 md:w-1/3 bg-white dark:bg-slate-950/50 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col gap-4">
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <h3 className="font-bold text-lg text-slate-900 dark:text-white">{quote.clientName}</h3>
@@ -179,7 +179,7 @@ export default function QuotesPage() {
 
                 <div className="space-y-2 flex-grow">
                   <span className="text-xs text-slate-500 dark:text-slate-500 font-semibold uppercase flex items-center gap-1"><FileText className="w-3.5 h-3.5"/> Description</span>
-                  <div className="bg-slate-950 p-4 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-800/60 leading-relaxed max-h-[200px] overflow-y-auto">
+                  <div className="bg-white dark:bg-slate-950 p-4 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-800/60 leading-relaxed max-h-[200px] overflow-y-auto">
                     {quote.projectDescription}
                   </div>
                 </div>

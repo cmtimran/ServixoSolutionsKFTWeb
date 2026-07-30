@@ -107,7 +107,7 @@ export default function ReviewsPage() {
         ) : (
           reviews.map((review) => (
             <div key={review.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col md:flex-row">
-              <div className="p-6 md:w-1/3 bg-slate-950/50 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-between">
+              <div className="p-6 md:w-1/3 bg-white dark:bg-slate-950/50 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-between">
                 <div>
                   <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-1">{review.clientName}</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
@@ -129,7 +129,7 @@ export default function ReviewsPage() {
               
               <div className="p-6 md:w-2/3 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-bold text-slate-200">{review.title || 'Untitled Review'}</h4>
+                  <h4 className="font-bold text-slate-900 dark:text-slate-200">{review.title || 'Untitled Review'}</h4>
                   
                   <button
                     onClick={() => toggleApproval(review.id, review.isApproved)}
@@ -147,7 +147,7 @@ export default function ReviewsPage() {
                   </button>
                 </div>
                 
-                <div className="bg-slate-950 p-4 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-800/60 leading-relaxed italic flex-grow">
+                <div className="bg-white dark:bg-slate-950 p-4 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-800/60 leading-relaxed italic flex-grow">
                   "{review.reviewText}"
                 </div>
 

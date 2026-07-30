@@ -73,7 +73,7 @@ export default function AdminOverview() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: idx * 0.05 }}
-              className="p-6 rounded-2xl bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between"
+              className="p-6 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between"
             >
               <div className="space-y-2">
                 <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider block">{card.label}</span>
@@ -91,7 +91,7 @@ export default function AdminOverview() {
       {/* Row: Analytics Chart Mock and Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart mock */}
-        <div className="lg:col-span-2 p-6 rounded-2xl bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-6">
+        <div className="lg:col-span-2 p-6 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-6">
           <div className="flex justify-between items-center">
             <div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">Monthly Analytics</h3>
@@ -124,7 +124,7 @@ export default function AdminOverview() {
         </div>
 
         {/* Recent Queries */}
-        <div className="p-6 rounded-2xl bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-6">
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-6">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Queries</h3>
             <Link href="/admin/queries" className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1">
@@ -133,12 +133,12 @@ export default function AdminOverview() {
             </Link>
           </div>
 
-          <div className="divide-y divide-slate-800">
+          <div className="divide-y divide-slate-200 dark:divide-slate-800">
             {data?.recentQueries && data.recentQueries.length > 0 ? (
               data.recentQueries.map((query) => (
                 <div key={query.id} className="py-4 first:pt-0 last:pb-0 flex justify-between items-start gap-4 text-xs">
                   <div className="space-y-1">
-                    <div className="font-bold text-slate-200">{query.name}</div>
+                    <div className="font-bold text-slate-900 dark:text-slate-200">{query.name}</div>
                     <div className="text-[10px] text-slate-500 dark:text-slate-500">{query.subject || 'No Subject'}</div>
                   </div>
 

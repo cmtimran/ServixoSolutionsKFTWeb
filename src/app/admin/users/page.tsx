@@ -94,7 +94,7 @@ export default function UsersPage() {
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
-            <thead className="bg-slate-950 text-slate-700 dark:text-slate-300 text-xs uppercase font-semibold">
+            <thead className="bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 text-xs uppercase font-semibold">
               <tr>
                 <th className="px-6 py-4">User</th>
                 <th className="px-6 py-4">Role</th>
@@ -102,7 +102,7 @@ export default function UsersPage() {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
               {users.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="px-6 py-8 text-center text-slate-500 dark:text-slate-500">
@@ -117,7 +117,7 @@ export default function UsersPage() {
                         <UserIcon className="w-5 h-5 text-indigo-400" />
                       </div>
                       <div>
-                        <div className="font-bold text-slate-200">{user.name || 'No Name Provided'}</div>
+                        <div className="font-bold text-slate-900 dark:text-slate-200">{user.name || 'No Name Provided'}</div>
                         <div className="text-xs text-slate-500 dark:text-slate-500 font-normal">{user.email}</div>
                       </div>
                     </td>

@@ -76,14 +76,14 @@ export default function SubscriptionsPage() {
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
-            <thead className="bg-slate-950 text-slate-700 dark:text-slate-300 text-xs uppercase font-semibold">
+            <thead className="bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 text-xs uppercase font-semibold">
               <tr>
                 <th className="px-6 py-4">Subscriber Email</th>
                 <th className="px-6 py-4">Subscribed On</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
               {subscriptions.length === 0 ? (
                 <tr>
                   <td colSpan={3} className="px-6 py-8 text-center text-slate-500 dark:text-slate-500">
@@ -97,7 +97,7 @@ export default function SubscriptionsPage() {
                       <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center shrink-0 border border-blue-500/20">
                         <Mail className="w-4 h-4 text-blue-400" />
                       </div>
-                      <a href={`mailto:${sub.email}`} className="text-slate-200 hover:text-blue-400 transition-colors">
+                      <a href={`mailto:${sub.email}`} className="text-slate-900 dark:text-slate-200 hover:text-blue-400 transition-colors">
                         {sub.email}
                       </a>
                     </td>

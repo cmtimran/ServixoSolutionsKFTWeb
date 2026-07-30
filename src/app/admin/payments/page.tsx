@@ -63,7 +63,7 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
         </Link>
       </div>
 
-      <div className="bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -87,11 +87,11 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
                 payments.map((payment) => (
                   <tr key={payment.id} className="border-b border-slate-200 dark:border-slate-800/50 hover:bg-slate-50 dark:bg-slate-900/50 transition-colors">
                     <td className="p-4">
-                      <div className="font-medium text-slate-200">{payment.customerName || 'Unknown Name'}</div>
+                      <div className="font-medium text-slate-900 dark:text-slate-200">{payment.customerName || 'Unknown Name'}</div>
                       <div className="text-xs text-slate-600 dark:text-slate-400">{payment.customerEmail || 'No email provided'}</div>
                     </td>
                     <td className="p-4">
-                      <div className="font-medium text-slate-200">{payment.productName}</div>
+                      <div className="font-medium text-slate-900 dark:text-slate-200">{payment.productName}</div>
                       <div className="text-xs text-slate-600 dark:text-slate-400 text-brand-indigo">{payment.planTier} Plan</div>
                     </td>
                     <td className="p-4 font-medium">
