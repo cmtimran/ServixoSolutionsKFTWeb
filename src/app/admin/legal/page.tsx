@@ -1,0 +1,163 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { Loader2, Save, FileText } from 'lucide-react';
+import 'react-quill/dist/quill.snow.css';
+
+// Dynamically import ReactQuill to prevent SSR issues (document is not defined)
+const ReactQuill = dynamic(() => import('react-quill'), { 
+  ssr: false,
+  loading: () => <div className="h-64 flex items-center justify-center bg-slate-800 rounded-xl"><Loader2 className="w-6 h-6 animate-spin text-slate-500" /></div>
+});
+
+const modules = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{'list': 'ordered'}, {'list': 'bullet'}],
+    ['link'],
+    ['clean']
+  ],
+};
+
+const formats = [
+  'header',
+  'bold', 'italic', 'underline', 'strike',
+  'list', 'bullet',
+  'link'
+];
+
+export default function LegalSettingsPage() {
+  const [settings, setSettings] = useState({
+    privacy_policy_content: '',
+    terms_and_policies_content: '',
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    fetch('/api/admin/settings')
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data) {
+          setSettings({
+            privacy_policy_content: json.data.privacy_policy_content || '',
+            terms_and_policies_content: json.data.terms_and_policies_content || '',
+          });
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ settings }),
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setMessage('Legal policies successfully saved to database!');
+      } else {
+        setMessage('Error saving policies.');
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage('Network error.');
+    } finally {
+      setSaving(false);
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Legal Pages</h1>
+        <p className="text-slate-400">Manage the content of your Privacy Policy and Terms & Policies pages.</p>
+      </div>
+
+      <form onSubmit={handleSave} className="space-y-10">
+        
+        {/* Privacy Policy Editor */}
+        <div className="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6 sm:p-8 backdrop-blur-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <FileText className="w-5 h-5 text-indigo-400" />
+            <h2 className="text-xl font-semibold text-white">Privacy Policy</h2>
+          </div>
+          <p className="text-sm text-slate-400 mb-6">This content will be displayed on the public /privacy-policy page.</p>
+          
+          <div className="bg-white text-slate-900 rounded-xl overflow-hidden">
+            <ReactQuill 
+              theme="snow"
+              value={settings.privacy_policy_content}
+              onChange={(val) => setSettings({ ...settings, privacy_policy_content: val })}
+              modules={modules}
+              formats={formats}
+              className="h-[400px] pb-10"
+            />
+          </div>
+        </div>
+
+        {/* Terms and Policies Editor */}
+        <div className="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6 sm:p-8 backdrop-blur-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <FileText className="w-5 h-5 text-indigo-400" />
+            <h2 className="text-xl font-semibold text-white">Terms and Policies</h2>
+          </div>
+          <p className="text-sm text-slate-400 mb-6">This content will be displayed on the public /terms-and-policies page.</p>
+          
+          <div className="bg-white text-slate-900 rounded-xl overflow-hidden">
+            <ReactQuill 
+              theme="snow"
+              value={settings.terms_and_policies_content}
+              onChange={(val) => setSettings({ ...settings, terms_and_policies_content: val })}
+              modules={modules}
+              formats={formats}
+              className="h-[400px] pb-10"
+            />
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <div className="flex items-center justify-between">
+          <div className={`text-sm font-medium ${message.includes('Error') ? 'text-red-400' : 'text-emerald-400'}`}>
+            {message}
+          </div>
+          
+          <button
+            type="submit"
+            disabled={saving}
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-8 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <Save className="w-5 h-5" />
+            )}
+            Publish Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}

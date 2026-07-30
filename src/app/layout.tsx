@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+import { prisma } from "@/lib/prisma";
+
 export const metadata: Metadata = {
   title: {
     default: "Servixo Solutions KFT — Enterprise IT Services & Products",
@@ -18,13 +20,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch default theme from settings, fallback to 'light'
+  let defaultTheme = "light";
+  try {
+    const themeSetting = await prisma.setting.findUnique({
+      where: { key: "defaultTheme" },
+    });
+    if (themeSetting?.value) {
+      defaultTheme = themeSetting.value;
+    }
+  } catch (error) {
+    console.error("Error fetching theme:", error);
+  }
+
+  const htmlClasses = `h-full antialiased ${defaultTheme === "dark" ? "dark" : ""}`.trim();
+
   return (
-    <html lang="en" className="h-full antialiased dark" suppressHydrationWarning>
+    <html lang="en" className={htmlClasses} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

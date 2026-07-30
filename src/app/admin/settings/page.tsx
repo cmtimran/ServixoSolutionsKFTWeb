@@ -10,6 +10,7 @@ export default function SettingsPage() {
     companyAddress: '',
     stripePublicKey: '',
     stripeSecretKey: '',
+    defaultTheme: 'light',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -26,6 +27,7 @@ export default function SettingsPage() {
             companyAddress: json.data.companyAddress || '',
             stripePublicKey: json.data.stripePublicKey || '',
             stripeSecretKey: json.data.stripeSecretKey || '',
+            defaultTheme: json.data.defaultTheme || 'light',
           });
         }
         setLoading(false);
@@ -116,6 +118,30 @@ export default function SettingsPage() {
                   placeholder="Budapest, Hungary"
                   className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Site Appearance */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-white border-b border-slate-700 pb-2 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-400"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+              Site Appearance
+            </h2>
+            <p className="text-sm text-slate-400 pb-2">Configure the default look and feel for visitors.</p>
+            
+            <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-300">Default Theme</label>
+                <select
+                  value={settings.defaultTheme}
+                  onChange={(e) => setSettings({ ...settings, defaultTheme: e.target.value })}
+                  className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all appearance-none"
+                >
+                  <option value="light">Light Mode (Bright)</option>
+                  <option value="dark">Dark Mode</option>
+                </select>
+                <p className="text-xs text-slate-500">Users can still toggle the theme manually using the icon in the header.</p>
               </div>
             </div>
           </div>

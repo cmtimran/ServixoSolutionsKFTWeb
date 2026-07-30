@@ -124,9 +124,8 @@ export default function Footer() {
         <div className="mt-14 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style={{ borderTop: '1px solid var(--border)', color: 'var(--text-subtle)' }}>
           <p>&copy; {new Date().getFullYear()} Servixo Solutions KFT. All rights reserved. Budapest, Hungary.</p>
           <div className="flex gap-5">
-            <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
-            <Link href="/terms" className="hover:underline">Terms of Service</Link>
-            <Link href="/admin" className="hover:underline">Admin</Link>
+            <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>
+            <Link href="/terms-and-policies" className="hover:underline">Terms & Policies</Link>
           </div>
         </div>
       </div>

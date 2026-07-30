@@ -7,7 +7,7 @@ import { Sun, Moon, Menu, X, ChevronDown, Award, ShieldAlert, Cpu } from 'lucide
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Header() {
-  const [darkMode, setDarkMode] = useState(true); // Dark mode default
+  const [darkMode, setDarkMode] = useState(false); // Assume bright by default
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
@@ -15,13 +15,9 @@ export default function Header() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Apply dark class by default
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
+    // Sync initial state from HTML class applied by server layout
+    setDarkMode(document.documentElement.classList.contains('dark'));
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +39,13 @@ export default function Header() {
   }, [pathname]);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   };
 
   return (
