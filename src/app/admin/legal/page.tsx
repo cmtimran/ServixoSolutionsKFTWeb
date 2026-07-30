@@ -1,32 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+
 import { Loader2, Save, FileText } from 'lucide-react';
 
-import 'react-quill/dist/quill.snow.css';
-
-const ReactQuill = dynamic(() => import('react-quill'), { 
-  ssr: false, 
-  loading: () => <div className="h-[400px] w-full bg-slate-900/50 animate-pulse rounded-xl flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>
-});
-
-const modules = {
-  toolbar: [
-    [{ 'header': [1, 2, 3, 4, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{'list': 'ordered'}, {'list': 'bullet'}],
-    ['link'],
-    ['clean']
-  ],
-};
-
-const formats = [
-  'header',
-  'bold', 'italic', 'underline', 'strike', 'blockquote',
-  'list', 'bullet',
-  'link'
-];
 
 export default function LegalSettingsPage() {
   const [settings, setSettings] = useState({
@@ -106,13 +83,12 @@ export default function LegalSettingsPage() {
           </div>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">This content will be displayed on the public /privacy-policy page.</p>
           
-          <div className="bg-white dark:bg-slate-900/50 rounded-xl overflow-hidden [&_.ql-toolbar]:border-slate-200 dark:[&_.ql-toolbar]:border-slate-700 [&_.ql-container]:border-slate-200 dark:[&_.ql-container]:border-slate-700 [&_.ql-editor]:min-h-[400px] [&_.ql-editor]:text-slate-900 dark:[&_.ql-editor]:text-slate-100">
-            <ReactQuill 
-              theme="snow"
+          <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+            <textarea 
               value={settings.privacy_policy_content}
-              onChange={(val) => setSettings({ ...settings, privacy_policy_content: val })}
-              modules={modules}
-              formats={formats}
+              onChange={(e) => setSettings({ ...settings, privacy_policy_content: e.target.value })}
+              className="w-full h-[400px] p-4 bg-transparent text-slate-900 dark:text-slate-100 focus:outline-none resize-none font-mono text-sm"
+              placeholder="Enter HTML content for Privacy Policy..."
             />
           </div>
         </div>
@@ -125,13 +101,12 @@ export default function LegalSettingsPage() {
           </div>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">This content will be displayed on the public /terms-and-policies page.</p>
           
-          <div className="bg-white dark:bg-slate-900/50 rounded-xl overflow-hidden [&_.ql-toolbar]:border-slate-200 dark:[&_.ql-toolbar]:border-slate-700 [&_.ql-container]:border-slate-200 dark:[&_.ql-container]:border-slate-700 [&_.ql-editor]:min-h-[400px] [&_.ql-editor]:text-slate-900 dark:[&_.ql-editor]:text-slate-100">
-            <ReactQuill 
-              theme="snow"
+          <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+            <textarea 
               value={settings.terms_and_policies_content}
-              onChange={(val) => setSettings({ ...settings, terms_and_policies_content: val })}
-              modules={modules}
-              formats={formats}
+              onChange={(e) => setSettings({ ...settings, terms_and_policies_content: e.target.value })}
+              className="w-full h-[400px] p-4 bg-transparent text-slate-900 dark:text-slate-100 focus:outline-none resize-none font-mono text-sm"
+              placeholder="Enter HTML content for Terms and Policies..."
             />
           </div>
         </div>
