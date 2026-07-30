@@ -331,18 +331,4 @@ p {
   background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
 }
 
-/* Force light mode by inverting the slate color scale */
-html:not(.dark) {
-  --color-slate-950: #ffffff;
-  --color-slate-900: #f8fafc;
-  --color-slate-850: #f1f5f9; /* custom if any */
-  --color-slate-800: #f1f5f9;
-  --color-slate-700: #e2e8f0;
-  --color-slate-600: #cbd5e1;
-  --color-slate-500: #94a3b8;
-  --color-slate-400: #64748b;
-  --color-slate-300: #475569;
-  --color-slate-200: #334155;
-  --color-slate-100: #1e293b;
-  --color-slate-50:  #0f172a;
-}
+
