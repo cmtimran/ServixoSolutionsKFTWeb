@@ -34,20 +34,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 flex font-sans transition-colors duration-300">
       
       {/* Mobile Sidebar Toggle Button */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2.5 rounded-xl bg-slate-850 border border-slate-700/60 text-slate-300 hover:text-white shadow-lg cursor-pointer"
+          className="p-2.5 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-lg cursor-pointer"
         >
           {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
       {/* Sidebar Navigation */}
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-slate-950 border-r border-slate-800 p-6 flex flex-col justify-between transform transition-transform duration-300 lg:translate-x-0 lg:static lg:h-screen shrink-0 ${
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between transform transition-transform duration-300 lg:translate-x-0 lg:static lg:h-screen shrink-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="space-y-8">
@@ -57,7 +57,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Cpu className="w-5 h-5" />
             </div>
             <div>
-              <span className="font-bold text-white tracking-tight">Servixo Admin</span>
+              <span className="font-bold text-slate-900 dark:text-white tracking-tight">Servixo Admin</span>
               <span className="text-[10px] block text-slate-500 uppercase tracking-widest font-semibold">Management Console</span>
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10'
-                      : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900'
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -87,17 +87,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* Back to Homepage & Logout */}
-        <div className="border-t border-slate-800 pt-6 space-y-4">
+        <div className="border-t border-slate-200 dark:border-slate-800 pt-6 space-y-4">
           <Link
             href="/"
-            className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Return to Homepage
           </Link>
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-2 text-xs font-semibold text-red-400 hover:text-red-300 transition-colors"
+            className="flex w-full items-center gap-2 text-xs font-semibold text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors"
           >
             Sign out
           </button>
