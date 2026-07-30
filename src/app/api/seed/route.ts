@@ -158,9 +158,9 @@ export async function GET() {
     // 7. Legal Settings
     const privacyPolicyHTML = `
 <h1>Privacy Policy</h1>
-<p><strong>Effective Date:</strong> [Date]</p>
+<p><strong>Effective Date:</strong> 2026-07-30</p>
 <p><strong>Company Name:</strong> Servixo Solutions KFT</p>
-<p><strong>Contact Email:</strong> [info@servixo.com]</p>
+<p><strong>Contact Email:</strong> servixokft@gmail.com</p>
 <p>Welcome to Servixo Solutions KFT ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regard to your personal information, please contact us.</p>
 <p>This Privacy Policy applies to all information collected through our website (and our services), as well as any related services, sales, marketing, or events.</p>
 <h2>1. Information We Collect</h2>
@@ -212,14 +212,14 @@ export async function GET() {
 <h2>8. Updates to This Policy</h2>
 <p>We may update this privacy notice from time to time. The updated version will be indicated by an updated "Effective Date" and the updated version will be effective as soon as it is accessible. If we make material changes to this privacy notice, we may notify you either by prominently posting a notice of such changes or by directly sending you a notification. We encourage you to review this privacy notice frequently to be informed of how we are protecting your information.</p>
 <h2>9. Contact Us</h2>
-<p>If you have questions or comments about this notice, you may email us at [info@servixo.com] or by post to:</p>
+<p>If you have questions or comments about this notice, you may email us at servixokft@gmail.com or by post to:</p>
 <p><strong>Servixo Solutions KFT</strong><br>
-[Company Address]<br>
-Budapest, Hungary</p>
+Rákóczi út 63<br>
+Budapest 1081, Hungary</p>
     `;
     const termsPoliciesHTML = `
 <h1>Terms and Policies</h1>
-<p><strong>Effective Date:</strong> [Date]</p>
+<p><strong>Effective Date:</strong> 2026-07-30</p>
 <p><strong>Company Name:</strong> Servixo Solutions KFT</p>
 <hr>
 <h2>1. Payment & Refund Policy</h2>
@@ -276,6 +276,25 @@ Budapest, Hungary</p>
       where: { key: 'terms_and_policies_content' },
       update: { value: termsPoliciesHTML },
       create: { key: 'terms_and_policies_content', value: termsPoliciesHTML },
+    });
+
+    // 8. Contact Settings
+    await prisma.setting.upsert({
+      where: { key: 'contactEmail' },
+      update: { value: 'servixokft@gmail.com' },
+      create: { key: 'contactEmail', value: 'servixokft@gmail.com' },
+    });
+
+    await prisma.setting.upsert({
+      where: { key: 'contactPhone' },
+      update: { value: '+36 20 281 1466' },
+      create: { key: 'contactPhone', value: '+36 20 281 1466' },
+    });
+
+    await prisma.setting.upsert({
+      where: { key: 'companyAddress' },
+      update: { value: 'Rákóczi út 63\nBudapest 1081, Hungary' },
+      create: { key: 'companyAddress', value: 'Rákóczi út 63\nBudapest 1081, Hungary' },
     });
 
     return NextResponse.json({ 
