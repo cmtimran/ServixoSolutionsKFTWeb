@@ -63,8 +63,8 @@ export default function SubscriptionsPage() {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Newsletter Subscriptions</h1>
-        <p className="text-slate-400">Manage email subscribers.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Newsletter Subscriptions</h1>
+        <p className="text-slate-600 dark:text-slate-400">Manage email subscribers.</p>
       </div>
 
       {error && (
@@ -73,10 +73,10 @@ export default function SubscriptionsPage() {
         </div>
       )}
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate-400">
-            <thead className="bg-slate-950 text-slate-300 text-xs uppercase font-semibold">
+          <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+            <thead className="bg-slate-950 text-slate-700 dark:text-slate-300 text-xs uppercase font-semibold">
               <tr>
                 <th className="px-6 py-4">Subscriber Email</th>
                 <th className="px-6 py-4">Subscribed On</th>
@@ -86,14 +86,14 @@ export default function SubscriptionsPage() {
             <tbody className="divide-y divide-slate-800/60">
               {subscriptions.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={3} className="px-6 py-8 text-center text-slate-500 dark:text-slate-500">
                     No subscribers found.
                   </td>
                 </tr>
               ) : (
                 subscriptions.map((sub) => (
-                  <tr key={sub.id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4 font-medium text-white flex items-center gap-3">
+                  <tr key={sub.id} className="hover:bg-slate-50 dark:bg-slate-800/30 transition-colors">
+                    <td className="px-6 py-4 font-medium text-slate-900 dark:text-white flex items-center gap-3">
                       <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center shrink-0 border border-blue-500/20">
                         <Mail className="w-4 h-4 text-blue-400" />
                       </div>
@@ -105,7 +105,7 @@ export default function SubscriptionsPage() {
                     <td className="px-6 py-4 flex justify-end">
                       <button
                         onClick={() => handleDelete(sub.id)}
-                        className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors group relative"
+                        className="p-2 text-slate-600 dark:text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors group relative"
                         title="Delete subscriber"
                       >
                         <Trash2 className="w-4 h-4" />

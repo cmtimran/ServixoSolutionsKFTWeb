@@ -94,15 +94,15 @@ export default function QuotesPage() {
       case 'IN_REVIEW': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
       case 'APPROVED': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
       case 'REJECTED': return 'bg-red-500/10 text-red-500 border-red-500/20';
-      default: return 'bg-slate-800 text-slate-300 border-slate-700';
+      default: return 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700';
     }
   };
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Quote Requests</h1>
-        <p className="text-slate-400">Manage client inquiries and project quotes.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Quote Requests</h1>
+        <p className="text-slate-600 dark:text-slate-400">Manage client inquiries and project quotes.</p>
       </div>
 
       {error && (
@@ -113,16 +113,16 @@ export default function QuotesPage() {
 
       <div className="grid gap-6">
         {quotes.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center text-slate-500">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center text-slate-500 dark:text-slate-500">
             No quote requests found.
           </div>
         ) : (
           quotes.map((quote) => (
-            <div key={quote.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col md:flex-row">
+            <div key={quote.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col md:flex-row">
               <div className="p-6 md:w-1/3 bg-slate-950/50 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col gap-4">
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-bold text-lg text-white">{quote.clientName}</h3>
+                    <h3 className="font-bold text-lg text-slate-900 dark:text-white">{quote.clientName}</h3>
                     <select
                       value={quote.status}
                       onChange={(e) => handleStatusChange(quote.id, e.target.value)}
@@ -135,22 +135,22 @@ export default function QuotesPage() {
                     </select>
                   </div>
                   {quote.companyName && (
-                    <p className="text-sm text-slate-400 font-medium">{quote.companyName}</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">{quote.companyName}</p>
                   )}
                 </div>
 
-                <div className="space-y-2 text-sm text-slate-400">
+                <div className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                   <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-slate-500" />
+                    <Mail className="w-4 h-4 text-slate-500 dark:text-slate-500" />
                     <a href={`mailto:${quote.clientEmail}`} className="hover:text-blue-400 transition-colors">{quote.clientEmail}</a>
                   </div>
                   {quote.clientPhone && (
                     <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-slate-500" />
+                      <Phone className="w-4 h-4 text-slate-500 dark:text-slate-500" />
                       <a href={`tel:${quote.clientPhone}`} className="hover:text-blue-400 transition-colors">{quote.clientPhone}</a>
                     </div>
                   )}
-                  <div className="flex items-center gap-2 text-xs text-slate-500 pt-2">
+                  <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-500 pt-2">
                     <Clock className="w-3.5 h-3.5" />
                     Requested on {new Date(quote.createdAt).toLocaleDateString()}
                   </div>
@@ -168,18 +168,18 @@ export default function QuotesPage() {
                 
                 <div className="flex flex-wrap gap-6 mb-6">
                   <div className="space-y-1">
-                    <span className="text-xs text-slate-500 font-semibold uppercase flex items-center gap-1"><DollarSign className="w-3.5 h-3.5"/> Budget</span>
-                    <p className="text-sm text-slate-300 font-medium">{quote.budgetRange}</p>
+                    <span className="text-xs text-slate-500 dark:text-slate-500 font-semibold uppercase flex items-center gap-1"><DollarSign className="w-3.5 h-3.5"/> Budget</span>
+                    <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">{quote.budgetRange}</p>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-xs text-slate-500 font-semibold uppercase flex items-center gap-1"><Clock className="w-3.5 h-3.5"/> Timeline</span>
-                    <p className="text-sm text-slate-300 font-medium">{quote.timeline}</p>
+                    <span className="text-xs text-slate-500 dark:text-slate-500 font-semibold uppercase flex items-center gap-1"><Clock className="w-3.5 h-3.5"/> Timeline</span>
+                    <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">{quote.timeline}</p>
                   </div>
                 </div>
 
                 <div className="space-y-2 flex-grow">
-                  <span className="text-xs text-slate-500 font-semibold uppercase flex items-center gap-1"><FileText className="w-3.5 h-3.5"/> Description</span>
-                  <div className="bg-slate-950 p-4 rounded-xl text-sm text-slate-300 border border-slate-800/60 leading-relaxed max-h-[200px] overflow-y-auto">
+                  <span className="text-xs text-slate-500 dark:text-slate-500 font-semibold uppercase flex items-center gap-1"><FileText className="w-3.5 h-3.5"/> Description</span>
+                  <div className="bg-slate-950 p-4 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-800/60 leading-relaxed max-h-[200px] overflow-y-auto">
                     {quote.projectDescription}
                   </div>
                 </div>

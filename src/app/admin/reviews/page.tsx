@@ -89,8 +89,8 @@ export default function ReviewsPage() {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Client Reviews</h1>
-        <p className="text-slate-400">Manage and approve client testimonials for the public site.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Client Reviews</h1>
+        <p className="text-slate-600 dark:text-slate-400">Manage and approve client testimonials for the public site.</p>
       </div>
 
       {error && (
@@ -101,16 +101,16 @@ export default function ReviewsPage() {
 
       <div className="grid gap-6">
         {reviews.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center text-slate-500">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center text-slate-500 dark:text-slate-500">
             No reviews found.
           </div>
         ) : (
           reviews.map((review) => (
-            <div key={review.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col md:flex-row">
+            <div key={review.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col md:flex-row">
               <div className="p-6 md:w-1/3 bg-slate-950/50 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-bold text-lg text-white mb-1">{review.clientName}</h3>
-                  <p className="text-sm text-slate-400 font-medium">
+                  <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-1">{review.clientName}</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
                     {review.designation} at <span className="text-indigo-400">{review.company}</span>
                   </p>
                   <div className="flex items-center gap-1 mt-4">
@@ -121,7 +121,7 @@ export default function ReviewsPage() {
                       />
                     ))}
                   </div>
-                  <div className="mt-4 text-xs text-slate-500">
+                  <div className="mt-4 text-xs text-slate-500 dark:text-slate-500">
                     Submitted {new Date(review.createdAt).toLocaleDateString()}
                   </div>
                 </div>
@@ -136,7 +136,7 @@ export default function ReviewsPage() {
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
                       review.isApproved 
                         ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20' 
-                        : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700 hover:text-white'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700 hover:bg-slate-700 hover:text-slate-900 dark:text-white'
                     }`}
                   >
                     {review.isApproved ? (
@@ -147,7 +147,7 @@ export default function ReviewsPage() {
                   </button>
                 </div>
                 
-                <div className="bg-slate-950 p-4 rounded-xl text-sm text-slate-300 border border-slate-800/60 leading-relaxed italic flex-grow">
+                <div className="bg-slate-950 p-4 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-800/60 leading-relaxed italic flex-grow">
                   "{review.reviewText}"
                 </div>
 

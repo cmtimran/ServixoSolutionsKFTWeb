@@ -57,19 +57,19 @@ export default function ProductsPage() {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Products Management</h1>
-          <p className="text-slate-400">Manage your digital products, features, and pricing tiers.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Products Management</h1>
+          <p className="text-slate-600 dark:text-slate-400">Manage your digital products, features, and pricing tiers.</p>
         </div>
-        <Link href="/admin/products/new" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 px-5 rounded-xl transition-all">
+        <Link href="/admin/products/new" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-slate-900 dark:text-white font-semibold py-2.5 px-5 rounded-xl transition-all">
           <Plus className="w-5 h-5" />
           Add New Product
         </Link>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate-400">
-            <thead className="bg-slate-950 text-slate-300 text-xs uppercase font-semibold">
+          <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+            <thead className="bg-slate-950 text-slate-700 dark:text-slate-300 text-xs uppercase font-semibold">
               <tr>
                 <th className="px-6 py-4">Product Name</th>
                 <th className="px-6 py-4">Slug</th>
@@ -81,14 +81,14 @@ export default function ProductsPage() {
             <tbody className="divide-y divide-slate-800/60">
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500 dark:text-slate-500">
                     No products found. Create your first product!
                   </td>
                 </tr>
               ) : (
                 products.map((product) => (
-                  <tr key={product.id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4 font-medium text-white flex items-center gap-3">
+                  <tr key={product.id} className="hover:bg-slate-50 dark:bg-slate-800/30 transition-colors">
+                    <td className="px-6 py-4 font-medium text-slate-900 dark:text-white flex items-center gap-3">
                       <div className="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center shrink-0">
                         <Package className="w-4 h-4 text-blue-400" />
                       </div>
@@ -100,13 +100,13 @@ export default function ProductsPage() {
                     <td className="px-6 py-4 flex items-center justify-end gap-3">
                       <Link
                         href={`/admin/products/${product.id}`}
-                        className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
+                        className="p-2 text-slate-600 dark:text-slate-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
                       >
                         <Pencil className="w-4 h-4" />
                       </Link>
                       <button
                         onClick={() => handleDelete(product.id)}
-                        className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                        className="p-2 text-slate-600 dark:text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

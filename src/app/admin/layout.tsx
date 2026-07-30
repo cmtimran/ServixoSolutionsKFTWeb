@@ -40,7 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2.5 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-lg cursor-pointer"
+          className="p-2.5 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-900 dark:text-white shadow-lg cursor-pointer"
         >
           {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -53,12 +53,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="space-y-8">
           {/* Logo & branding */}
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 rounded-lg text-white">
+            <div className="p-2 bg-blue-600 rounded-lg text-slate-900 dark:text-white">
               <Cpu className="w-5 h-5" />
             </div>
             <div>
               <span className="font-bold text-slate-900 dark:text-white tracking-tight">Servixo Admin</span>
-              <span className="text-[10px] block text-slate-500 uppercase tracking-widest font-semibold">Management Console</span>
+              <span className="text-[10px] block text-slate-500 dark:text-slate-500 uppercase tracking-widest font-semibold">Management Console</span>
             </div>
           </div>
 
@@ -73,8 +73,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-600/10'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900'
+                      ? 'bg-blue-600 text-slate-900 dark:text-white shadow-md shadow-blue-600/10'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-white dark:bg-slate-900'
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -90,7 +90,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="border-t border-slate-200 dark:border-slate-800 pt-6 space-y-4">
           <Link
             href="/"
-            className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-900 dark:text-white transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Return to Homepage

@@ -84,7 +84,7 @@ export default function LegalSettingsPage() {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Legal Pages</h1>
-        <p className="text-slate-500 dark:text-slate-400">Manage the content of your Privacy Policy and Terms & Policies pages.</p>
+        <p className="text-slate-500 dark:text-slate-500 dark:text-slate-400">Manage the content of your Privacy Policy and Terms & Policies pages.</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-10">
@@ -95,7 +95,7 @@ export default function LegalSettingsPage() {
             <FileText className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Privacy Policy</h2>
           </div>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">This content will be displayed on the public /privacy-policy page.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-500 dark:text-slate-400 mb-6">This content will be displayed on the public /privacy-policy page.</p>
           
           <div className="bg-white rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 text-slate-900">
             <JoditEditor
@@ -113,7 +113,7 @@ export default function LegalSettingsPage() {
             <FileText className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Terms and Policies</h2>
           </div>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">This content will be displayed on the public /terms-and-policies page.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-500 dark:text-slate-400 mb-6">This content will be displayed on the public /terms-and-policies page.</p>
           
           <div className="bg-white rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 text-slate-900">
             <JoditEditor
@@ -134,7 +134,7 @@ export default function LegalSettingsPage() {
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-8 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-blue-500/20"
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-slate-900 dark:text-white font-semibold py-3 px-8 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-blue-500/20"
           >
             {saving ? (
               <Loader2 className="w-5 h-5 animate-spin" />

@@ -30,7 +30,7 @@ export default async function QueriesPage() {
 
       <div className="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
         {queries.length === 0 ? (
-          <div className="p-8 text-center text-slate-500">
+          <div className="p-8 text-center text-slate-500 dark:text-slate-500">
             No contact queries yet.
           </div>
         ) : (
@@ -47,7 +47,7 @@ export default async function QueriesPage() {
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+                    <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-500 dark:text-slate-400">
                       <span className="flex items-center gap-1"><Mail className="w-4 h-4" /> {query.name} ({query.email})</span>
                       <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {new Date(query.createdAt).toLocaleString()}</span>
                     </div>
@@ -59,7 +59,7 @@ export default async function QueriesPage() {
                     <form action={markAsRead.bind(null, query.id)}>
                       <button 
                         type="submit"
-                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 bg-white border border-slate-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:text-blue-400 dark:hover:bg-slate-800/50 dark:hover:border-blue-500/50"
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 bg-white border border-slate-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:text-blue-400 dark:hover:bg-slate-50 dark:bg-slate-800/50 dark:hover:border-blue-500/50"
                       >
                         <CheckCircle className="w-4 h-4" />
                         Mark Read
