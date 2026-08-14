@@ -1,46 +1,33 @@
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
 
-export async function POST(req: Request) {
+/**
+ * POST /api/admin/payments/sync
+ * Replaced Stripe sync with a SimplePay status check from our DB.
+ * (SimplePay updates status via IPN — this endpoint just returns current DB state.)
+ */
+export async function POST() {
   try {
-    const secretKeySetting = await prisma.setting.findUnique({ where: { key: 'stripeSecretKey' } });
-    const stripeSecretKey = secretKeySetting?.value || process.env.STRIPE_SECRET_KEY;
-
-    if (!stripeSecretKey) {
-      return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 });
-    }
-
-    const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2026-06-24.dahlia' as any,
-    });
-
     const pendingPayments = await prisma.payment.findMany({
-      where: { status: { in: ['pending', 'open'] } }
+      where: { status: 'pending' },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
     });
 
-    let updatedCount = 0;
-
-    for (const payment of pendingPayments) {
-      try {
-        const session = await stripe.checkout.sessions.retrieve(payment.sessionId);
-        if (session.status !== payment.status) {
-          await prisma.payment.update({
-            where: { id: payment.id },
-            data: { 
-              status: session.status || 'unknown',
-              customerEmail: session.customer_details?.email || payment.customerEmail,
-              customerName: session.customer_details?.name || payment.customerName,
-            }
-          });
-          updatedCount++;
-        }
-      } catch (err) {
-        // Session might not exist or error
-      }
-    }
-
-    return NextResponse.json({ success: true, updatedCount });
+    return NextResponse.json({
+      success: true,
+      message: 'SimplePay payments are updated in real-time via IPN webhook.',
+      pendingCount: pendingPayments.length,
+      pendingPayments: pendingPayments.map(p => ({
+        id:        p.id,
+        orderRef:  p.simplePayOrderRef,
+        product:   p.productName,
+        plan:      p.planTier,
+        amount:    p.amount,
+        currency:  p.currency,
+        createdAt: p.createdAt,
+      })),
+    });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

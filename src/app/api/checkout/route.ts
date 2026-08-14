@@ -1,73 +1,115 @@
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
+import {
+  generateSignature,
+  generateSalt,
+  getTimeoutDate,
+  getSimplePayBase,
+  SDK_VERSION,
+  type SimplePayStartRequest,
+  type SimplePayStartResponse,
+} from '@/lib/simplepay';
 
+/**
+ * POST /api/checkout
+ * Drop-in replacement for the old Stripe checkout route.
+ * Now initiates a SimplePay v2 payment and returns { paymentUrl }.
+ */
 export async function POST(req: Request) {
   try {
-    const { productName, planTier, price, interval = 'month' } = await req.json();
-    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
+    const { productName, planTier, price, currency = 'HUF' } = await req.json();
 
-    // Fetch Stripe keys from the database settings
-    const secretKeySetting = await prisma.setting.findUnique({ where: { key: 'stripeSecretKey' } });
-    const publicKeySetting = await prisma.setting.findUnique({ where: { key: 'stripePublicKey' } });
+    const merchantId = process.env.SIMPLEPAY_MERCHANT_ID;
+    const secretKey  = process.env.SIMPLEPAY_SECRET_KEY;
+    const appUrl     = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
-    const stripeSecretKey = secretKeySetting?.value || process.env.STRIPE_SECRET_KEY;
-    const stripePublicKey = publicKeySetting?.value || process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-
-    if (!stripeSecretKey || stripeSecretKey === 'sk_test_placeholder') {
-       // Simulate checkout if Stripe isn't configured
-       return NextResponse.json({ 
-         mock: true,
-         url: `/checkout/mock?session_id=mock_session_${Date.now()}`
-       });
+    if (!merchantId || !secretKey) {
+      return NextResponse.json(
+        { error: 'SimplePay credentials are not configured.' },
+        { status: 500 }
+      );
     }
 
-    const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2026-06-24.dahlia' as any,
-    });
+    const orderRef   = `SRVX-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+    const totalAmount = currency === 'HUF'
+      ? Math.round(parseFloat(String(price)) * 400).toString()
+      : parseFloat(String(price)).toFixed(2);
 
-    // Convert price string/number to cents (e.g. 14.99 -> 1499)
-    const unitAmount = Math.round(parseFloat(String(price)) * 100);
-
-    const session = await stripe.checkout.sessions.create({
-      ui_mode: 'embedded_page',
-      payment_method_types: ['card'],
-      line_items: [
+    const payload: SimplePayStartRequest = {
+      salt:          generateSalt(),
+      merchant:      merchantId,
+      orderRef,
+      currency:      currency as 'HUF' | 'EUR' | 'USD',
+      customerEmail: 'sandbox@servixosolutionskft.com',
+      language:      'EN',
+      sdkVersion:    SDK_VERSION,
+      methods:       ['CARD'],
+      total:         totalAmount,
+      timeout:       getTimeoutDate(30),
+      url:           `${appUrl}/checkout/simplepay-return`,
+      invoice: {
+        name:    'Servixo Customer',
+        country: 'HU',
+        state:   'Budapest',
+        city:    'Budapest',
+        zip:     '1081',
+        address: 'Rákóczi út 63',
+      },
+      items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: `${productName} - ${planTier} Plan`,
-            },
-            unit_amount: unitAmount,
-            recurring: { interval },
-          },
-          quantity: 1,
+          ref:         orderRef,
+          title:       `${productName} — ${planTier}`,
+          description: `Subscription: ${productName} ${planTier} plan`,
+          amount:      1,
+          price:       parseFloat(totalAmount),
+          tax:         0,
         },
       ],
-      mode: 'subscription',
-      return_url: `${origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
-      metadata: {
-        productName,
-        planTier,
-      }
+    };
+
+    const signature = generateSignature(payload, secretKey);
+    const spBase    = getSimplePayBase();
+
+    const spRes = await fetch(`${spBase}/start`, {
+      method:  'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Signature':    signature,
+        'Accept':       'application/json',
+      },
+      body: JSON.stringify(payload).replace(/\//g, '\\/'),
     });
 
-    // Create a pending payment record
+    const spText = await spRes.text();
+    let spData: SimplePayStartResponse;
+    try {
+      spData = JSON.parse(spText);
+    } catch {
+      return NextResponse.json({ error: 'Unexpected response from SimplePay' }, { status: 502 });
+    }
+
+    if (!spRes.ok || spData.errorCodes?.length) {
+      return NextResponse.json(
+        { error: `SimplePay error: ${JSON.stringify(spData.errorCodes ?? spData)}` },
+        { status: 400 }
+      );
+    }
+
     await prisma.payment.create({
       data: {
-        sessionId: session.id,
+        sessionId:         spData.transactionId,
         productName,
         planTier,
-        amount: unitAmount / 100,
-        currency: 'USD',
-        status: 'pending',
-      }
+        amount:            parseFloat(totalAmount),
+        currency,
+        status:            'pending',
+        simplePayOrderRef: orderRef,
+      },
     });
 
-    return NextResponse.json({ clientSecret: session.client_secret, publicKey: stripePublicKey });
+    return NextResponse.json({ paymentUrl: spData.paymentUrl, orderRef });
   } catch (err: any) {
-    console.error('Error creating checkout session:', err);
+    console.error('[/api/checkout] Error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

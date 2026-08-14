@@ -95,7 +95,7 @@ export default async function ServicesPage() {
 
                     {/* Benefits */}
                     <div className="grid grid-cols-1 gap-2">
-                      {service.benefits.slice(0, 3).map((b) => (
+                      {service.benefits.slice(0, 3).map((b: string) => (
                         <div key={b} className="flex items-center gap-2">
                           <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--brand-emerald)' }} />
                           <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>{b}</span>

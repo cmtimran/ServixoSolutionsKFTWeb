@@ -1,57 +1,43 @@
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
 
+/**
+ * GET /api/checkout/session
+ * Replaced Stripe session lookup with SimplePay order status lookup from our DB.
+ */
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const sessionId = searchParams.get('session_id');
+    const orderRef = searchParams.get('order_ref') || searchParams.get('session_id');
 
-    if (!sessionId) {
-      return NextResponse.json({ error: 'Session ID is required' }, { status: 400 });
+    if (!orderRef) {
+      return NextResponse.json({ error: 'order_ref is required' }, { status: 400 });
     }
 
-    const secretKeySetting = await prisma.setting.findUnique({ where: { key: 'stripeSecretKey' } });
-    const stripeSecretKey = secretKeySetting?.value || process.env.STRIPE_SECRET_KEY;
-
-    if (!stripeSecretKey) {
-       return NextResponse.json({ error: 'Stripe is not configured' }, { status: 500 });
-    }
-
-    const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2026-06-24.dahlia' as any,
+    const payment = await prisma.payment.findFirst({
+      where: {
+        OR: [
+          { simplePayOrderRef: orderRef },
+          { sessionId: orderRef },
+        ],
+      },
     });
 
-    // Retrieve the session from Stripe and expand the invoice to get the PDF and hosted URL
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['invoice']
-    });
-
-    // Update our database Payment record
-    const payment = await prisma.payment.findUnique({
-      where: { sessionId: session.id }
-    });
-
-    if (payment) {
-      // Update with the latest status and customer info
-      await prisma.payment.update({
-        where: { id: payment.id },
-        data: {
-          status: session.status || 'unknown',
-          customerEmail: session.customer_details?.email || null,
-          customerName: session.customer_details?.name || null,
-        }
-      });
+    if (!payment) {
+      return NextResponse.json({ error: 'Payment not found' }, { status: 404 });
     }
 
     return NextResponse.json({
-      status: session.status,
-      customer_email: session.customer_details?.email,
-      invoice_url: (session.invoice as Stripe.Invoice)?.hosted_invoice_url,
-      invoice_pdf: (session.invoice as Stripe.Invoice)?.invoice_pdf,
+      status:         payment.status,
+      orderRef:       payment.simplePayOrderRef,
+      transactionId:  payment.simplePayTransId,
+      customer_email: payment.customerEmail,
+      amount:         payment.amount,
+      currency:       payment.currency,
+      productName:    payment.productName,
+      planTier:       payment.planTier,
     });
   } catch (err: any) {
-    console.error('Error retrieving checkout session:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

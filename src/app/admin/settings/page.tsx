@@ -8,8 +8,6 @@ export default function SettingsPage() {
     contactEmail: '',
     contactPhone: '',
     companyAddress: '',
-    stripePublicKey: '',
-    stripeSecretKey: '',
     defaultTheme: 'light',
   });
   const [loading, setLoading] = useState(true);
@@ -25,8 +23,6 @@ export default function SettingsPage() {
             contactEmail: json.data.contactEmail || '',
             contactPhone: json.data.contactPhone || '',
             companyAddress: json.data.companyAddress || '',
-            stripePublicKey: json.data.stripePublicKey || '',
-            stripeSecretKey: json.data.stripeSecretKey || '',
             defaultTheme: json.data.defaultTheme || 'light',
           });
         }
@@ -146,38 +142,24 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* Stripe Integration */}
+          {/* SimplePay Integration */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white border-b border-slate-300 dark:border-slate-700 pb-2 flex items-center gap-2">
               <Key className="w-5 h-5 text-indigo-400" />
-              Stripe Configuration
+              SimplePay Configuration
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 pb-2">Enter your Stripe API keys to enable checkout and payments for digital products.</p>
-            
-            <div className="grid grid-cols-1 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Stripe Public Key</label>
-                <input
-                  type="text"
-                  value={settings.stripePublicKey}
-                  onChange={(e) => setSettings({ ...settings, stripePublicKey: e.target.value })}
-                  placeholder="pk_live_..."
-                  className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono text-sm"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Stripe Secret Key</label>
-                <input
-                  type="password"
-                  value={settings.stripeSecretKey}
-                  onChange={(e) => setSettings({ ...settings, stripeSecretKey: e.target.value })}
-                  placeholder="sk_live_..."
-                  className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono text-sm"
-                />
-                <p className="text-xs text-slate-500 dark:text-slate-500">This key is securely stored and never exposed to the frontend.</p>
-              </div>
+            <p className="text-sm text-slate-600 dark:text-slate-400 pb-2">
+              SimplePay (OTP Mobil) is the active payment gateway. Credentials are managed via environment variables on the server.
+            </p>
+            <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-4 text-sm text-indigo-300 space-y-1">
+              <div className="font-semibold text-indigo-200 mb-2">🔒 Active Credentials (from .env)</div>
+              <div><span className="text-slate-400">Merchant ID:</span> <span className="font-mono">OMS57078401</span></div>
+              <div><span className="text-slate-400">Environment:</span> <span className="font-mono text-amber-300">Sandbox</span></div>
+              <div><span className="text-slate-400">IPN Endpoint:</span> <span className="font-mono text-xs">/api/simplepay/ipn</span></div>
             </div>
+            <p className="text-xs text-slate-500">
+              To update credentials, edit <code className="bg-slate-800 px-1 rounded">.env.local</code> on the server and restart the application.
+            </p>
           </div>
 
           <div className="pt-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
