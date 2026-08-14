@@ -111,15 +111,17 @@ model ContactMessage {
 }
 
 model Payment {
-  id              String   @id @default(uuid())
-  sessionId       String   @unique
-  customerEmail   String?
-  customerName    String?
-  productName     String
-  planTier        String
-  amount          Float
-  currency        String
-  status          String   @default("pending")
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                 String   @id @default(uuid())
+  sessionId          String   @unique
+  customerEmail      String?
+  customerName       String?
+  productName        String
+  planTier           String
+  amount             Float
+  currency           String
+  status             String   @default("pending")
+  simplePayOrderRef  String?  @unique  // SimplePay orderRef (used for IPN matching)
+  simplePayTransId   String?           // SimplePay transactionId (filled in by IPN)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }

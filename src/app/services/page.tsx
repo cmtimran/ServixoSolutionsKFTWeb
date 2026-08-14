@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import { prisma } from '@/lib/prisma';
+import { MOCK_SERVICES } from '@/lib/mockData';
 import { Cloud, Code2, ShieldCheck, LineChart, ArrowRight, CheckCircle2, Leaf } from 'lucide-react';
 import Link from 'next/link';
 
@@ -38,7 +39,15 @@ const COLOR_MAP: Record<string, string> = {
 export const revalidate = 60;
 
 export default async function ServicesPage() {
-  const services = await prisma.service.findMany();
+  let services: any[] = [];
+
+  try {
+    const dbServices = await prisma.service.findMany();
+    services = dbServices.length > 0 ? dbServices : MOCK_SERVICES;
+  } catch {
+    services = MOCK_SERVICES;
+  }
+
 
   return (
     <>

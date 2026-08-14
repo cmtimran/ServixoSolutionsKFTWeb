@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
 import { prisma } from '@/lib/prisma';
 import ProductsList from '@/components/ProductsList';
+import { MOCK_PRODUCTS } from '@/lib/mockData';
 
 export const metadata: Metadata = {
   title: 'Software Products',
@@ -13,12 +14,24 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function ProductsPage() {
-  const dbProducts = await prisma.product.findMany();
-  const products = dbProducts.map(p => ({
-    ...p,
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
-  }));
+  let products: any[] = [];
+
+  try {
+    const dbProducts = await prisma.product.findMany();
+    if (dbProducts.length > 0) {
+      products = dbProducts.map(p => ({
+        ...p,
+        createdAt: p.createdAt.toISOString(),
+        updatedAt: p.updatedAt.toISOString(),
+      }));
+    } else {
+      // DB is connected but empty — use mock data
+      products = MOCK_PRODUCTS;
+    }
+  } catch {
+    // DB not reachable — fall back to mock data
+    products = MOCK_PRODUCTS;
+  }
 
   return (
     <>

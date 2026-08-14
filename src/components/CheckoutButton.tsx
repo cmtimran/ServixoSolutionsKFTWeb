@@ -43,7 +43,7 @@ export default function CheckoutButton({
         price: price.toString(),
         interval
       });
-      router.push(`/checkout/pay?${params.toString()}`);
+      router.push(`/checkout/simplepay-pay?${params.toString()}`);
     } catch (err: any) {
       console.error('Checkout error:', err);
       alert(err.message || 'An error occurred during checkout.');
