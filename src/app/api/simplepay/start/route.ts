@@ -110,7 +110,7 @@ export async function POST(req: Request) {
     // Persist a pending payment record
     await prisma.payment.create({
       data: {
-        sessionId:         spData.transactionId,
+        sessionId:         String(spData.transactionId),
         productName,
         planTier,
         amount:            parseFloat(totalAmount),
