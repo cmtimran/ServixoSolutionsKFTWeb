@@ -26,7 +26,7 @@ function SimplePayContent() {
     fetch('/api/simplepay/start', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ productName, planTier, price, currency: 'HUF' }),
+      body:    JSON.stringify({ productName, planTier, price, currency: 'USD' }),
     })
       .then((res) => res.json())
       .then((data) => {
