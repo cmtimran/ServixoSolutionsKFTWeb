@@ -6,6 +6,8 @@ import { prisma } from '@/lib/prisma';
 import { CheckCircle2, ChevronDown, ArrowRight, Cloud, Code2, ShieldCheck, LineChart, Leaf } from 'lucide-react';
 import Link from 'next/link';
 
+import { dbFetchWithTimeout } from '@/lib/dbFetch';
+
 const ICON_MAP: Record<string, React.ElementType> = {
   Cloud: Cloud, Software: Code2, Cybersecurity: ShieldCheck, 'IT Consulting': LineChart, Environmental: Leaf,
 };
@@ -21,8 +23,12 @@ const COLOR_MAP: Record<string, string> = {
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const services = await prisma.service.findMany({ select: { slug: true } });
-  return services.map((s) => ({ slug: s.slug }));
+  try {
+    const services = await dbFetchWithTimeout(prisma.service.findMany({ select: { slug: true } }));
+    return services.map((s) => ({ slug: s.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

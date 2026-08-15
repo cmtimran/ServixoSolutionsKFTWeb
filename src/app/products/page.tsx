@@ -5,6 +5,7 @@ import PageHero from '@/components/PageHero';
 import { prisma } from '@/lib/prisma';
 import ProductsList from '@/components/ProductsList';
 import { MOCK_PRODUCTS } from '@/lib/mockData';
+import { dbFetchWithTimeout } from '@/lib/dbFetch';
 
 export const metadata: Metadata = {
   title: 'Software Products',
@@ -17,7 +18,7 @@ export default async function ProductsPage() {
   let products: any[] = [];
 
   try {
-    const dbProducts = await prisma.product.findMany();
+    const dbProducts = await dbFetchWithTimeout(prisma.product.findMany());
     if (dbProducts.length > 0) {
       products = dbProducts.map(p => ({
         ...p,

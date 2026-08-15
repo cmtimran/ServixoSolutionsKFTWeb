@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { dbFetchWithTimeout } from '@/lib/dbFetch';
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -28,9 +30,9 @@ export default async function RootLayout({
   // Fetch default theme from settings, fallback to 'light'
   let defaultTheme = "light";
   try {
-    const themeSetting = await prisma.setting.findUnique({
+    const themeSetting = await dbFetchWithTimeout(prisma.setting.findUnique({
       where: { key: "defaultTheme" },
-    });
+    }), 2000);
     if (themeSetting?.value) {
       defaultTheme = themeSetting.value;
     }

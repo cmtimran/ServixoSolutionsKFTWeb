@@ -38,11 +38,13 @@ const COLOR_MAP: Record<string, string> = {
 
 export const revalidate = 60;
 
+import { dbFetchWithTimeout } from '@/lib/dbFetch';
+
 export default async function ServicesPage() {
   let services: any[] = [];
 
   try {
-    const dbServices = await prisma.service.findMany();
+    const dbServices = await dbFetchWithTimeout(prisma.service.findMany());
     services = dbServices.length > 0 ? dbServices : MOCK_SERVICES;
   } catch {
     services = MOCK_SERVICES;

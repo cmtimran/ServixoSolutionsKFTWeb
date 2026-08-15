@@ -9,11 +9,17 @@ import CheckoutButton from '@/components/CheckoutButton';
 import ProductDetailPricing from '@/components/ProductDetailPricing';
 import { Prisma } from '@prisma/client';
 
+import { dbFetchWithTimeout } from '@/lib/dbFetch';
+
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const products = await prisma.product.findMany({ select: { slug: true } });
-  return products.map((p) => ({ slug: p.slug }));
+  try {
+    const products = await dbFetchWithTimeout(prisma.product.findMany({ select: { slug: true } }));
+    return products.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

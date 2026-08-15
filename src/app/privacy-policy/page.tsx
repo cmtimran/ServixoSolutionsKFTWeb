@@ -8,10 +8,17 @@ export const metadata: Metadata = {
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
+import { dbFetchWithTimeout } from '@/lib/dbFetch';
+
 export default async function PrivacyPolicyPage() {
-  const setting = await prisma.setting.findUnique({
-    where: { key: 'privacy_policy_content' },
-  });
+  let setting = null;
+  try {
+    setting = await dbFetchWithTimeout(prisma.setting.findUnique({
+      where: { key: 'privacy_policy_content' },
+    }));
+  } catch (err) {
+    console.error('Error fetching privacy policy:', err);
+  }
 
   const content = setting?.value || '<p>Our privacy policy is currently being updated. Please check back later.</p>';
 

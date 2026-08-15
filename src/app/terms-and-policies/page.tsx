@@ -8,10 +8,17 @@ export const metadata: Metadata = {
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
+import { dbFetchWithTimeout } from '@/lib/dbFetch';
+
 export default async function TermsAndPoliciesPage() {
-  const setting = await prisma.setting.findUnique({
-    where: { key: 'terms_and_policies_content' },
-  });
+  let setting = null;
+  try {
+    setting = await dbFetchWithTimeout(prisma.setting.findUnique({
+      where: { key: 'terms_and_policies_content' },
+    }));
+  } catch (err) {
+    console.error('Error fetching terms:', err);
+  }
 
   const content = setting?.value || '<p>Our terms and policies are currently being updated. Please check back later.</p>';
 
