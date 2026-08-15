@@ -100,8 +100,11 @@ function ReturnContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center transition-colors">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-10 h-10 text-indigo-500 dark:text-indigo-400 animate-spin" />
+          <p className="text-slate-600 dark:text-slate-400 font-medium animate-pulse">Confirming transaction details...</p>
+        </div>
       </div>
     );
   }
@@ -110,32 +113,32 @@ function ReturnContent() {
   const cfg   = EVENT_CONFIG[event] ?? EVENT_CONFIG.UNKNOWN;
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6">
-      <div className={`max-w-md w-full ${cfg.bg} border ${cfg.border} rounded-2xl p-8 text-center shadow-2xl`}>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 transition-colors">
+      <div className={`max-w-md w-full bg-white dark:bg-transparent ${cfg.bg} border border-slate-200 dark:border-transparent dark:${cfg.border} rounded-2xl p-8 text-center shadow-lg dark:shadow-2xl transition-all`}>
         {/* Icon */}
-        <div className={`w-20 h-20 ${cfg.bg} rounded-full flex items-center justify-center mx-auto mb-6 border ${cfg.border}`}>
+        <div className={`w-20 h-20 ${cfg.bg} rounded-full flex items-center justify-center mx-auto mb-6 border border-slate-100 dark:border-transparent dark:${cfg.border}`}>
           {cfg.icon}
         </div>
 
         <h1 className={`text-2xl font-bold ${cfg.color} mb-3`}>{cfg.title}</h1>
-        <p className="text-slate-400 text-sm leading-relaxed mb-6">{cfg.subtitle}</p>
+        <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-medium">{cfg.subtitle}</p>
 
         {/* Transaction details */}
         {data && (
-          <div className="bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 mb-6 text-left space-y-2 text-xs font-mono">
-            <div className="flex justify-between gap-4">
-              <span className="text-slate-500">Order Ref</span>
-              <span className="text-slate-300 truncate">{data.orderRef}</span>
+          <div className="bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 mb-6 text-left space-y-2 text-xs font-mono">
+            <div className="flex justify-between gap-4 border-b border-slate-200 dark:border-slate-700/50 pb-2 mb-2">
+              <span className="text-slate-500 font-semibold">Order Ref</span>
+              <span className="text-slate-700 dark:text-slate-300 truncate">{data.orderRef}</span>
             </div>
             {data.transactionId !== 'N/A' && (
-              <div className="flex justify-between gap-4">
-                <span className="text-slate-500">Transaction ID</span>
-                <span className="text-slate-300 truncate">{data.transactionId}</span>
+              <div className="flex justify-between gap-4 border-b border-slate-200 dark:border-slate-700/50 pb-2 mb-2">
+                <span className="text-slate-500 font-semibold">Transaction ID</span>
+                <span className="text-slate-700 dark:text-slate-300 truncate">{data.transactionId}</span>
               </div>
             )}
             <div className="flex justify-between gap-4">
-              <span className="text-slate-500">Status</span>
-              <span className={`font-semibold ${cfg.color}`}>{event}</span>
+              <span className="text-slate-500 font-semibold">Status</span>
+              <span className={`font-bold ${cfg.color}`}>{event}</span>
             </div>
           </div>
         )}
@@ -170,7 +173,7 @@ function ReturnContent() {
         </div>
 
         {/* Powered by footer */}
-        <p className="mt-6 text-slate-600 text-xs">
+        <p className="mt-6 text-slate-500 dark:text-slate-600 text-xs font-medium">
           Processed by SimplePay — OTP Mobil Kft.
         </p>
       </div>
@@ -182,8 +185,8 @@ export default function SimplePayReturnPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-          <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center transition-colors">
+          <Loader2 className="w-10 h-10 text-indigo-500 dark:text-indigo-400 animate-spin" />
         </div>
       }
     >
