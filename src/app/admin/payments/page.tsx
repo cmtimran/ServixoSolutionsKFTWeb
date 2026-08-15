@@ -12,17 +12,15 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
   const currentFilter = params.status || 'paid';
 
   const statusWhere = currentFilter === 'paid' 
-    ? { equals: 'complete' } 
+    ? { in: ['complete', 'success', 'paid'] } 
     : currentFilter === 'canceled' 
-      ? { in: ['expired', 'canceled'] } 
+      ? { in: ['expired', 'canceled', 'cancelled'] } 
       : currentFilter === 'declined'
         ? { in: ['failed', 'declined', 'unpaid'] }
-        : { notIn: ['pending', 'open'] };
+        : undefined;
 
   const payments = await prisma.payment.findMany({
-    where: {
-      status: statusWhere
-    },
+    where: statusWhere ? { status: statusWhere } : undefined,
     orderBy: { createdAt: 'desc' }
   });
 
@@ -98,7 +96,7 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
                       ${payment.amount.toFixed(2)} {payment.currency.toUpperCase()}
                     </td>
                     <td className="p-4">
-                      {payment.status === 'complete' ? (
+                      {payment.status === 'complete' || payment.status === 'success' || payment.status === 'paid' ? (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                           <CheckCircle className="w-3.5 h-3.5" />
                           Paid
@@ -109,12 +107,12 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
                           Pending
                         </span>
                       ) : payment.status === 'failed' || payment.status === 'declined' ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
                           <XCircle className="w-3.5 h-3.5" />
                           Declined
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-500/10 text-slate-500 border border-slate-500/20">
                           <XCircle className="w-3.5 h-3.5" />
                           Canceled
                         </span>
@@ -130,7 +128,7 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
                       })}
                     </td>
                     <td className="p-4 text-right">
-                      {payment.status === 'complete' && (
+                      {(payment.status === 'complete' || payment.status === 'success' || payment.status === 'paid') && (
                         <a 
                           href={`/api/admin/payments/${payment.id}/invoice`} 
                           target="_blank" 
