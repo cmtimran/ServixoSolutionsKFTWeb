@@ -19,24 +19,8 @@ export async function POST(req: Request) {
   });
   const settingsMap = dbSettings.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, string>);
 
-  // Use environment variables, or fallback to public sandbox credentials for testing
-  const merchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || 'PUBLICTESTHUF';
-  const secretKey = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '32637af0d35a9b2105650800dc0366b8';
-
-  if (!secretKey) {
-    console.error('[SimplePay IPN] SIMPLEPAY_SECRET_KEY not set');
-    return new Response('Configuration error', { status: 500 });
-  }
-
-  // Read raw body for signature verification
   const rawBody = await req.text();
   const signatureHeader = req.headers.get('Signature') ?? '';
-
-  // Verify the signature from SimplePay
-  if (!verifySignature(rawBody, signatureHeader, secretKey)) {
-    console.error('[SimplePay IPN] Signature verification failed');
-    return new Response('Invalid signature', { status: 401 });
-  }
 
   let ipn: SimplePayIpnPayload;
   try {
@@ -44,6 +28,34 @@ export async function POST(req: Request) {
   } catch {
     console.error('[SimplePay IPN] Failed to parse body:', rawBody);
     return new Response('Bad request', { status: 400 });
+  }
+
+  // Use environment variables, or fallback to public sandbox credentials for testing
+  const configuredMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
+  const configuredSecretKey = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
+
+  let secretKey = '';
+  let merchantId = ipn.merchant;
+
+  if (configuredMerchantId && ipn.merchant === configuredMerchantId) {
+    secretKey = configuredSecretKey;
+  } else if (ipn.merchant === 'PUBLICTESTUSD') {
+    secretKey = 'Aa9cDbHc1i2lLmN4z3C542zjXqZiDiCj';
+  } else if (ipn.merchant === 'PUBLICTESTEUR') {
+    secretKey = '9A2sDc7xh1JKW8r193RwW7X7X2ts837w';
+  } else if (ipn.merchant === 'PUBLICTESTHUF') {
+    secretKey = '32637af0d35a9b2105650800dc0366b8';
+  }
+
+  if (!secretKey) {
+    console.error(`[SimplePay IPN] Unknown merchant ID: ${ipn.merchant}`);
+    return new Response('Configuration error', { status: 500 });
+  }
+
+  // Verify the signature from SimplePay
+  if (!verifySignature(rawBody, signatureHeader, secretKey)) {
+    console.error('[SimplePay IPN] Signature verification failed');
+    return new Response('Invalid signature', { status: 401 });
   }
 
   console.log('[SimplePay IPN] Received:', ipn);
