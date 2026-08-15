@@ -13,9 +13,15 @@ import { verifySignature, generateSignature, generateSalt, type SimplePayIpnPayl
  * NEXT_PUBLIC_APP_URL=https://xxxx.ngrok.io in .env.local
  */
 export async function POST(req: Request) {
+  // Fetch SimplePay settings from DB
+  const dbSettings = await prisma.setting.findMany({
+    where: { key: { in: ['simplepayMerchantId', 'simplepaySecretKey'] } }
+  });
+  const settingsMap = dbSettings.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, string>);
+
   // Use environment variables, or fallback to public sandbox credentials for testing
-  const merchantId = process.env.SIMPLEPAY_MERCHANT_ID || 'PUBLICTESTHUF';
-  const secretKey = process.env.SIMPLEPAY_SECRET_KEY || '32637af0d35a9b2105650800dc0366b8';
+  const merchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || 'PUBLICTESTHUF';
+  const secretKey = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '32637af0d35a9b2105650800dc0366b8';
 
   if (!secretKey) {
     console.error('[SimplePay IPN] SIMPLEPAY_SECRET_KEY not set');

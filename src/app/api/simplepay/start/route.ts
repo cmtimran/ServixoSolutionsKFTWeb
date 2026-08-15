@@ -14,10 +14,16 @@ export async function POST(req: Request) {
   try {
     const { productName, planTier, price, currency = 'HUF' } = await req.json();
 
-    // Use environment variables, or fallback to public sandbox credentials for testing
-    const merchantId  = process.env.SIMPLEPAY_MERCHANT_ID || 'PUBLICTESTHUF';
-    // Public sandbox key for PUBLICTESTHUF
-    const secretKey   = process.env.SIMPLEPAY_SECRET_KEY || '32637af0d35a9b2105650800dc0366b8';
+    // Fetch SimplePay settings from DB
+    const dbSettings = await prisma.setting.findMany({
+      where: { key: { in: ['simplepayMerchantId', 'simplepaySecretKey', 'simplepayEnvironment'] } }
+    });
+    const settingsMap = dbSettings.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, string>);
+
+    // DB > ENV > Fallback
+    const merchantId  = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || 'PUBLICTESTHUF';
+    const secretKey   = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '32637af0d35a9b2105650800dc0366b8';
+    const isLive      = settingsMap.simplepayEnvironment === 'live';
     const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
     if (!merchantId || !secretKey) {
@@ -69,7 +75,7 @@ export async function POST(req: Request) {
 
     const signature = generateSignature(payload, secretKey);
 
-    const spBase = getSimplePayBase();
+    const spBase = getSimplePayBase(isLive);
     const spRes = await fetch(`${spBase}/start`, {
       method:  'POST',
       headers: {

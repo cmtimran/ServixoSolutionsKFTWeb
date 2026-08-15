@@ -9,6 +9,9 @@ export default function SettingsPage() {
     contactPhone: '',
     companyAddress: '',
     defaultTheme: 'light',
+    simplepayMerchantId: '',
+    simplepaySecretKey: '',
+    simplepayEnvironment: 'sandbox',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -24,6 +27,9 @@ export default function SettingsPage() {
             contactPhone: json.data.contactPhone || '',
             companyAddress: json.data.companyAddress || '',
             defaultTheme: json.data.defaultTheme || 'light',
+            simplepayMerchantId: json.data.simplepayMerchantId || '',
+            simplepaySecretKey: json.data.simplepaySecretKey || '',
+            simplepayEnvironment: json.data.simplepayEnvironment || 'sandbox',
           });
         }
         setLoading(false);
@@ -145,21 +151,52 @@ export default function SettingsPage() {
           {/* SimplePay Integration */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white border-b border-slate-300 dark:border-slate-700 pb-2 flex items-center gap-2">
-              <Key className="w-5 h-5 text-indigo-400" />
+              <Key className="w-5 h-5 text-indigo-500" />
               SimplePay Configuration
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-400 pb-2">
-              SimplePay (OTP Mobil) is the active payment gateway. Credentials are managed via environment variables on the server.
+              Manage your SimplePay (OTP Mobil) credentials. Leave blank to use environment variables or Sandbox fallbacks.
             </p>
-            <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-4 text-sm text-indigo-300 space-y-1">
-              <div className="font-semibold text-indigo-200 mb-2">🔒 Active Credentials (from .env)</div>
-              <div><span className="text-slate-400">Merchant ID:</span> <span className="font-mono">OMS57078401</span></div>
-              <div><span className="text-slate-400">Environment:</span> <span className="font-mono text-amber-300">Sandbox</span></div>
-              <div><span className="text-slate-400">IPN Endpoint:</span> <span className="font-mono text-xs">/api/simplepay/ipn</span></div>
+            
+            <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Environment</label>
+                <select
+                  value={settings.simplepayEnvironment}
+                  onChange={(e) => setSettings({ ...settings, simplepayEnvironment: e.target.value })}
+                  className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
+                >
+                  <option value="sandbox">Sandbox (Testing)</option>
+                  <option value="live">Live (Production)</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Merchant ID</label>
+                <input
+                  type="text"
+                  value={settings.simplepayMerchantId}
+                  onChange={(e) => setSettings({ ...settings, simplepayMerchantId: e.target.value })}
+                  placeholder="e.g. OMS57078401"
+                  className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Secret Key</label>
+                <input
+                  type="password"
+                  value={settings.simplepaySecretKey}
+                  onChange={(e) => setSettings({ ...settings, simplepaySecretKey: e.target.value })}
+                  placeholder="••••••••••••••••••••••••"
+                  className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                />
+              </div>
             </div>
-            <p className="text-xs text-slate-500">
-              To update credentials, edit <code className="bg-slate-800 px-1 rounded">.env.local</code> on the server and restart the application.
-            </p>
+            
+            <div className="mt-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-4 text-sm text-indigo-800 dark:text-indigo-300">
+              <span className="font-semibold text-indigo-900 dark:text-indigo-200">ℹ️ Note:</span> If these fields are empty, the system will fall back to `.env.local` variables or the default Sandbox credentials.
+            </div>
           </div>
 
           <div className="pt-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">

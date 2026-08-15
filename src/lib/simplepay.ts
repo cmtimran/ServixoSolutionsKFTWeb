@@ -119,8 +119,10 @@ export function getTimeoutDate(minutesFromNow = 30): string {
 
 // ─── Base URL resolver ────────────────────────────────────────────────────────
 
-export function getSimplePayBase(): string {
-  return process.env.SIMPLEPAY_SANDBOX === 'true'
-    ? SIMPLEPAY_SANDBOX_BASE
-    : SIMPLEPAY_LIVE_BASE;
+export function getSimplePayBase(isLive: boolean = false): string {
+  // If isLive is true, use LIVE_BASE. Otherwise use SANDBOX_BASE.
+  // Note: if process.env.SIMPLEPAY_SANDBOX is explicitly 'true', we force sandbox anyway.
+  if (process.env.SIMPLEPAY_SANDBOX === 'true') return SIMPLEPAY_SANDBOX_BASE;
+  
+  return isLive ? SIMPLEPAY_LIVE_BASE : SIMPLEPAY_SANDBOX_BASE;
 }
