@@ -8,6 +8,7 @@ interface CheckoutButtonProps {
   productName: string;
   planTier: string;
   price: string | number;
+  currency?: string;
   featured?: boolean;
   className?: string;
   interval?: 'month' | 'year';
@@ -19,6 +20,7 @@ export default function CheckoutButton({
   productName, 
   planTier, 
   price, 
+  currency = 'USD',
   featured,
   className = '',
   interval = 'month',
@@ -41,6 +43,7 @@ export default function CheckoutButton({
         productName,
         planTier,
         price: price.toString(),
+        currency,
         interval
       });
       router.push(`/checkout/simplepay-pay?${params.toString()}`);

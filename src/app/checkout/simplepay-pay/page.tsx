@@ -14,6 +14,7 @@ function SimplePayContent() {
     const productName = searchParams.get('productName');
     const planTier    = searchParams.get('planTier');
     const price       = searchParams.get('price');
+    const currency    = searchParams.get('currency') || 'USD';
 
     if (!productName || !price) {
       setError('Missing product information.');
@@ -26,7 +27,7 @@ function SimplePayContent() {
     fetch('/api/simplepay/start', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ productName, planTier, price, currency: 'USD' }),
+      body:    JSON.stringify({ productName, planTier, price, currency }),
     })
       .then((res) => res.json())
       .then((data) => {
