@@ -56,7 +56,24 @@ function SimplePayContent() {
             <CreditCard className="w-8 h-8 text-red-500 dark:text-red-400" />
           </div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Payment Initialisation Failed</h2>
-          <p className="text-slate-600 dark:text-slate-400 text-sm mb-6">{error}</p>
+          <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-lg p-4 mb-6 text-left">
+            <p className="text-red-800 dark:text-red-300 font-mono text-sm break-all">{error}</p>
+            {error?.includes('5302') && (
+              <p className="mt-3 text-sm text-slate-700 dark:text-slate-400">
+                <strong>Fix:</strong> This usually means your SimplePay Secret Key or Merchant ID is incorrect. Please double-check your credentials in the Admin Panel settings and ensure there are no accidental spaces.
+              </p>
+            )}
+            {error?.includes('5081') && (
+              <p className="mt-3 text-sm text-slate-700 dark:text-slate-400">
+                <strong>Fix:</strong> Invalid merchant. Make sure you are using the correct Environment (Sandbox vs Live) in the Admin Panel settings.
+              </p>
+            )}
+            {error?.includes('5010') && (
+              <p className="mt-3 text-sm text-slate-700 dark:text-slate-400">
+                <strong>Fix:</strong> Invalid parameters were sent to SimplePay.
+              </p>
+            )}
+          </div>
           <button
             onClick={() => router.back()}
             className="px-6 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-lg transition-colors text-sm font-medium"
