@@ -28,7 +28,8 @@ export async function POST(req: Request) {
     let secretKey  = rawSecretKey.trim();
 
     // Use correct test credentials based on currency if no custom credentials are provided
-    if (!merchantId || !secretKey) {
+    // Also override if the configured merchant ID is one of the public test accounts to ensure currency matches
+    if (!merchantId || !secretKey || merchantId.startsWith('PUBLICTEST')) {
       if (currency === 'USD') {
         merchantId = 'PUBLICTESTUSD';
         secretKey  = 'Aa9cDbHc1i2lLmN4z3C542zjXqZiDiCj';
