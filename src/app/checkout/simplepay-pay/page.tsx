@@ -50,7 +50,7 @@ function SimplePayContent() {
 
   if (status === 'error') {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 transition-colors">
+      <div className="w-full flex flex-col items-center justify-center p-6">
         <div className="max-w-md w-full bg-white dark:bg-red-500/10 border border-slate-200 dark:border-red-500/30 rounded-2xl p-8 text-center shadow-lg dark:shadow-none">
           <div className="w-16 h-16 bg-red-100 dark:bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <CreditCard className="w-8 h-8 text-red-500 dark:text-red-400" />
@@ -86,7 +86,7 @@ function SimplePayContent() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 transition-colors">
+    <div className="w-full flex flex-col items-center justify-center p-6">
       <div className="max-w-md w-full text-center">
         {/* Animated logo / icon */}
         <div className="relative w-24 h-24 mx-auto mb-8">
@@ -123,16 +123,25 @@ function SimplePayContent() {
   );
 }
 
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
 export default function SimplePayPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center transition-colors">
-          <Loader2 className="w-10 h-10 text-indigo-500 dark:text-indigo-400 animate-spin" />
-        </div>
-      }
-    >
-      <SimplePayContent />
-    </Suspense>
+    <>
+      <Header />
+      <main className="flex-grow bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center py-20 transition-colors">
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center">
+              <Loader2 className="w-10 h-10 text-indigo-500 dark:text-indigo-400 animate-spin" />
+            </div>
+          }
+        >
+          <SimplePayContent />
+        </Suspense>
+      </main>
+      <Footer />
+    </>
   );
 }

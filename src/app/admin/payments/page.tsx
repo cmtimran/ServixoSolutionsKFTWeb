@@ -129,15 +129,15 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
                     </td>
                     <td className="p-4 text-right">
                       {(payment.status === 'complete' || payment.status === 'success' || payment.status === 'paid') && (
-                        <a 
-                          href={`/api/admin/payments/${payment.id}/invoice`} 
+                        <Link 
+                          href={`/admin/payments/${payment.id}/invoice`} 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-brand-indigo hover:text-slate-900 dark:text-white text-slate-700 dark:text-slate-300 text-sm font-medium rounded-lg transition-colors"
                         >
                           <FileText className="w-4 h-4" />
                           Invoice
-                        </a>
+                        </Link>
                       )}
                     </td>
                   </tr>

@@ -17,21 +17,30 @@ function RedirectContent() {
   }, [router, searchParams]);
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
-      <Loader2 className="w-10 h-10 text-indigo-400 animate-spin mb-4" />
-      <p className="text-slate-400 text-sm">Redirecting to payment…</p>
+    <div className="w-full flex flex-col items-center justify-center">
+      <Loader2 className="w-10 h-10 text-indigo-500 dark:text-indigo-400 animate-spin mb-4" />
+      <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Redirecting to payment…</p>
     </div>
   );
 }
 
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
 export default function CheckoutPayPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
-      </div>
-    }>
-      <RedirectContent />
-    </Suspense>
+    <>
+      <Header />
+      <main className="flex-grow bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center py-20 transition-colors">
+        <Suspense fallback={
+          <div className="flex items-center justify-center">
+            <Loader2 className="w-10 h-10 text-indigo-500 dark:text-indigo-400 animate-spin" />
+          </div>
+        }>
+          <RedirectContent />
+        </Suspense>
+      </main>
+      <Footer />
+    </>
   );
 }
