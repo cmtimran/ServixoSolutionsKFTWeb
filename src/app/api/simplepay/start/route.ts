@@ -14,13 +14,15 @@ export async function POST(req: Request) {
   try {
     const { productName, planTier, price, currency = 'HUF' } = await req.json();
 
-    const merchantId  = process.env.SIMPLEPAY_MERCHANT_ID;
-    const secretKey   = process.env.SIMPLEPAY_SECRET_KEY;
+    // Use environment variables, or fallback to public sandbox credentials for testing
+    const merchantId  = process.env.SIMPLEPAY_MERCHANT_ID || 'PUBLICTESTHUF';
+    // Public sandbox key for PUBLICTESTHUF
+    const secretKey   = process.env.SIMPLEPAY_SECRET_KEY || '32637af0d35a9b2105650800dc0366b8';
     const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
     if (!merchantId || !secretKey) {
       return NextResponse.json(
-        { error: 'SimplePay credentials are not configured. Please set SIMPLEPAY_MERCHANT_ID and SIMPLEPAY_SECRET_KEY in .env.local' },
+        { error: 'SimplePay credentials are not configured.' },
         { status: 500 }
       );
     }

@@ -13,7 +13,9 @@ import { verifySignature, generateSignature, generateSalt, type SimplePayIpnPayl
  * NEXT_PUBLIC_APP_URL=https://xxxx.ngrok.io in .env.local
  */
 export async function POST(req: Request) {
-  const secretKey = process.env.SIMPLEPAY_SECRET_KEY;
+  // Use environment variables, or fallback to public sandbox credentials for testing
+  const merchantId = process.env.SIMPLEPAY_MERCHANT_ID || 'PUBLICTESTHUF';
+  const secretKey = process.env.SIMPLEPAY_SECRET_KEY || '32637af0d35a9b2105650800dc0366b8';
 
   if (!secretKey) {
     console.error('[SimplePay IPN] SIMPLEPAY_SECRET_KEY not set');
@@ -68,7 +70,7 @@ export async function POST(req: Request) {
   const confirmPayload = {
     salt:          generateSalt(),
     orderRef:      ipn.orderRef,
-    merchant:      process.env.SIMPLEPAY_MERCHANT_ID ?? '',
+    merchant:      merchantId,
     transactionId: ipn.transactionId,
     e:             ipn.e,
   };
