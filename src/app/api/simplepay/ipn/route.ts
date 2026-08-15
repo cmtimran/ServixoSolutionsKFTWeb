@@ -15,7 +15,11 @@ import { verifySignature, generateSignature, generateSalt, type SimplePayIpnPayl
 export async function POST(req: Request) {
   // Fetch SimplePay settings from DB
   const dbSettings = await prisma.setting.findMany({
-    where: { key: { in: ['simplepayMerchantId', 'simplepaySecretKey'] } }
+    where: { key: { in: [
+      'simplepayMerchantId', 'simplepaySecretKey',
+      'simplepayMerchantIdEUR', 'simplepaySecretKeyEUR',
+      'simplepayMerchantIdUSD', 'simplepaySecretKeyUSD'
+    ] } }
   });
   const settingsMap = dbSettings.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, string>);
 
@@ -30,15 +34,20 @@ export async function POST(req: Request) {
     return new Response('Bad request', { status: 400 });
   }
 
-  // Use environment variables, or fallback to public sandbox credentials for testing
-  const configuredMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
-  const configuredSecretKey = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
+  // Find the matching secret key for the incoming merchant ID
+  const configuredHUF = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
+  const configuredEUR = settingsMap.simplepayMerchantIdEUR || '';
+  const configuredUSD = settingsMap.simplepayMerchantIdUSD || '';
 
   let secretKey = '';
   let merchantId = ipn.merchant;
 
-  if (configuredMerchantId && ipn.merchant === configuredMerchantId) {
-    secretKey = configuredSecretKey;
+  if (configuredHUF && ipn.merchant === configuredHUF) {
+    secretKey = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
+  } else if (configuredEUR && ipn.merchant === configuredEUR) {
+    secretKey = settingsMap.simplepaySecretKeyEUR || '';
+  } else if (configuredUSD && ipn.merchant === configuredUSD) {
+    secretKey = settingsMap.simplepaySecretKeyUSD || '';
   } else if (ipn.merchant === 'PUBLICTESTUSD') {
     secretKey = 'Aa9cDbHc1i2lLmN4z3C542zjXqZiDiCj';
   } else if (ipn.merchant === 'PUBLICTESTEUR') {

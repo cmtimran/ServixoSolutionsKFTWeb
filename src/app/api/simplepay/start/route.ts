@@ -16,19 +16,37 @@ export async function POST(req: Request) {
 
     // Fetch SimplePay settings from DB
     const dbSettings = await prisma.setting.findMany({
-      where: { key: { in: ['simplepayMerchantId', 'simplepaySecretKey', 'simplepayEnvironment'] } }
+      where: { key: { in: [
+        'simplepayEnvironment',
+        'simplepayMerchantId', 'simplepaySecretKey',       // Legacy/HUF
+        'simplepayMerchantIdEUR', 'simplepaySecretKeyEUR', // EUR
+        'simplepayMerchantIdUSD', 'simplepaySecretKeyUSD'  // USD
+      ] } }
     });
     const settingsMap = dbSettings.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, string>);
 
-    // DB > ENV > Fallback
-    const rawMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
-    const rawSecretKey  = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
-    
-    let merchantId = rawMerchantId.trim();
-    let secretKey  = rawSecretKey.trim();
+    const isLive = settingsMap.simplepayEnvironment === 'live';
 
-    // Use correct test credentials based on currency if no custom credentials are provided
-    // Also override if the configured merchant ID is one of the public test accounts to ensure currency matches
+    // Determine the configured Merchant ID based on the requested currency
+    let configuredMerchantId = '';
+    let configuredSecretKey  = '';
+
+    if (currency === 'USD') {
+      configuredMerchantId = settingsMap.simplepayMerchantIdUSD || '';
+      configuredSecretKey  = settingsMap.simplepaySecretKeyUSD || '';
+    } else if (currency === 'EUR') {
+      configuredMerchantId = settingsMap.simplepayMerchantIdEUR || '';
+      configuredSecretKey  = settingsMap.simplepaySecretKeyEUR || '';
+    } else {
+      // Default / HUF
+      configuredMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
+      configuredSecretKey  = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
+    }
+
+    let merchantId = configuredMerchantId.trim();
+    let secretKey  = configuredSecretKey.trim();
+
+    // Fallback to public test credentials if in sandbox OR missing credentials
     if (!merchantId || !secretKey || merchantId.startsWith('PUBLICTEST')) {
       if (currency === 'USD') {
         merchantId = 'PUBLICTESTUSD';
@@ -41,7 +59,6 @@ export async function POST(req: Request) {
         secretKey  = '32637af0d35a9b2105650800dc0366b8';
       }
     }
-    const isLive      = settingsMap.simplepayEnvironment === 'live';
     const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
     if (!merchantId || !secretKey) {
