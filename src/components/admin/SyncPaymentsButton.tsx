@@ -31,7 +31,7 @@ export default function SyncPaymentsButton() {
       className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-brand-indigo text-white font-medium rounded-lg transition-colors disabled:opacity-50"
     >
       <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-      {isSyncing ? 'Syncing...' : 'Sync with Stripe'}
+      {isSyncing ? 'Refreshing...' : 'Refresh Payments'}
     </button>
   );
 }

@@ -93,7 +93,7 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
                       <div className="text-xs text-slate-600 dark:text-slate-400 text-brand-indigo">{payment.planTier} Plan</div>
                     </td>
                     <td className="p-4 font-medium">
-                      ${payment.amount.toFixed(2)} {payment.currency.toUpperCase()}
+                      {payment.currency.toUpperCase() === 'USD' ? '$' : ''}{payment.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {payment.currency.toUpperCase()}
                     </td>
                     <td className="p-4">
                       {payment.status === 'complete' || payment.status === 'success' || payment.status === 'paid' ? (
