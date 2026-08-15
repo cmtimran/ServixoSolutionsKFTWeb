@@ -9,6 +9,7 @@ type Product = {
   title: string;
   slug: string;
   priceBasic: number;
+  currency: string;
   createdAt: string;
 };
 
@@ -95,7 +96,9 @@ export default function ProductsPage() {
                       {product.title}
                     </td>
                     <td className="px-6 py-4">{product.slug}</td>
-                    <td className="px-6 py-4">€{product.priceBasic}</td>
+                    <td className="px-6 py-4">
+                      {product.currency === 'HUF' ? `${product.priceBasic} Ft` : product.currency === 'EUR' ? `€${product.priceBasic}` : `$${product.priceBasic}`}
+                    </td>
                     <td className="px-6 py-4">{new Date(product.createdAt).toLocaleDateString()}</td>
                     <td className="px-6 py-4 flex items-center justify-end gap-3">
                       <Link

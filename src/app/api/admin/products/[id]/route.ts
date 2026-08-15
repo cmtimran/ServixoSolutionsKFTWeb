@@ -35,7 +35,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const body = await request.json();
-    const { title, slug, description, features, specifications, priceBasic, pricePro, priceEnterprise, images } = body;
+    const { title, slug, description, features, specifications, priceBasic, pricePro, priceEnterprise, currency, images } = body;
 
     const product = await prisma.product.update({
       where: { id },
@@ -48,6 +48,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         priceBasic: Number(priceBasic) || 0,
         pricePro: Number(pricePro) || 0,
         priceEnterprise: Number(priceEnterprise) || 0,
+        currency: currency || 'USD',
         images: images || [],
       }
     });

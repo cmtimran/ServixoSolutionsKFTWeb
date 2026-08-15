@@ -86,12 +86,15 @@ export default async function ProductDetailPage({
               {/* Price card */}
               <div className="w-full lg:w-64 flex-shrink-0 glass-card rounded-2xl p-6">
                 <div className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>Starting from</div>
-                <div className="text-4xl font-extrabold text-gradient mb-0.5">${product.priceBasic}</div>
+                <div className="text-4xl font-extrabold text-gradient mb-0.5">
+                  {product.currency === 'HUF' ? `${product.priceBasic} Ft` : product.currency === 'EUR' ? `€${product.priceBasic}` : `$${product.priceBasic}`}
+                </div>
                 <div className="text-xs mb-5" style={{ color: 'var(--text-muted)' }}>per month, billed annually</div>
                 <CheckoutButton 
                   productName={product.title}
                   planTier="Basic"
                   price={product.priceBasic}
+                  currency={product.currency || 'USD'}
                   interval="month"
                   className="btn-primary w-full justify-center text-center block mb-3 style-override"
                   autoTrigger={buy === 'true'}

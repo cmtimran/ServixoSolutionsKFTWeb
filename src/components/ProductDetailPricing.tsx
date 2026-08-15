@@ -54,11 +54,14 @@ export default function ProductDetailPricing({ product }: { product: any }) {
               )}
               <div>
                 <div className="text-lg font-extrabold">{plan.tier}</div>
-                <div className="text-3xl font-extrabold mt-2">${plan.price}<span className="text-sm font-normal opacity-70">{intervalLabel}</span></div>
+                <div className="text-3xl font-extrabold mt-2">
+                  {product.currency === 'HUF' ? `${plan.price} Ft` : product.currency === 'EUR' ? `€${plan.price}` : `$${plan.price}`}
+                  <span className="text-sm font-normal opacity-70">{intervalLabel}</span>
+                </div>
               </div>
               <div className="divider" style={plan.featured ? { background: 'rgba(255,255,255,0.15)' } : {}} />
               <ul className="space-y-3 flex-grow">
-                {plan.features.map((f) => (
+                {plan.features.map((f: string) => (
                   <li key={f} className="flex items-center gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: plan.featured ? '#bfdbfe' : 'var(--brand-emerald)' }} />
                     <span style={{ color: plan.featured ? 'rgba(255,255,255,0.85)' : 'var(--text-secondary)' }}>{f}</span>
@@ -69,6 +72,7 @@ export default function ProductDetailPricing({ product }: { product: any }) {
                 productName={product.title}
                 planTier={plan.tier}
                 price={plan.price}
+                currency={product.currency || 'USD'}
                 interval={interval}
                 featured={plan.featured}
                 className={`block w-full text-center py-3 rounded-xl font-bold text-sm transition-all ${plan.featured ? 'bg-white hover:opacity-90' : 'btn-outline justify-center'}`}

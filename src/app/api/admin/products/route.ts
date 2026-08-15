@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, slug, description, features, specifications, priceBasic, pricePro, priceEnterprise, images } = body;
+    const { title, slug, description, features, specifications, priceBasic, pricePro, priceEnterprise, currency, images } = body;
 
     if (!title || !slug || !description) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
         priceBasic: Number(priceBasic) || 0,
         pricePro: Number(pricePro) || 0,
         priceEnterprise: Number(priceEnterprise) || 0,
+        currency: currency || 'USD',
         images: images || [],
       }
     });
