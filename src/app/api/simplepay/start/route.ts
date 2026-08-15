@@ -24,8 +24,22 @@ export async function POST(req: Request) {
     const rawMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
     const rawSecretKey  = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
     
-    const merchantId  = rawMerchantId.trim() || 'PUBLICTESTHUF';
-    const secretKey   = rawSecretKey.trim() || '32637af0d35a9b2105650800dc0366b8';
+    let merchantId = rawMerchantId.trim();
+    let secretKey  = rawSecretKey.trim();
+
+    // Use correct test credentials based on currency if no custom credentials are provided
+    if (!merchantId || !secretKey) {
+      if (currency === 'USD') {
+        merchantId = 'PUBLICTESTUSD';
+        secretKey  = 'Aa9cDbHc1i2lLmN4z3C542zjXqZiDiCj';
+      } else if (currency === 'EUR') {
+        merchantId = 'PUBLICTESTEUR';
+        secretKey  = '9A2sDc7xh1JKW8r193RwW7X7X2ts837w';
+      } else {
+        merchantId = 'PUBLICTESTHUF';
+        secretKey  = '32637af0d35a9b2105650800dc0366b8';
+      }
+    }
     const isLive      = settingsMap.simplepayEnvironment === 'live';
     const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
