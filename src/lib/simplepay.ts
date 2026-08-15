@@ -11,7 +11,7 @@ import crypto from 'crypto';
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 export const SIMPLEPAY_SANDBOX_BASE = 'https://sandbox.simplepay.hu/payment/v2';
-export const SIMPLEPAY_LIVE_BASE    = 'https://simplepay.hu/payment/v2';
+export const SIMPLEPAY_LIVE_BASE    = 'https://secure.simplepay.hu/payment/v2';
 export const SDK_VERSION            = 'SimplePayV2.1_NextJS_Servixo';
 
 // ─── Types ────────────────────────────────────────────────────────────────────

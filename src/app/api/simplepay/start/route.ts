@@ -21,8 +21,11 @@ export async function POST(req: Request) {
     const settingsMap = dbSettings.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, string>);
 
     // DB > ENV > Fallback
-    const merchantId  = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || 'PUBLICTESTHUF';
-    const secretKey   = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '32637af0d35a9b2105650800dc0366b8';
+    const rawMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
+    const rawSecretKey  = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
+    
+    const merchantId  = rawMerchantId.trim() || 'PUBLICTESTHUF';
+    const secretKey   = rawSecretKey.trim() || '32637af0d35a9b2105650800dc0366b8';
     const isLive      = settingsMap.simplepayEnvironment === 'live';
     const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
@@ -59,7 +62,7 @@ export async function POST(req: Request) {
         state:   'Budapest',
         city:    'Budapest',
         zip:     '1081',
-        address: 'Rákóczi út 63',
+        address: 'Rakoczi ut 63',
       },
       items: [
         {
