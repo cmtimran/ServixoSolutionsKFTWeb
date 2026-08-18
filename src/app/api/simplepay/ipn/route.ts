@@ -82,13 +82,14 @@ export async function POST(req: Request) {
   // Build the required confirmation response according to SimplePay v2 specification
   // Must return receiveDate in ISO 8601 format: YYYY-MM-DDTHH:mm:ss+02:00
   const receiveDate = new Date().toISOString().replace(/\.\d{3}Z$/, '+00:00');
+  const merchantId = ipn.merchant || configuredMerchantId;
   
   const confirmPayload = {
     salt:          generateSalt(),
-    orderRef:      ipn.orderRef,
+    orderRef:      orderRef || ipn.orderRef,
     merchant:      merchantId,
-    transactionId: ipn.transactionId,
-    e:             ipn.e,
+    transactionId: transactionId || ipn.transactionId,
+    e:             eventStatus || ipn.e,
     receiveDate,
   };
   const confirmSignature = generateSignature(confirmPayload, secretKey);
