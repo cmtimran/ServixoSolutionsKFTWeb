@@ -23,16 +23,15 @@ export async function POST(req: Request) {
     const isLive = settingsMap.simplepayEnvironment === 'live';
 
     const rawMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
-    const rawSecretKey  = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
+    const rawSecretKey  = settingsMap.simplepaySecretKey  || process.env.SIMPLEPAY_SECRET_KEY  || '';
 
-    // Partner merchant ID OMS57078401 or fallback
-    const merchantId = rawMerchantId.trim() || 'OMS57078401';
-    const secretKey  = rawSecretKey.trim() || '32637af0d35a9b2105650800dc0366b8';
+    const merchantId = rawMerchantId.trim();
+    const secretKey  = rawSecretKey.trim();
     const appUrl     = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
     if (!merchantId || !secretKey) {
       return NextResponse.json(
-        { error: 'SimplePay credentials are not configured.' },
+        { error: 'SimplePay credentials are not configured. Please set them in Admin Panel Settings.' },
         { status: 500 }
       );
     }

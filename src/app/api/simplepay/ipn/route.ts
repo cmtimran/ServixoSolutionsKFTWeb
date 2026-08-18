@@ -31,23 +31,18 @@ export async function POST(req: Request) {
   }
 
   // Find matching secret key
-  const configuredMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || 'OMS57078401';
-  const configuredSecretKey  = settingsMap.simplepaySecretKey  || process.env.SIMPLEPAY_SECRET_KEY  || '32637af0d35a9b2105650800dc0366b8';
+  const configuredMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
+  const configuredSecretKey  = settingsMap.simplepaySecretKey  || process.env.SIMPLEPAY_SECRET_KEY  || '';
 
   let secretKey = '';
   const merchantId = ipn.merchant;
 
-  if (ipn.merchant === configuredMerchantId || ipn.merchant === 'OMS57078401') {
-    secretKey = configuredSecretKey;
-  } else if (ipn.merchant === 'PUBLICTESTHUF') {
-    secretKey = '32637af0d35a9b2105650800dc0366b8';
-  } else {
-    // Fallback to configured key
+  if (ipn.merchant === configuredMerchantId) {
     secretKey = configuredSecretKey;
   }
 
   if (!secretKey) {
-    console.error(`[SimplePay IPN] Secret key missing for merchant: ${ipn.merchant}`);
+    console.error(`[SimplePay IPN] Secret key missing or unconfigured for merchant: ${ipn.merchant}`);
     return new Response('Configuration error', { status: 500 });
   }
 
