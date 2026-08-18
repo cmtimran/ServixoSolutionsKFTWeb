@@ -39,7 +39,7 @@ function SimplePayContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.customerName || !formData.customerEmail || !formData.customerPhone || !formData.billingAddress) {
+    if (!formData.customerName || !formData.customerEmail) {
       setError(t('checkout.required_error'));
       return;
     }
@@ -199,11 +199,10 @@ function SimplePayContent() {
                   </label>
                   <input
                     type="tel"
-                    required
                     value={formData.customerPhone}
                     onChange={(e) => setFormData({ ...formData, customerPhone: e.target.value })}
                     placeholder="+36 20 123 4567"
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                   />
                 </div>
               </div>
@@ -245,7 +244,7 @@ function SimplePayContent() {
               </div>
             </div>
 
-            {/* Billing Address */}
+            {/* Billing Address (Optional) */}
             <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-indigo-500" />
@@ -259,10 +258,9 @@ function SimplePayContent() {
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.billingAddress}
                     onChange={(e) => setFormData({ ...formData, billingAddress: e.target.value })}
-                    placeholder="e.g. Rákóczi út 63."
+                    placeholder="e.g. Street Name, House Number"
                     className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                   />
                 </div>
@@ -273,7 +271,6 @@ function SimplePayContent() {
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.billingZip}
                     onChange={(e) => setFormData({ ...formData, billingZip: e.target.value })}
                     placeholder="1081"
@@ -287,7 +284,6 @@ function SimplePayContent() {
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.billingCity}
                     onChange={(e) => setFormData({ ...formData, billingCity: e.target.value })}
                     placeholder="Budapest"
