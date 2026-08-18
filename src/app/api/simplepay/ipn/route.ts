@@ -83,22 +83,34 @@ export async function POST(req: Request) {
     console.error('[SimplePay IPN] DB update error:', err);
   }
 
-  // Build the required confirmation response according to SimplePay v2 specification
-  // Must return receiveDate in ISO 8601 format: YYYY-MM-DDTHH:mm:ss+02:00
+  // According to Page 36-37 of SimplePay 2.x Official Documentation:
+  // "The above data must be returned in the response, complemented with the time of 
+  // reception of the IPN notification. The time must be stored in the 'receiveDate' field."
+  //
+  // Example in documentation (Page 37):
+  // {
+  //   "salt": "...",
+  //   "orderRef": "...",
+  //   "method": "CARD",
+  //   "merchant": "...",
+  //   "finishDate": "...",
+  //   "paymentDate": "...",
+  //   "transactionId": 99844942,
+  //   "status": "FINISHED",
+  //   "receiveDate": "2019-09-09T14:46:20+02:00"
+  // }
   const receiveDate = new Date().toISOString().replace(/\.\d{3}Z$/, '+00:00');
-  const merchantId = ipn.merchant || configuredMerchantId;
-  
-  const confirmPayload = {
-    salt:          generateSalt(),
-    orderRef:      orderRef || ipn.orderRef,
-    merchant:      merchantId,
-    transactionId: transactionId || ipn.transactionId,
-    e:             eventStatus || ipn.e,
+
+  // Exact mirrored payload plus receiveDate
+  const confirmPayload: Record<string, any> = {
+    ...ipn,
     receiveDate,
   };
+
+  const responseJsonString = JSON.stringify(confirmPayload).replace(/\//g, '\\/');
   const confirmSignature = generateSignature(confirmPayload, secretKey);
 
-  return new Response(JSON.stringify(confirmPayload).replace(/\//g, '\\/'), {
+  return new Response(responseJsonString, {
     status: 200,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
