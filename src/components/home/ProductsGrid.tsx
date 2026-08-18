@@ -47,8 +47,8 @@ export default function ProductsGrid({ products }: { products: Product[] }) {
                   </div>
                   <div className="shrink-0 text-left sm:text-right">
                     <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 block">Starting at</span>
-                    <span className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
-                      ${product.priceBasic}
+                    <span className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">
+                      {Math.round(product.priceBasic).toLocaleString('hu-HU')} Ft
                     </span>
                     <span className="text-xs font-medium text-slate-600 dark:text-slate-400">/mo</span>
                   </div>
