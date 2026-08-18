@@ -12,6 +12,10 @@ import { verifySignature, generateSignature, generateSalt, type SimplePayIpnPayl
  * For local testing: expose with `ngrok http 3000` and set
  * NEXT_PUBLIC_APP_URL=https://xxxx.ngrok.io in .env.local
  */
+export async function GET() {
+  return NextResponse.json({ status: 'SimplePay IPN endpoint is active and listening.' });
+}
+
 export async function POST(req: Request) {
   // Fetch SimplePay settings from DB
   const dbSettings = await prisma.setting.findMany({
