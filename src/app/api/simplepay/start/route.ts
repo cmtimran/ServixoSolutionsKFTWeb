@@ -12,7 +12,20 @@ import {
 
 export async function POST(req: Request) {
   try {
-    const { productName, planTier, price } = await req.json();
+    const {
+      productName,
+      planTier,
+      price,
+      customerName,
+      customerEmail,
+      customerPhone,
+      companyName,
+      taxNumber,
+      billingAddress,
+      billingCity,
+      billingZip,
+      billingCountry = 'HU',
+    } = await req.json();
 
     // Fetch SimplePay settings from DB
     const dbSettings = await prisma.setting.findMany({
@@ -48,7 +61,7 @@ export async function POST(req: Request) {
       merchant:      merchantId,
       orderRef,
       currency:      'HUF',
-      customerEmail: 'sandbox@servixosolutionskft.com',   // placeholder for sandbox
+      customerEmail: customerEmail || 'customer@servixosolutionskft.com',
       language:      'HU',
       sdkVersion:    SDK_VERSION,
       methods:       ['CARD'],
@@ -56,12 +69,13 @@ export async function POST(req: Request) {
       timeout:       getTimeoutDate(30),
       url:           `${appUrl}/checkout/simplepay-return`,
       invoice: {
-        name:    'Servixo Customer',
-        country: 'HU',
-        state:   'Budapest',
-        city:    'Budapest',
-        zip:     '1081',
-        address: 'Rákóczi út 63',
+        name:    companyName || customerName || 'Servixo Customer',
+        company: companyName || undefined,
+        country: billingCountry || 'HU',
+        state:   billingCity || 'Budapest',
+        city:    billingCity || 'Budapest',
+        zip:     billingZip || '1081',
+        address: billingAddress || 'Rákóczi út 63',
       },
       items: [
         {
@@ -106,10 +120,19 @@ export async function POST(req: Request) {
       );
     }
 
-    // Persist a pending payment record in HUF
+    // Persist a pending payment record in HUF with full customer details
     await prisma.payment.create({
       data: {
         sessionId:         String(spData.transactionId),
+        customerName:      customerName || null,
+        customerEmail:     customerEmail || null,
+        customerPhone:     customerPhone || null,
+        companyName:       companyName || null,
+        taxNumber:         taxNumber || null,
+        billingAddress:    billingAddress || null,
+        billingCity:       billingCity || null,
+        billingZip:        billingZip || null,
+        billingCountry:    billingCountry || 'HU',
         productName,
         planTier,
         amount:            numericPrice,

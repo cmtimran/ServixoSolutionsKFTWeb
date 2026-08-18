@@ -31,7 +31,21 @@ export default async function AdminInvoicePage({ params }: { params: Promise<{ i
           <div>
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Billed To</h3>
             <div className="text-slate-900 dark:text-slate-200 font-medium">{payment.customerName || 'Customer'}</div>
+            {payment.companyName && (
+              <div className="text-slate-700 dark:text-slate-300 text-sm font-semibold mt-0.5">{payment.companyName}</div>
+            )}
+            {payment.taxNumber && (
+              <div className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Tax/VAT ID: {payment.taxNumber}</div>
+            )}
             <div className="text-slate-600 dark:text-slate-400 text-sm mt-1">{payment.customerEmail || 'No email provided'}</div>
+            {payment.customerPhone && (
+              <div className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{payment.customerPhone}</div>
+            )}
+            {payment.billingAddress && (
+              <div className="text-slate-500 dark:text-slate-400 text-xs mt-1">
+                {payment.billingAddress}, {payment.billingZip} {payment.billingCity}, {payment.billingCountry}
+              </div>
+            )}
           </div>
           <div className="text-right">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Payment Info</h3>
