@@ -148,7 +148,52 @@ export async function GET() {
           "updatedAt" TIMESTAMP(3) NOT NULL,
           CONSTRAINT "Setting_pkey" PRIMARY KEY ("key")
         );
-      `)
+      `),
+      // Ensure Payment table exists and has all new columns
+      prisma.$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "Payment" (
+          "id" TEXT NOT NULL,
+          "sessionId" TEXT NOT NULL,
+          "customerEmail" TEXT,
+          "customerName" TEXT,
+          "customerPhone" TEXT,
+          "companyName" TEXT,
+          "taxNumber" TEXT,
+          "billingAddress" TEXT,
+          "billingCity" TEXT,
+          "billingZip" TEXT,
+          "billingCountry" TEXT,
+          "productName" TEXT NOT NULL,
+          "planTier" TEXT NOT NULL,
+          "amount" DOUBLE PRECISION NOT NULL,
+          "currency" TEXT NOT NULL DEFAULT 'HUF',
+          "status" TEXT NOT NULL DEFAULT 'pending',
+          "deliveryStatus" TEXT NOT NULL DEFAULT 'pending',
+          "deliveryNotes" TEXT,
+          "simplePayOrderRef" TEXT,
+          "simplePayTransId" TEXT,
+          "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "updatedAt" TIMESTAMP(3) NOT NULL,
+          CONSTRAINT "Payment_pkey" PRIMARY KEY ("id")
+        );
+      `),
+      prisma.$executeRawUnsafe(`CREATE UNIQUE INDEX IF NOT EXISTS "Payment_sessionId_key" ON "Payment"("sessionId");`),
+      prisma.$executeRawUnsafe(`CREATE UNIQUE INDEX IF NOT EXISTS "Payment_simplePayOrderRef_key" ON "Payment"("simplePayOrderRef");`),
+
+      // Add missing columns to Payment if table already existed previously
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "customerPhone" TEXT;`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "companyName" TEXT;`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "taxNumber" TEXT;`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "billingAddress" TEXT;`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "billingCity" TEXT;`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "billingZip" TEXT;`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "billingCountry" TEXT;`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "deliveryStatus" TEXT NOT NULL DEFAULT 'pending';`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Payment" ADD COLUMN IF NOT EXISTS "deliveryNotes" TEXT;`),
+
+      // Add missing columns to Quote
+      prisma.$executeRawUnsafe(`ALTER TABLE "Quote" ADD COLUMN IF NOT EXISTS "adminNotes" TEXT;`),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Quote" ADD COLUMN IF NOT EXISTS "attachmentUrl" TEXT;`)
     ]);
 
     return NextResponse.json({ 
