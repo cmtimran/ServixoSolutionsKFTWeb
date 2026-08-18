@@ -74,12 +74,14 @@ export async function GET() {
           "priceBasic" DOUBLE PRECISION NOT NULL,
           "pricePro" DOUBLE PRECISION NOT NULL,
           "priceEnterprise" DOUBLE PRECISION NOT NULL,
+          "currency" TEXT NOT NULL DEFAULT 'HUF',
           "images" TEXT[],
           "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
           "updatedAt" TIMESTAMP(3) NOT NULL,
           CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
         );
       `),
+      prisma.$executeRawUnsafe(`ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "currency" TEXT NOT NULL DEFAULT 'HUF';`),
       prisma.$executeRawUnsafe(`
         CREATE UNIQUE INDEX IF NOT EXISTS "Product_slug_key" ON "Product"("slug");
       `),
