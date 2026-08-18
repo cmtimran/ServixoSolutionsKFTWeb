@@ -1,28 +1,60 @@
-import { prisma } from '@/lib/prisma';
-import { CreditCard, CheckCircle, Clock, XCircle, FileText } from 'lucide-react';
-import SyncPaymentsButton from '@/components/admin/SyncPaymentsButton';
+'use client';
 
+import { useState, useEffect } from 'react';
+import { CreditCard, CheckCircle, Clock, XCircle, FileText, Loader2, RefreshCw } from 'lucide-react';
+import SyncPaymentsButton from '@/components/admin/SyncPaymentsButton';
 import Link from 'next/link';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+type PaymentRecord = {
+  id: string;
+  sessionId: string;
+  customerName: string | null;
+  customerEmail: string | null;
+  customerPhone: string | null;
+  companyName: string | null;
+  taxNumber: string | null;
+  billingAddress: string | null;
+  billingCity: string | null;
+  billingZip: string | null;
+  billingCountry: string | null;
+  productName: string;
+  planTier: string;
+  amount: number;
+  currency: string;
+  status: string;
+  simplePayOrderRef: string | null;
+  simplePayTransId: string | null;
+  createdAt: string;
+};
 
-export default async function AdminPaymentsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
-  const params = await searchParams;
-  const currentFilter = params.status || 'paid';
+export default function AdminPaymentsPage() {
+  const [payments, setPayments] = useState<PaymentRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentFilter, setCurrentFilter] = useState<'all' | 'paid' | 'canceled' | 'declined'>('paid');
+  const [error, setError] = useState<string | null>(null);
 
-  const statusWhere = currentFilter === 'paid' 
-    ? { in: ['complete', 'success', 'paid'] } 
-    : currentFilter === 'canceled' 
-      ? { in: ['expired', 'canceled', 'cancelled'] } 
-      : currentFilter === 'declined'
-        ? { in: ['failed', 'declined', 'unpaid'] }
-        : undefined;
+  const fetchPayments = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`/api/admin/payments?status=${currentFilter}`);
+      const json = await res.json();
+      if (json.success) {
+        setPayments(json.data);
+      } else {
+        setError(json.error || 'Failed to load payments');
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Error fetching payments');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const payments = await prisma.payment.findMany({
-    where: statusWhere ? { status: statusWhere } : undefined,
-    orderBy: { createdAt: 'desc' }
-  });
+  useEffect(() => {
+    fetchPayments();
+  }, [currentFilter]);
 
   return (
     <div>
@@ -35,31 +67,41 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
       </div>
 
       <div className="flex gap-4 mb-6">
-        <Link 
-          href="/admin/payments?status=all"
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'all' ? 'bg-brand-indigo text-slate-900 dark:text-white' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-slate-800'}`}
+        <button 
+          type="button"
+          onClick={() => setCurrentFilter('all')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentFilter === 'all' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-slate-800'}`}
         >
           All
-        </Link>
-        <Link 
-          href="/admin/payments?status=paid"
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'paid' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-slate-800'}`}
+        </button>
+        <button 
+          type="button"
+          onClick={() => setCurrentFilter('paid')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentFilter === 'paid' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-slate-800'}`}
         >
           Paid
-        </Link>
-        <Link 
-          href="/admin/payments?status=canceled"
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'canceled' ? 'bg-rose-500/20 text-rose-400' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-slate-800'}`}
+        </button>
+        <button 
+          type="button"
+          onClick={() => setCurrentFilter('canceled')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentFilter === 'canceled' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-slate-800'}`}
         >
           Canceled
-        </Link>
-        <Link 
-          href="/admin/payments?status=declined"
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${currentFilter === 'declined' ? 'bg-amber-500/20 text-amber-400' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-slate-800'}`}
+        </button>
+        <button 
+          type="button"
+          onClick={() => setCurrentFilter('declined')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentFilter === 'declined' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-slate-800'}`}
         >
           Declined
-        </Link>
+        </button>
       </div>
+
+      {error && (
+        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-sm">
+          {error}
+        </div>
+      )}
 
       <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
@@ -75,7 +117,13 @@ export default async function AdminPaymentsPage({ searchParams }: { searchParams
               </tr>
             </thead>
             <tbody>
-              {payments.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="p-12 text-center text-slate-500">
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto text-indigo-500" />
+                  </td>
+                </tr>
+              ) : payments.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center text-slate-500 dark:text-slate-500">
                     No payments found.
