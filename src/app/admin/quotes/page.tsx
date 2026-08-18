@@ -14,6 +14,7 @@ type Quote = {
   timeline: string;
   projectDescription: string;
   status: 'PENDING' | 'IN_REVIEW' | 'APPROVED' | 'REJECTED';
+  adminNotes?: string | null;
   createdAt: string;
 };
 
@@ -21,6 +22,9 @@ export default function QuotesPage() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeNotesQuoteId, setActiveNotesQuoteId] = useState<string | null>(null);
+  const [notesText, setNotesText] = useState<string>('');
+  const [savingNotes, setSavingNotes] = useState<boolean>(false);
 
   const fetchQuotes = async () => {
     try {
@@ -53,13 +57,35 @@ export default function QuotesPage() {
       const json = await res.json();
       
       if (json.success) {
-        fetchQuotes();
+        setQuotes(prev => prev.map(q => q.id === id ? { ...q, status: status as any } : q));
       } else {
         alert(json.error || 'Error updating status');
       }
     } catch (error) {
       console.error(error);
       alert('Error updating status');
+    }
+  };
+
+  const handleSaveNotes = async (id: string) => {
+    setSavingNotes(true);
+    try {
+      const res = await fetch(`/api/admin/quotes/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminNotes: notesText })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setQuotes(prev => prev.map(q => q.id === id ? { ...q, adminNotes: notesText } : q));
+        setActiveNotesQuoteId(null);
+      } else {
+        alert(json.error || 'Error saving notes');
+      }
+    } catch (error) {
+      alert('Error saving notes');
+    } finally {
+      setSavingNotes(false);
     }
   };
 
@@ -70,7 +96,7 @@ export default function QuotesPage() {
       const json = await res.json();
       
       if (json.success) {
-        fetchQuotes();
+        setQuotes(prev => prev.filter(q => q.id !== id));
       } else {
         alert(json.error || 'Error deleting quote');
       }
@@ -101,8 +127,8 @@ export default function QuotesPage() {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Quote Requests</h1>
-        <p className="text-slate-600 dark:text-slate-400">Manage client inquiries and project quotes.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Quote Requests & Delivery</h1>
+        <p className="text-slate-600 dark:text-slate-400">Review client project requirements, prepare proposals, and manage custom deliverables.</p>
       </div>
 
       {error && (
@@ -155,6 +181,17 @@ export default function QuotesPage() {
                     Requested on {new Date(quote.createdAt).toLocaleDateString()}
                   </div>
                 </div>
+
+                {/* Direct Email Action Button */}
+                <div className="pt-2">
+                  <a
+                    href={`mailto:${quote.clientEmail}?subject=Proposal: Custom IT Solution for ${quote.clientName}&body=Dear ${quote.clientName},%0D%0A%0D%0AThank you for reaching out to Servixo Solutions Kft. regarding your ${quote.projectTypes.join(', ')} project.%0D%0A%0D%0A`}
+                    className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition-colors"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    Send Proposal / Email
+                  </a>
+                </div>
               </div>
               
               <div className="p-6 md:w-2/3 flex flex-col">
@@ -178,19 +215,69 @@ export default function QuotesPage() {
                 </div>
 
                 <div className="space-y-2 flex-grow">
-                  <span className="text-xs text-slate-500 dark:text-slate-500 font-semibold uppercase flex items-center gap-1"><FileText className="w-3.5 h-3.5"/> Description</span>
-                  <div className="bg-white dark:bg-slate-950 p-4 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-800/60 leading-relaxed max-h-[200px] overflow-y-auto">
+                  <span className="text-xs text-slate-500 dark:text-slate-500 font-semibold uppercase flex items-center gap-1"><FileText className="w-3.5 h-3.5"/> Requirements & Scope</span>
+                  <div className="bg-white dark:bg-slate-950 p-4 rounded-xl text-sm text-slate-700 dark:text-slate-300 border border-slate-800/60 leading-relaxed max-h-[150px] overflow-y-auto">
                     {quote.projectDescription}
                   </div>
                 </div>
 
-                <div className="mt-6 flex justify-end">
+                {/* Admin Delivery & Proposal Notes */}
+                {quote.adminNotes && activeNotesQuoteId !== quote.id && (
+                  <div className="mt-4 p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-xs space-y-1">
+                    <span className="font-bold text-indigo-400 block">Internal Delivery Notes / Proposal:</span>
+                    <p className="text-slate-300 whitespace-pre-wrap">{quote.adminNotes}</p>
+                  </div>
+                )}
+
+                {activeNotesQuoteId === quote.id && (
+                  <div className="mt-4 p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                      Proposal / Delivery Notes
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={notesText}
+                      onChange={(e) => setNotesText(e.target.value)}
+                      placeholder="Add estimate notes, tech stack decisions, milestone schedule, or deliverables..."
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
+                    />
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        type="button"
+                        onClick={() => setActiveNotesQuoteId(null)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:bg-slate-800"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        disabled={savingNotes}
+                        onClick={() => handleSaveNotes(quote.id)}
+                        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold disabled:opacity-50"
+                      >
+                        {savingNotes ? 'Saving...' : 'Save Notes'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-6 flex justify-between items-center pt-3 border-t border-slate-100 dark:border-slate-800/60">
+                  <button
+                    onClick={() => {
+                      setActiveNotesQuoteId(quote.id);
+                      setNotesText(quote.adminNotes || '');
+                    }}
+                    className="text-xs font-semibold text-indigo-500 dark:text-indigo-400 hover:underline cursor-pointer"
+                  >
+                    📝 {quote.adminNotes ? 'Edit Notes / Proposal' : '+ Add Delivery Notes'}
+                  </button>
+
                   <button
                     onClick={() => handleDelete(quote.id)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition-colors border border-transparent hover:border-red-500/20 cursor-pointer"
                   >
-                    <Trash2 className="w-4 h-4" />
-                    Delete Quote
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Delete
                   </button>
                 </div>
               </div>

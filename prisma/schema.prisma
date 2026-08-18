@@ -71,6 +71,7 @@ model Quote {
   clientPhone        String
   companyName        String?
   status             QuoteStatus @default(PENDING)
+  adminNotes         String?     // Internal delivery & review notes
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
 }
@@ -128,6 +129,8 @@ model Payment {
   amount             Float
   currency           String   @default("HUF")
   status             String   @default("pending")
+  deliveryStatus     String   @default("pending") // pending, in_progress, delivered
+  deliveryNotes      String?  // License keys, login credentials, onboarding link, repo link
   simplePayOrderRef  String?  @unique  // SimplePay orderRef (used for IPN matching)
   simplePayTransId   String?           // SimplePay transactionId (filled in by IPN)
   createdAt          DateTime @default(now())

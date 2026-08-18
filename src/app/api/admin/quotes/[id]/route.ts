@@ -11,15 +11,22 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { status } = await request.json();
+    const { status, adminNotes } = await request.json();
 
-    if (!['PENDING', 'IN_REVIEW', 'APPROVED', 'REJECTED'].includes(status)) {
-      return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+    const dataToUpdate: any = {};
+    if (status) {
+      if (!['PENDING', 'IN_REVIEW', 'APPROVED', 'REJECTED'].includes(status)) {
+        return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+      }
+      dataToUpdate.status = status;
+    }
+    if (adminNotes !== undefined) {
+      dataToUpdate.adminNotes = adminNotes;
     }
 
     const updatedQuote = await prisma.quote.update({
       where: { id },
-      data: { status }
+      data: dataToUpdate
     });
 
     return NextResponse.json({ success: true, data: updatedQuote });
