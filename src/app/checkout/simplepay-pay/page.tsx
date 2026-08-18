@@ -244,7 +244,7 @@ function SimplePayContent() {
               </div>
             </div>
 
-            {/* Billing Address (Optional) */}
+            {/* Billing Address */}
             <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-indigo-500" />
@@ -286,7 +286,7 @@ function SimplePayContent() {
                     type="text"
                     value={formData.billingCity}
                     onChange={(e) => setFormData({ ...formData, billingCity: e.target.value })}
-                    placeholder="Budapest"
+                    placeholder="Budapest / Dhaka / London..."
                     className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                   />
                 </div>
@@ -300,13 +300,46 @@ function SimplePayContent() {
                     onChange={(e) => setFormData({ ...formData, billingCountry: e.target.value })}
                     className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                   >
-                    <option value="HU">Hungary (Magyarország)</option>
-                    <option value="DE">Germany (Deutschland)</option>
-                    <option value="AT">Austria (Österreich)</option>
-                    <option value="RO">Romania</option>
-                    <option value="SK">Slovakia</option>
+                    <option value="HU">Hungary</option>
+                    <option value="BD">Bangladesh</option>
                     <option value="US">United States</option>
                     <option value="GB">United Kingdom</option>
+                    <option value="DE">Germany</option>
+                    <option value="AT">Austria</option>
+                    <option value="FR">France</option>
+                    <option value="IT">Italy</option>
+                    <option value="ES">Spain</option>
+                    <option value="NL">Netherlands</option>
+                    <option value="BE">Belgium</option>
+                    <option value="CH">Switzerland</option>
+                    <option value="SE">Sweden</option>
+                    <option value="NO">Norway</option>
+                    <option value="DK">Denmark</option>
+                    <option value="FI">Finland</option>
+                    <option value="PL">Poland</option>
+                    <option value="CZ">Czech Republic</option>
+                    <option value="SK">Slovakia</option>
+                    <option value="RO">Romania</option>
+                    <option value="BG">Bulgaria</option>
+                    <option value="GR">Greece</option>
+                    <option value="PT">Portugal</option>
+                    <option value="IE">Ireland</option>
+                    <option value="CA">Canada</option>
+                    <option value="AU">Australia</option>
+                    <option value="NZ">New Zealand</option>
+                    <option value="AE">United Arab Emirates</option>
+                    <option value="SA">Saudi Arabia</option>
+                    <option value="QA">Qatar</option>
+                    <option value="SG">Singapore</option>
+                    <option value="MY">Malaysia</option>
+                    <option value="IN">India</option>
+                    <option value="PK">Pakistan</option>
+                    <option value="JP">Japan</option>
+                    <option value="KR">South Korea</option>
+                    <option value="CN">China</option>
+                    <option value="BR">Brazil</option>
+                    <option value="MX">Mexico</option>
+                    <option value="ZA">South Africa</option>
                   </select>
                 </div>
               </div>
