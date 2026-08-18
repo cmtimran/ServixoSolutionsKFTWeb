@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: quotes });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching quotes:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
   }
 }
