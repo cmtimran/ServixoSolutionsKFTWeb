@@ -26,7 +26,7 @@ export default function ProductForm({ initialData }: { initialData?: Product }) 
       priceBasic: 0,
       pricePro: 0,
       priceEnterprise: 0,
-      currency: 'USD',
+      currency: 'HUF',
     }
   );
   const [saving, setSaving] = useState(false);
@@ -130,19 +130,17 @@ export default function ProductForm({ initialData }: { initialData?: Product }) 
           <div className="space-y-2">
             <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Currency</label>
             <select
-              value={formData.currency || 'USD'}
+              value={formData.currency || 'HUF'}
               onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
               className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
               <option value="HUF">HUF (Ft)</option>
             </select>
           </div>
         </div>
 
         <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700/60">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Pricing Tiers ({formData.currency || 'USD'})</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Pricing Tiers ({formData.currency || 'HUF'})</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Basic Price</label>

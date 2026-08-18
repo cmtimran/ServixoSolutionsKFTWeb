@@ -20,7 +20,7 @@ export default function CheckoutButton({
   productName, 
   planTier, 
   price, 
-  currency = 'USD',
+  currency = 'HUF',
   featured,
   className = '',
   interval = 'month',

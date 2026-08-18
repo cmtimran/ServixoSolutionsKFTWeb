@@ -27,7 +27,7 @@ function SimplePayContent() {
     fetch('/api/simplepay/start', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ productName, planTier, price, currency }),
+      body:    JSON.stringify({ productName, planTier, price, currency: 'HUF' }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -59,21 +59,6 @@ function SimplePayContent() {
           <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Payment Initialisation Failed</h2>
           <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-lg p-4 mb-6 text-left">
             <p className="text-red-800 dark:text-red-300 font-mono text-sm break-all">{error}</p>
-            {error?.includes('5302') && (
-              <p className="mt-3 text-sm text-slate-700 dark:text-slate-400">
-                <strong>Fix:</strong> This usually means your SimplePay Secret Key or Merchant ID is incorrect. Please double-check your credentials in the Admin Panel settings and ensure there are no accidental spaces.
-              </p>
-            )}
-            {error?.includes('5081') && (
-              <p className="mt-3 text-sm text-slate-700 dark:text-slate-400">
-                <strong>Fix:</strong> Invalid merchant. Make sure you are using the correct Environment (Sandbox vs Live) in the Admin Panel settings.
-              </p>
-            )}
-            {error?.includes('5010') && (
-              <p className="mt-3 text-sm text-slate-700 dark:text-slate-400">
-                <strong>Fix:</strong> Invalid parameters were sent to SimplePay.
-              </p>
-            )}
           </div>
           <button
             onClick={() => router.back()}
@@ -87,8 +72,8 @@ function SimplePayContent() {
   }
 
   return (
-    <div className="w-full flex flex-col items-center justify-center p-6">
-      <div className="max-w-md w-full text-center">
+    <div className="w-full flex flex-col items-center justify-center p-6 max-w-xl mx-auto">
+      <div className="w-full text-center">
         {/* Animated logo / icon */}
         <div className="relative w-24 h-24 mx-auto mb-8">
           <div className="absolute inset-0 rounded-full bg-indigo-500/20 animate-ping" />
@@ -98,26 +83,42 @@ function SimplePayContent() {
         </div>
 
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-          {status === 'preparing' ? 'Preparing Your Payment…' : 'Redirecting to SimplePay…'}
+          {status === 'preparing' ? 'Fizetés előkészítése… / Preparing Payment…' : 'Átirányítás a SimplePay oldalára… / Redirecting…'}
         </h1>
-        <p className="text-slate-600 dark:text-slate-400 text-sm mb-8">
+        <p className="text-slate-600 dark:text-slate-400 text-sm mb-6">
           {status === 'preparing'
-            ? 'Securely initialising your transaction with SimplePay.'
-            : 'You will be redirected to SimplePay\'s secure payment page momentarily.'}
+            ? 'Biztonságos kapcsolat létesítése az OTP Mobil SimplePay rendszerével.'
+            : 'Pillanatokon belül átirányítjuk a SimplePay fizetési felületére.'}
         </p>
 
-        <div className="flex items-center justify-center gap-2 text-slate-500 dark:text-slate-500 text-xs font-medium">
+        <div className="flex items-center justify-center gap-2 text-slate-500 dark:text-slate-500 text-xs font-medium mb-6">
           <Loader2 className="w-4 h-4 animate-spin text-indigo-500 dark:text-slate-500" />
-          <span>Powered by SimplePay (OTP Mobil)</span>
+          <span>Fizetési szolgáltató / Payment Provider: OTP Mobil Kft. (SimplePay)</span>
+        </div>
+
+        {/* Mandatory SimplePay Data Forwarding Statement (Adattovábbítási nyilatkozat) */}
+        <div className="text-left bg-slate-100 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-xs text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed">
+          <div className="font-semibold text-slate-900 dark:text-slate-200">
+            Adattovábbítási nyilatkozat / Data Transfer Declaration:
+          </div>
+          <p>
+            Tudomásul veszem, hogy a <strong>Servixo Solutions Kft.</strong> (1081 Budapest, Rákóczi út 63.) adatkezelő által a(z) servixosolutionskft.com felhasználói adatbázisában tárolt alábbi személyes adataim átadásra kerülnek az <strong>OTP Mobil Kft. (1143 Budapest, Hungária krt. 17-19.)</strong>, mint adatfeldolgozó részére.
+          </p>
+          <p className="text-[11px] text-slate-500">
+            Az adatfeldolgozó által végzett adatfeldolgozási tevékenység jellege és célja a SimplePay Adatkezelési tájékoztatóban tekinthető meg:{' '}
+            <a href="https://simplepay.hu/adatkezelesi-tajekoztato/" target="_blank" rel="noopener noreferrer" className="text-indigo-500 underline">
+              simplepay.hu/adatkezelesi-tajekoztato
+            </a>
+          </p>
         </div>
 
         {/* Trust badges */}
-        <div className="mt-10 flex items-center justify-center gap-4 text-slate-500 dark:text-slate-600 text-xs font-medium">
+        <div className="mt-8 flex items-center justify-center gap-4 text-slate-500 dark:text-slate-600 text-xs font-medium">
           <span className="flex items-center gap-1">🔒 256-bit SSL</span>
           <span>·</span>
           <span className="flex items-center gap-1">🛡️ 3D Secure</span>
           <span>·</span>
-          <span className="flex items-center gap-1">🇭🇺 OTP Mobil</span>
+          <span className="flex items-center gap-1">🇭🇺 OTP Mobil SimplePay</span>
         </div>
       </div>
     </div>

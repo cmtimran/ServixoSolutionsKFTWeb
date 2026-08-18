@@ -118,7 +118,7 @@ export default function ProductsList({ products }: { products: any[] }) {
                         >
                           <div className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${isSelected ? 'text-blue-200' : 'text-[var(--text-muted)]'}`}>{tier}</div>
                           <div className={`text-lg font-extrabold ${isSelected ? 'text-white' : 'text-gradient'}`}>
-                            {product.currency === 'HUF' ? `${price} Ft` : product.currency === 'EUR' ? `€${price}` : `$${price}`}
+                            {Math.round(price).toLocaleString('hu-HU')} Ft
                           </div>
                           <div className={`text-[9px] ${isSelected ? 'text-blue-200' : 'text-[var(--text-subtle)]'}`}>{intervalLabel}</div>
                         </button>
@@ -133,7 +133,7 @@ export default function ProductsList({ products }: { products: any[] }) {
                       price={((selectedTiers[product.id] || 'Basic') === 'Basic' ? product.priceBasic : 
                            (selectedTiers[product.id] || 'Basic') === 'Pro' ? product.pricePro : 
                            product.priceEnterprise) * multiplier}
-                      currency={product.currency || 'USD'}
+                      currency="HUF"
                       interval={interval}
                       className="btn-primary"
                     />

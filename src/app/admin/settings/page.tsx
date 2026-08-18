@@ -11,10 +11,6 @@ export default function SettingsPage() {
     defaultTheme: 'light',
     simplepayMerchantId: '',
     simplepaySecretKey: '',
-    simplepayMerchantIdEUR: '',
-    simplepaySecretKeyEUR: '',
-    simplepayMerchantIdUSD: '',
-    simplepaySecretKeyUSD: '',
     simplepayEnvironment: 'sandbox',
   });
   const [loading, setLoading] = useState(true);
@@ -33,10 +29,6 @@ export default function SettingsPage() {
             defaultTheme: json.data.defaultTheme || 'light',
             simplepayMerchantId: json.data.simplepayMerchantId || '',
             simplepaySecretKey: json.data.simplepaySecretKey || '',
-            simplepayMerchantIdEUR: json.data.simplepayMerchantIdEUR || '',
-            simplepaySecretKeyEUR: json.data.simplepaySecretKeyEUR || '',
-            simplepayMerchantIdUSD: json.data.simplepayMerchantIdUSD || '',
-            simplepaySecretKeyUSD: json.data.simplepaySecretKeyUSD || '',
             simplepayEnvironment: json.data.simplepayEnvironment || 'sandbox',
           });
         }
@@ -86,7 +78,7 @@ export default function SettingsPage() {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Platform Settings</h1>
-        <p className="text-slate-600 dark:text-slate-400">Manage your core website configuration, contact details, and integrations.</p>
+        <p className="text-slate-600 dark:text-slate-400">Manage your core website configuration, contact details, and SimplePay integration.</p>
       </div>
 
       <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-6 sm:p-8 backdrop-blur-sm">
@@ -160,10 +152,10 @@ export default function SettingsPage() {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white border-b border-slate-300 dark:border-slate-700 pb-2 flex items-center gap-2">
               <Key className="w-5 h-5 text-indigo-500" />
-              SimplePay Configuration
+              SimplePay Configuration (HUF)
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-400 pb-2">
-              Manage your SimplePay (OTP Mobil) credentials. SimplePay requires different Merchant IDs for different currencies. Leave blank to use environment variables or Sandbox fallbacks.
+              Manage your OTP Mobil SimplePay (HUF) credentials.
             </p>
             
             <div className="grid grid-cols-1 gap-6">
@@ -179,90 +171,31 @@ export default function SettingsPage() {
                 </select>
               </div>
 
-              {/* HUF Credentials */}
-              <div className="bg-slate-100 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
-                <h3 className="font-semibold text-slate-800 dark:text-slate-200">Hungarian Forint (HUF) Credentials</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Merchant ID</label>
-                    <input
-                      type="text"
-                      value={settings.simplepayMerchantId}
-                      onChange={(e) => setSettings({ ...settings, simplepayMerchantId: e.target.value })}
-                      placeholder="e.g. OMS57078401"
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Secret Key</label>
-                    <input
-                      type="password"
-                      value={settings.simplepaySecretKey}
-                      onChange={(e) => setSettings({ ...settings, simplepaySecretKey: e.target.value })}
-                      placeholder="••••••••••••••••••••••••"
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                    />
-                  </div>
-                </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Merchant ID (HUF)</label>
+                <input
+                  type="text"
+                  value={settings.simplepayMerchantId}
+                  onChange={(e) => setSettings({ ...settings, simplepayMerchantId: e.target.value })}
+                  placeholder="e.g. OMS57078401"
+                  className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                />
               </div>
 
-              {/* USD Credentials */}
-              <div className="bg-slate-100 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
-                <h3 className="font-semibold text-slate-800 dark:text-slate-200">US Dollar (USD) Credentials</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Merchant ID</label>
-                    <input
-                      type="text"
-                      value={settings.simplepayMerchantIdUSD}
-                      onChange={(e) => setSettings({ ...settings, simplepayMerchantIdUSD: e.target.value })}
-                      placeholder="Leave blank for test fallback"
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Secret Key</label>
-                    <input
-                      type="password"
-                      value={settings.simplepaySecretKeyUSD}
-                      onChange={(e) => setSettings({ ...settings, simplepaySecretKeyUSD: e.target.value })}
-                      placeholder="••••••••••••••••••••••••"
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* EUR Credentials */}
-              <div className="bg-slate-100 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
-                <h3 className="font-semibold text-slate-800 dark:text-slate-200">Euro (EUR) Credentials</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Merchant ID</label>
-                    <input
-                      type="text"
-                      value={settings.simplepayMerchantIdEUR}
-                      onChange={(e) => setSettings({ ...settings, simplepayMerchantIdEUR: e.target.value })}
-                      placeholder="Leave blank for test fallback"
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Secret Key</label>
-                    <input
-                      type="password"
-                      value={settings.simplepaySecretKeyEUR}
-                      onChange={(e) => setSettings({ ...settings, simplepaySecretKeyEUR: e.target.value })}
-                      placeholder="••••••••••••••••••••••••"
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                    />
-                  </div>
-                </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Secret Key</label>
+                <input
+                  type="password"
+                  value={settings.simplepaySecretKey}
+                  onChange={(e) => setSettings({ ...settings, simplepaySecretKey: e.target.value })}
+                  placeholder="••••••••••••••••••••••••"
+                  className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                />
               </div>
             </div>
             
             <div className="mt-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-4 text-sm text-indigo-800 dark:text-indigo-300">
-              <span className="font-semibold text-indigo-900 dark:text-indigo-200">ℹ️ Note:</span> If these fields are empty, the system will fall back to `.env.local` variables or the default Sandbox credentials for testing.
+              <span className="font-semibold text-indigo-900 dark:text-indigo-200">ℹ️ Note:</span> Default merchant ID is <code>OMS57078401</code>.
             </div>
           </div>
 
@@ -274,13 +207,9 @@ export default function SettingsPage() {
             <button
               type="submit"
               disabled={saving}
-              className="mt-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-slate-900 dark:text-white font-semibold py-3 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-xl transition-all disabled:opacity-50"
             >
-              {saving ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Save className="w-5 h-5" />
-              )}
+              {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
               Save Configuration
             </button>
           </div>

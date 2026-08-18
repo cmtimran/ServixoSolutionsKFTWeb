@@ -53,7 +53,7 @@ model Product {
   priceBasic      Float
   pricePro        Float
   priceEnterprise Float
-  currency        String   @default("USD")
+  currency        String   @default("HUF")
   images          String[] // List of image URLs
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

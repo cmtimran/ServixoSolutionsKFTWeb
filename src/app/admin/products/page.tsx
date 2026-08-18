@@ -97,7 +97,7 @@ export default function ProductsPage() {
                     </td>
                     <td className="px-6 py-4">{product.slug}</td>
                     <td className="px-6 py-4">
-                      {product.currency === 'HUF' ? `${product.priceBasic} Ft` : product.currency === 'EUR' ? `€${product.priceBasic}` : `$${product.priceBasic}`}
+                      {Math.round(product.priceBasic).toLocaleString('hu-HU')} Ft
                     </td>
                     <td className="px-6 py-4">{new Date(product.createdAt).toLocaleDateString()}</td>
                     <td className="px-6 py-4 flex items-center justify-end gap-3">

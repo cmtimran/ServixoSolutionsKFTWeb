@@ -114,9 +114,10 @@ const MOCK_PRODUCTS = [
       'Max Concurrent Users': 'Unlimited (Auto-scalable)',
       'Security Certification': 'SOC2 Type II, GDPR compliant'
     },
-    priceBasic: 99,
-    pricePro: 299,
-    priceEnterprise: 999,
+    priceBasic: 120000,
+    pricePro: 160000,
+    priceEnterprise: 240000,
+    currency: 'HUF',
     images: [
       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop'
@@ -138,9 +139,10 @@ const MOCK_PRODUCTS = [
       'Threat DB Updates': 'Real-time via encrypted websocket',
       'SIEM Integration': 'Splunk, Elastic, Datadog supported'
     },
-    priceBasic: 49,
-    pricePro: 149,
-    priceEnterprise: 499,
+    priceBasic: 140000,
+    pricePro: 200000,
+    priceEnterprise: 300000,
+    currency: 'HUF',
     images: [
       'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=600&auto=format&fit=crop'
     ]

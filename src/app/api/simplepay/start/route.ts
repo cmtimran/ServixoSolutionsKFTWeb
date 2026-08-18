@@ -12,54 +12,23 @@ import {
 
 export async function POST(req: Request) {
   try {
-    const { productName, planTier, price, currency = 'HUF' } = await req.json();
+    const { productName, planTier, price } = await req.json();
 
     // Fetch SimplePay settings from DB
     const dbSettings = await prisma.setting.findMany({
-      where: { key: { in: [
-        'simplepayEnvironment',
-        'simplepayMerchantId', 'simplepaySecretKey',       // Legacy/HUF
-        'simplepayMerchantIdEUR', 'simplepaySecretKeyEUR', // EUR
-        'simplepayMerchantIdUSD', 'simplepaySecretKeyUSD'  // USD
-      ] } }
+      where: { key: { in: ['simplepayMerchantId', 'simplepaySecretKey', 'simplepayEnvironment'] } }
     });
     const settingsMap = dbSettings.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, string>);
 
     const isLive = settingsMap.simplepayEnvironment === 'live';
 
-    // Determine the configured Merchant ID based on the requested currency
-    let configuredMerchantId = '';
-    let configuredSecretKey  = '';
+    const rawMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
+    const rawSecretKey  = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
 
-    if (currency === 'USD') {
-      configuredMerchantId = settingsMap.simplepayMerchantIdUSD || '';
-      configuredSecretKey  = settingsMap.simplepaySecretKeyUSD || '';
-    } else if (currency === 'EUR') {
-      configuredMerchantId = settingsMap.simplepayMerchantIdEUR || '';
-      configuredSecretKey  = settingsMap.simplepaySecretKeyEUR || '';
-    } else {
-      // Default / HUF
-      configuredMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
-      configuredSecretKey  = settingsMap.simplepaySecretKey || process.env.SIMPLEPAY_SECRET_KEY || '';
-    }
-
-    let merchantId = configuredMerchantId.trim();
-    let secretKey  = configuredSecretKey.trim();
-
-    // Fallback to public test credentials if in sandbox OR missing credentials
-    if (!merchantId || !secretKey || merchantId.startsWith('PUBLICTEST')) {
-      if (currency === 'USD') {
-        merchantId = 'PUBLICTESTUSD';
-        secretKey  = 'Aa9cDbHc1i2lLmN4z3C542zjXqZiDiCj';
-      } else if (currency === 'EUR') {
-        merchantId = 'PUBLICTESTEUR';
-        secretKey  = '9A2sDc7xh1JKW8r193RwW7X7X2ts837w';
-      } else {
-        merchantId = 'PUBLICTESTHUF';
-        secretKey  = '32637af0d35a9b2105650800dc0366b8';
-      }
-    }
-    const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
+    // Partner merchant ID OMS57078401 or fallback
+    const merchantId = rawMerchantId.trim() || 'OMS57078401';
+    const secretKey  = rawSecretKey.trim() || '32637af0d35a9b2105650800dc0366b8';
+    const appUrl     = process.env.NEXT_PUBLIC_APP_URL || 'https://www.servixosolutionskft.com';
 
     if (!merchantId || !secretKey) {
       return NextResponse.json(
@@ -71,18 +40,17 @@ export async function POST(req: Request) {
     // Build a unique order reference (timestamp + random suffix)
     const orderRef = `SRVX-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
-    // Convert price to integer (SimplePay uses whole-unit amounts, e.g. HUF has no decimals)
-    const totalAmount = currency === 'HUF'
-      ? Math.round(parseFloat(String(price)) * 400).toString()   // approximate USD→HUF if price is in USD
-      : parseFloat(String(price)).toFixed(2);
+    // SimplePay HUF requires integer amount (no decimals)
+    const numericPrice = Math.round(parseFloat(String(price)) || 120000);
+    const totalAmount = numericPrice.toString();
 
     const payload: SimplePayStartRequest = {
       salt:          generateSalt(),
       merchant:      merchantId,
       orderRef,
-      currency:      currency as 'HUF' | 'EUR' | 'USD',
+      currency:      'HUF',
       customerEmail: 'sandbox@servixosolutionskft.com',   // placeholder for sandbox
-      language:      'EN',
+      language:      'HU',
       sdkVersion:    SDK_VERSION,
       methods:       ['CARD'],
       total:         totalAmount,
@@ -94,15 +62,15 @@ export async function POST(req: Request) {
         state:   'Budapest',
         city:    'Budapest',
         zip:     '1081',
-        address: 'Rakoczi ut 63',
+        address: 'Rákóczi út 63',
       },
       items: [
         {
           ref:         orderRef,
           title:       `${productName} — ${planTier}`,
-          description: `Subscription: ${productName} ${planTier} plan`,
+          description: `Előfizetés: ${productName} ${planTier} csomag`,
           amount:      1,
-          price:       parseFloat(totalAmount),
+          price:       numericPrice,
           tax:         0,
         },
       ],
@@ -139,14 +107,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // Persist a pending payment record
+    // Persist a pending payment record in HUF
     await prisma.payment.create({
       data: {
         sessionId:         String(spData.transactionId),
         productName,
         planTier,
-        amount:            parseFloat(totalAmount),
-        currency,
+        amount:            numericPrice,
+        currency:          'HUF',
         status:            'pending',
         simplePayOrderRef: orderRef,
       },
