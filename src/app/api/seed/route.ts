@@ -37,56 +37,133 @@ export async function GET() {
     }
 
     // 3. Products
-    const product1 = await prisma.product.upsert({
-      where: { slug: 'starter-kit' },
-      update: {},
-      create: {
-        title: 'Business Starter Kit',
+    const ALL_PRODUCTS = [
+      {
+        slug: 'servixo-erp',
+        title: 'Servixo CoreERP',
+        description: 'A unified enterprise planning suite managing inventory, finances, and HR with advanced AI forecasting.',
+        features: [
+          'Real-time automated inventory tracking',
+          'Double-entry automated accounting ledger',
+          'Intelligent sales forecasting dashboard',
+          'GDPR-compliant employee files & payroll'
+        ],
+        specifications: {
+          'Deployment': 'Cloud-hosted or On-Premises',
+          'Supported APIs': 'REST, GraphQL, Webhooks',
+          'Database': 'PostgreSQL / MongoDB',
+          'Max Concurrent Users': 'Unlimited (Auto-scalable)',
+          'Security Certification': 'SOC2 Type II, GDPR compliant'
+        },
+        priceBasic: 120000,
+        pricePro: 160000,
+        priceEnterprise: 240000,
+        currency: 'HUF',
+        images: [
+          'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop'
+        ]
+      },
+      {
+        slug: 'guardx-security',
+        title: 'GuardX Cyber Sentinel',
+        description: 'An AI-powered endpoint protection agent that detects and neutralizes zero-day security threats instantly.',
+        features: [
+          'Heuristic real-time malware detection',
+          'Continuous central server network monitoring',
+          'Automated sandboxed execution of suspect files',
+          'Centralized admin threat response console'
+        ],
+        specifications: {
+          'OS Support': 'Windows Server, Linux (Ubuntu/RHEL), macOS',
+          'Agent Memory footprint': '< 45MB RAM',
+          'Threat DB Updates': 'Real-time via encrypted websocket',
+          'SIEM Integration': 'Splunk, Elastic, Datadog supported'
+        },
+        priceBasic: 140000,
+        pricePro: 200000,
+        priceEnterprise: 300000,
+        currency: 'HUF',
+        images: [
+          'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=600&auto=format&fit=crop'
+        ]
+      },
+      {
         slug: 'starter-kit',
-        description: 'Everything you need to get your business online.',
+        title: 'Business Starter Kit',
+        description: 'Everything you need to launch and automate your business online quickly.',
+        features: [
+          'Custom Domain & Hosting Setup',
+          'Landing Page & Contact Integration',
+          'Basic Analytics & User Dashboard',
+          'Secure Authentication & Payment Gateway'
+        ],
+        specifications: {
+          'Hosting': '1 Year Included (Cloudflare / Vercel)',
+          'Support': 'Email & WhatsApp Support',
+          'Database': 'PostgreSQL'
+        },
         priceBasic: 120000,
         pricePro: 180000,
         priceEnterprise: 250000,
         currency: 'HUF',
-        features: ['Custom Domain', 'Landing Page', 'Contact Form', 'Analytics Dashboard'],
-        specifications: { 'Hosting': '1 Year Included', 'Support': 'Email Support' },
-        images: []
-      }
-    });
-
-    const product2 = await prisma.product.upsert({
-      where: { slug: 'enterprise-suite' },
-      update: {},
-      create: {
-        title: 'Enterprise Management Suite',
+        images: [
+          'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop'
+        ]
+      },
+      {
         slug: 'enterprise-suite',
-        description: 'A comprehensive ERP solution for large scale operations.',
+        title: 'Enterprise Management Suite',
+        description: 'A comprehensive ERP & CRM solution for large scale distributed operations.',
+        features: [
+          'Full HR & Payroll Module',
+          'Finance & Accounting Tracking',
+          'Fixed Asset & Fleet Management',
+          'Custom BI Reporting & Multi-branch support'
+        ],
+        specifications: {
+          'Deployment': 'Cloud, Hybrid or On-Premise',
+          'Support': '24/7 Dedicated Account Manager',
+          'Scalability': 'Multi-region clustering'
+        },
         priceBasic: 350000,
         pricePro: 550000,
         priceEnterprise: 950000,
         currency: 'HUF',
-        features: ['HR Module', 'Finance Tracking', 'Asset Management', 'Custom Reporting'],
-        specifications: { 'Deployment': 'Cloud or On-Premise', 'Support': '24/7 Dedicated' },
-        images: []
+        images: [
+          'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop'
+        ]
       }
-    });
+    ];
 
-    const product3 = await prisma.product.upsert({
-      where: { slug: 'saas-subscription' },
-      update: {},
-      create: {
-        title: 'SaaS Subscription',
-        slug: 'saas-subscription',
-        description: 'Monthly and Yearly plans for our core platform.',
-        priceBasic: 50000,
-        pricePro: 90000,
-        priceEnterprise: 150000,
-        currency: 'HUF',
-        features: ['Up to 5 users', 'Core modules', 'Email support', '99.9% SLA'],
-        specifications: { 'Deployment': 'Cloud', 'Support': 'Standard' },
-        images: []
-      }
-    });
+    for (const prod of ALL_PRODUCTS) {
+      await prisma.product.upsert({
+        where: { slug: prod.slug },
+        update: {
+          title: prod.title,
+          description: prod.description,
+          features: prod.features,
+          specifications: prod.specifications as any,
+          priceBasic: prod.priceBasic,
+          pricePro: prod.pricePro,
+          priceEnterprise: prod.priceEnterprise,
+          currency: prod.currency,
+          images: prod.images
+        },
+        create: {
+          slug: prod.slug,
+          title: prod.title,
+          description: prod.description,
+          features: prod.features,
+          specifications: prod.specifications as any,
+          priceBasic: prod.priceBasic,
+          pricePro: prod.pricePro,
+          priceEnterprise: prod.priceEnterprise,
+          currency: prod.currency,
+          images: prod.images
+        }
+      });
+    }
 
     // 4. Quotes (Since Quotes don't have unique non-ID fields naturally, we just count them and add if none exist)
     const quoteCount = await prisma.quote.count();
