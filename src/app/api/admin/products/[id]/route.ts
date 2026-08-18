@@ -48,7 +48,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         priceBasic: Number(priceBasic) || 0,
         pricePro: Number(pricePro) || 0,
         priceEnterprise: Number(priceEnterprise) || 0,
-        currency: currency || 'USD',
+        currency: currency || 'HUF',
         images: images || [],
       }
     });

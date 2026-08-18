@@ -139,7 +139,7 @@ export default async function SimplePayReturnPage({ searchParams }: { searchPara
                   <div className="flex justify-between gap-4 border-b border-slate-200 dark:border-slate-700/50 print:border-slate-200 pb-2">
                     <span className="text-slate-500 font-semibold">Amount Paid</span>
                     <span className="text-slate-900 dark:text-slate-200 font-bold">
-                      {paymentRecord.currency === 'USD' ? '$' : ''}{paymentRecord.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {paymentRecord.currency.toUpperCase()}
+                      {Math.round(paymentRecord.amount).toLocaleString('hu-HU')} {paymentRecord.currency === 'HUF' ? 'Ft' : paymentRecord.currency}
                     </span>
                   </div>
                   <div className="flex justify-between gap-4 border-b border-slate-200 dark:border-slate-700/50 print:border-slate-200 pb-2">

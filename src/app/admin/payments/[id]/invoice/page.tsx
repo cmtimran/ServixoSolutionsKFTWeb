@@ -73,7 +73,7 @@ export default async function AdminInvoicePage({ params }: { params: Promise<{ i
                   <div className="text-sm text-slate-500 mt-1">{payment.planTier} Plan Subscription</div>
                 </td>
                 <td className="py-4 text-right text-slate-900 dark:text-slate-200 font-medium">
-                  {payment.currency === 'USD' ? '$' : ''}{payment.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {payment.currency.toUpperCase()}
+                  {Math.round(payment.amount).toLocaleString('hu-HU')} {payment.currency === 'HUF' ? 'Ft' : payment.currency}
                 </td>
               </tr>
             </tbody>
@@ -86,7 +86,7 @@ export default async function AdminInvoicePage({ params }: { params: Promise<{ i
             <div className="flex justify-between py-3 border-t-2 border-slate-900 dark:border-slate-700 font-bold text-lg">
               <span className="text-slate-900 dark:text-slate-200">Total Paid</span>
               <span className="text-brand-indigo dark:text-indigo-400">
-                {payment.currency === 'USD' ? '$' : ''}{payment.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {payment.currency.toUpperCase()}
+                {Math.round(payment.amount).toLocaleString('hu-HU')} {payment.currency === 'HUF' ? 'Ft' : payment.currency}
               </span>
             </div>
           </div>
