@@ -6,7 +6,10 @@ import { Loader2, CreditCard, ShieldCheck, Lock, Building, User, Mail, Phone, Ma
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+import { useLanguage } from '@/context/LanguageContext';
+
 function SimplePayContent() {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -37,12 +40,12 @@ function SimplePayContent() {
     e.preventDefault();
 
     if (!formData.customerName || !formData.customerEmail || !formData.customerPhone || !formData.billingAddress) {
-      setError('Kérjük, töltse ki a kötelező mezőket! / Please fill in all required fields.');
+      setError(t('checkout.required_error'));
       return;
     }
 
     if (!formData.acceptDataTransfer) {
-      setError('A fizetéshez el kell fogadnia az adattovábbítási nyilatkozatot.');
+      setError(t('checkout.consent_error'));
       return;
     }
 
@@ -71,11 +74,11 @@ function SimplePayContent() {
         // Redirect to SimplePay hosted checkout
         window.location.href = data.paymentUrl;
       } else {
-        setError('Nem érkezett válasz a fizetési szervertől.');
+        setError('No response from payment server');
         setLoading(false);
       }
     } catch (err: any) {
-      setError(err.message || 'Hálózati hiba történt.');
+      setError(err.message || 'A network error occurred.');
       setLoading(false);
     }
   };
@@ -91,31 +94,31 @@ function SimplePayContent() {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-500">Rendelés összegzése</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-500">{t('checkout.summary_title')}</span>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">{productName}</h2>
             </div>
           </div>
 
           <div className="py-6 space-y-4 text-sm border-b border-slate-100 dark:border-slate-800">
             <div className="flex justify-between items-center">
-              <span className="text-slate-600 dark:text-slate-400">Csomag / Tier</span>
+              <span className="text-slate-600 dark:text-slate-400">{t('checkout.tier')}</span>
               <span className="font-semibold text-slate-900 dark:text-white px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-xs">
                 {planTier}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-600 dark:text-slate-400">Fizetési szolgáltató</span>
+              <span className="text-slate-600 dark:text-slate-400">{t('checkout.payment_provider')}</span>
               <span className="font-semibold text-slate-900 dark:text-white text-xs">OTP Mobil SimplePay</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-600 dark:text-slate-400">Pénznem</span>
+              <span className="text-slate-600 dark:text-slate-400">{t('checkout.currency')}</span>
               <span className="font-semibold text-slate-900 dark:text-white text-xs">Hungarian Forint (HUF)</span>
             </div>
           </div>
 
           <div className="pt-6">
             <div className="flex justify-between items-baseline mb-6">
-              <span className="text-base font-semibold text-slate-900 dark:text-white">Fizetendő összeg</span>
+              <span className="text-base font-semibold text-slate-900 dark:text-white">{t('checkout.gross_total')}</span>
               <div className="text-right">
                 <div className="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">
                   {numericPrice.toLocaleString('hu-HU')} Ft
@@ -127,11 +130,11 @@ function SimplePayContent() {
             <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 space-y-2 text-xs text-slate-500">
               <div className="flex items-center gap-2">
                 <Lock className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                <span>256-bites SSL titkosítású biztonságos fizetés</span>
+                <span>{t('checkout.ssl_badge')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                <span>Azonnali visszaigazolás és számlázás</span>
+                <span>{t('checkout.instant_badge')}</span>
               </div>
             </div>
           </div>
@@ -140,9 +143,9 @@ function SimplePayContent() {
         {/* Customer & Billing Form Column (7 cols) */}
         <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Számlázási és ügyféladatok</h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('checkout.billing_title')}</h1>
             <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-              Kérjük, adja meg a számla kiállításához szükséges adatait a fizetés megkezdése előtt.
+              {t('checkout.billing_subtitle')}
             </p>
           </div>
 
@@ -158,41 +161,41 @@ function SimplePayContent() {
             <div className="space-y-4">
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <User className="w-4 h-4 text-indigo-500" />
-                1. Személyes / Kapcsolattartó adatok
+                {t('checkout.section_1')}
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 sm:col-span-2">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Teljes név / Full Name *
+                    {t('checkout.full_name')}
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.customerName}
                     onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
-                    placeholder="pl. Kovács János"
+                    placeholder="e.g. John Doe / Kovács János"
                     className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    E-mail cím (hozzáféréshez) *
+                    {t('checkout.email')}
                   </label>
                   <input
                     type="email"
                     required
                     value={formData.customerEmail}
                     onChange={(e) => setFormData({ ...formData, customerEmail: e.target.value })}
-                    placeholder="janos@pelda.hu"
+                    placeholder="john@example.com"
                     className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Telefonszám / Phone *
+                    {t('checkout.phone')}
                   </label>
                   <input
                     type="tel"
@@ -210,26 +213,26 @@ function SimplePayContent() {
             <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <Building className="w-4 h-4 text-indigo-500" />
-                2. Céges adatok (Opcionális)
+                {t('checkout.section_2')}
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Cégnév / Company Name
+                    {t('checkout.company_name')}
                   </label>
                   <input
                     type="text"
                     value={formData.companyName}
                     onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                    placeholder="pl. Servixo Solutions Kft."
+                    placeholder="e.g. Acme Corp / Servixo Solutions Kft."
                     className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Adószám / Tax Number
+                    {t('checkout.tax_number')}
                   </label>
                   <input
                     type="text"
@@ -246,27 +249,27 @@ function SimplePayContent() {
             <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-indigo-500" />
-                3. Számlázási cím / Billing Address
+                {t('checkout.section_3')}
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-1.5 sm:col-span-3">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Utca, házszám / Street Address *
+                    {t('checkout.address')}
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.billingAddress}
                     onChange={(e) => setFormData({ ...formData, billingAddress: e.target.value })}
-                    placeholder="pl. Rákóczi út 63."
+                    placeholder="e.g. Rákóczi út 63."
                     className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Irányítószám / Zip *
+                    {t('checkout.zip')}
                   </label>
                   <input
                     type="text"
@@ -280,7 +283,7 @@ function SimplePayContent() {
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Város / City *
+                    {t('checkout.city')}
                   </label>
                   <input
                     type="text"
@@ -294,20 +297,20 @@ function SimplePayContent() {
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Ország / Country *
+                    {t('checkout.country')}
                   </label>
                   <select
                     value={formData.billingCountry}
                     onChange={(e) => setFormData({ ...formData, billingCountry: e.target.value })}
                     className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                   >
-                    <option value="HU">Magyarország (HU)</option>
-                    <option value="DE">Németország (DE)</option>
-                    <option value="AT">Ausztria (AT)</option>
-                    <option value="RO">Románia (RO)</option>
-                    <option value="SK">Szlovákia (SK)</option>
-                    <option value="US">Egyesült Államok (US)</option>
-                    <option value="GB">Egyesült Királyság (GB)</option>
+                    <option value="HU">Hungary (Magyarország)</option>
+                    <option value="DE">Germany (Deutschland)</option>
+                    <option value="AT">Austria (Österreich)</option>
+                    <option value="RO">Romania</option>
+                    <option value="SK">Slovakia</option>
+                    <option value="US">United States</option>
+                    <option value="GB">United Kingdom</option>
                   </select>
                 </div>
               </div>
@@ -318,15 +321,14 @@ function SimplePayContent() {
               <div className="bg-slate-100 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed">
                 <div className="font-semibold text-slate-900 dark:text-slate-200 flex items-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                  <span>Adattovábbítási nyilatkozat / Data Transfer Declaration</span>
+                  <span>{t('checkout.declaration_title')}</span>
                 </div>
                 <p>
-                  Tudomásul veszem, hogy a <strong>Servixo Solutions Kft.</strong> (1081 Budapest, Rákóczi út 63.) adatkezelő által a(z) servixosolutionskft.com felhasználói adatbázisában tárolt alábbi személyes adataim átadásra kerülnek az <strong>OTP Mobil Kft. (1143 Budapest, Hungária krt. 17-19.)</strong>, mint adatfeldolgozó részére.
+                  {t('checkout.declaration_text')}
                 </p>
                 <p className="text-[11px] text-slate-500">
-                  Az adatfeldolgozó által végzett adatfeldolgozási tevékenység jellege és célja a SimplePay Adatkezelési tájékoztatóban tekinthető meg:{' '}
                   <a href="https://simplepay.hu/adatkezelesi-tajekoztato/" target="_blank" rel="noopener noreferrer" className="text-indigo-500 underline">
-                    simplepay.hu/adatkezelesi-tajekoztato
+                    {t('checkout.declaration_privacy_link')} (simplepay.hu)
                   </a>
                 </p>
               </div>
@@ -340,7 +342,7 @@ function SimplePayContent() {
                   className="mt-0.5 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                 />
                 <span className="text-xs text-slate-600 dark:text-slate-400">
-                  Kifejezetten elfogadom az <strong>Adattovábbítási nyilatkozatot</strong> és az Általános Szerződési Feltételeket. *
+                  {t('checkout.declaration_consent')}
                 </span>
               </label>
             </div>
@@ -355,12 +357,12 @@ function SimplePayContent() {
                 {loading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Átirányítás a SimplePay felületére…</span>
+                    <span>{t('checkout.redirecting')}</span>
                   </>
                 ) : (
                   <>
                     <CreditCard className="w-5 h-5" />
-                    <span>Tovább a biztonságos SimplePay fizetéshez</span>
+                    <span>{t('checkout.submit_btn')}</span>
                   </>
                 )}
               </button>

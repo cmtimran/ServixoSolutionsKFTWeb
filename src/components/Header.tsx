@@ -6,7 +6,10 @@ import { usePathname } from 'next/navigation';
 import { Sun, Moon, Menu, X, ChevronDown, Award, ShieldAlert, Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { useLanguage } from '@/context/LanguageContext';
+
 export default function Header() {
+  const { language, setLanguage, t } = useLanguage();
   const [darkMode, setDarkMode] = useState(false); // Assume bright by default
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
@@ -48,6 +51,10 @@ export default function Header() {
     }
   };
 
+  const toggleLanguage = () => {
+    setLanguage(language === 'EN' ? 'HU' : 'EN');
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -81,7 +88,7 @@ export default function Header() {
                 pathname === '/' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-slate-300'
               }`}
             >
-              Home
+              {t('nav.home')}
             </Link>
             
             <Link
@@ -90,7 +97,7 @@ export default function Header() {
                 pathname === '/about' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-slate-300'
               }`}
             >
-              About Us
+              {t('nav.about')}
             </Link>
 
             {/* Services Dropdown */}
@@ -101,7 +108,7 @@ export default function Header() {
                 onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
                 className="flex items-center gap-1 text-sm font-medium text-slate-900 dark:text-slate-300 hover:text-blue-500 transition-colors cursor-pointer py-2"
               >
-                Services <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
+                {t('nav.services')} <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               <AnimatePresence>
@@ -123,8 +130,8 @@ export default function Header() {
                           <Cpu className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold text-blue-500">All Services →</div>
-                          <div className="text-[10px] text-slate-500">Browse our full capability list</div>
+                          <div className="text-sm font-semibold text-blue-500">{t('nav.all_services')}</div>
+                          <div className="text-[10px] text-slate-500">{t('nav.browse_services')}</div>
                         </div>
                       </Link>
                       <Link
@@ -135,7 +142,7 @@ export default function Header() {
                           <Cpu className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold">Cloud Migration</div>
+                          <div className="text-sm font-semibold">{t('nav.cloud')}</div>
                           <div className="text-[10px] text-slate-500">Scale on secure cloud infrastructure</div>
                         </div>
                       </Link>
@@ -147,7 +154,7 @@ export default function Header() {
                           <Award className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold">Software Dev</div>
+                          <div className="text-sm font-semibold">{t('nav.software')}</div>
                           <div className="text-[10px] text-slate-500">Premium bespoke applications</div>
                         </div>
                       </Link>
@@ -159,7 +166,7 @@ export default function Header() {
                           <ShieldAlert className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold">Cybersecurity</div>
+                          <div className="text-sm font-semibold">{t('nav.cybersecurity')}</div>
                           <div className="text-[10px] text-slate-500">Lock down your core infrastructure</div>
                         </div>
                       </Link>
@@ -175,7 +182,7 @@ export default function Header() {
                 pathname === '/products' || pathname.startsWith('/products/') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-slate-300'
               }`}
             >
-              Products
+              {t('nav.products')}
             </Link>
 
             <Link
@@ -184,7 +191,7 @@ export default function Header() {
                 pathname === '/reviews' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-slate-300'
               }`}
             >
-              Clients & Reviews
+              {t('nav.reviews')}
             </Link>
 
             <Link
@@ -193,12 +200,21 @@ export default function Header() {
                 pathname === '/contact' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-slate-300'
               }`}
             >
-              Contact Us
+              {t('nav.contact')}
             </Link>
           </nav>
 
           {/* Right Actions */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3">
+            {/* Language Switcher */}
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+              title="Change Language"
+            >
+              <span>{language === 'EN' ? '🇬🇧 EN' : '🇭🇺 HU'}</span>
+            </button>
+
             <button
               onClick={toggleDarkMode}
               className="p-2 rounded-xl border border-slate-200/80 dark:border-slate-800/80 text-slate-900 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
@@ -210,12 +226,18 @@ export default function Header() {
               href="/quote"
               className="px-5 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg hover:shadow-blue-500/20 hover:scale-[1.02] transition-all duration-200"
             >
-              Get a Quote
+              {t('nav.quote')}
             </Link>
           </div>
 
           {/* Mobile Actions */}
-          <div className="flex lg:hidden items-center gap-3">
+          <div className="flex lg:hidden items-center gap-2">
+            <button
+              onClick={toggleLanguage}
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+            >
+              {language === 'EN' ? '🇬🇧 EN' : '🇭🇺 HU'}
+            </button>
             <button
               onClick={toggleDarkMode}
               className="p-2 rounded-xl border border-slate-200/80 dark:border-slate-800/80 text-slate-900 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
