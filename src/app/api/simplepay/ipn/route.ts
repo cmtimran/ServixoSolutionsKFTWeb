@@ -78,17 +78,25 @@ export async function POST(req: Request) {
     // Still respond 200 so SimplePay doesn't retry infinitely
   }
 
-  // Build the required confirmation response (must be signed)
+  // Build the required confirmation response according to SimplePay v2 specification
+  // Must return receiveDate in ISO 8601 format: YYYY-MM-DDTHH:mm:ss+02:00
+  const receiveDate = new Date().toISOString().replace(/\.\d{3}Z$/, '+00:00');
+  
   const confirmPayload = {
     salt:          generateSalt(),
     orderRef:      ipn.orderRef,
     merchant:      merchantId,
     transactionId: ipn.transactionId,
     e:             ipn.e,
+    receiveDate,
   };
   const confirmSignature = generateSignature(confirmPayload, secretKey);
 
-  return NextResponse.json(confirmPayload, {
-    headers: { Signature: confirmSignature },
+  return new Response(JSON.stringify(confirmPayload).replace(/\//g, '\\/'), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Signature':    confirmSignature,
+    },
   });
 }
