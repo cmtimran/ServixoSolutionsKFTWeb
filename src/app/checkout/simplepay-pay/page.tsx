@@ -2,11 +2,95 @@
 
 import { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Loader2, CreditCard, ShieldCheck, Lock, Building, User, Mail, Phone, MapPin, CheckCircle2 } from 'lucide-react';
+import {
+  Loader2,
+  CreditCard,
+  ShieldCheck,
+  Lock,
+  Building,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  CheckCircle2,
+  Search,
+  ChevronDown as ChevronDownIcon,
+} from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
 import { useLanguage } from '@/context/LanguageContext';
+import { ALL_COUNTRIES } from '@/lib/countries';
+
+function CountrySelect({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredCountries = ALL_COUNTRIES.filter((c) =>
+    c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.code.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const selectedCountry = ALL_COUNTRIES.find((c) => c.code === value) || ALL_COUNTRIES.find((c) => c.code === 'HU');
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white flex items-center justify-between focus:outline-none focus:border-indigo-500 cursor-pointer"
+      >
+        <span className="truncate">{selectedCountry ? `${selectedCountry.name} (${selectedCountry.code})` : 'Select Country'}</span>
+        <ChevronDownIcon className="w-4 h-4 text-slate-400 shrink-0" />
+      </button>
+
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+          <div className="absolute left-0 right-0 top-full mt-1 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden max-h-64 flex flex-col">
+            <div className="p-2 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/80 sticky top-0 flex items-center gap-2">
+              <Search className="w-4 h-4 text-slate-400 shrink-0 ml-1" />
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search country..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-transparent border-none text-xs text-slate-900 dark:text-white focus:outline-none placeholder:text-slate-400 py-1"
+              />
+            </div>
+            <div className="overflow-y-auto flex-1 p-1">
+              {filteredCountries.length === 0 ? (
+                <div className="py-4 text-center text-xs text-slate-500">No country found</div>
+              ) : (
+                filteredCountries.map((c) => (
+                  <button
+                    key={c.code}
+                    type="button"
+                    onClick={() => {
+                      onChange(c.code);
+                      setIsOpen(false);
+                      setSearchTerm('');
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors ${
+                      value === c.code
+                        ? 'bg-indigo-600 text-white font-semibold'
+                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                    }`}
+                  >
+                    <span>{c.name}</span>
+                    <span className={`text-[10px] ${value === c.code ? 'text-indigo-200' : 'text-slate-400'}`}>
+                      {c.code}
+                    </span>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 function SimplePayContent() {
   const { t } = useLanguage();
@@ -295,52 +379,10 @@ function SimplePayContent() {
                   <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
                     {t('checkout.country')}
                   </label>
-                  <select
+                  <CountrySelect
                     value={formData.billingCountry}
-                    onChange={(e) => setFormData({ ...formData, billingCountry: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                  >
-                    <option value="HU">Hungary</option>
-                    <option value="BD">Bangladesh</option>
-                    <option value="US">United States</option>
-                    <option value="GB">United Kingdom</option>
-                    <option value="DE">Germany</option>
-                    <option value="AT">Austria</option>
-                    <option value="FR">France</option>
-                    <option value="IT">Italy</option>
-                    <option value="ES">Spain</option>
-                    <option value="NL">Netherlands</option>
-                    <option value="BE">Belgium</option>
-                    <option value="CH">Switzerland</option>
-                    <option value="SE">Sweden</option>
-                    <option value="NO">Norway</option>
-                    <option value="DK">Denmark</option>
-                    <option value="FI">Finland</option>
-                    <option value="PL">Poland</option>
-                    <option value="CZ">Czech Republic</option>
-                    <option value="SK">Slovakia</option>
-                    <option value="RO">Romania</option>
-                    <option value="BG">Bulgaria</option>
-                    <option value="GR">Greece</option>
-                    <option value="PT">Portugal</option>
-                    <option value="IE">Ireland</option>
-                    <option value="CA">Canada</option>
-                    <option value="AU">Australia</option>
-                    <option value="NZ">New Zealand</option>
-                    <option value="AE">United Arab Emirates</option>
-                    <option value="SA">Saudi Arabia</option>
-                    <option value="QA">Qatar</option>
-                    <option value="SG">Singapore</option>
-                    <option value="MY">Malaysia</option>
-                    <option value="IN">India</option>
-                    <option value="PK">Pakistan</option>
-                    <option value="JP">Japan</option>
-                    <option value="KR">South Korea</option>
-                    <option value="CN">China</option>
-                    <option value="BR">Brazil</option>
-                    <option value="MX">Mexico</option>
-                    <option value="ZA">South Africa</option>
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, billingCountry: val })}
+                  />
                 </div>
               </div>
             </div>
