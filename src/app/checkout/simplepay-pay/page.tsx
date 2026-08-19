@@ -227,12 +227,12 @@ function SimplePayContent() {
                   target="_blank"
                   rel="noopener noreferrer"
                   title="SimplePay – Online Bankkártyás Fizetés"
-                  className="inline-block bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-200 dark:border-slate-800 transition-transform hover:scale-105"
+                  className="inline-block bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 transition-transform hover:scale-105"
                 >
                   <img
-                    src="/simple_logo.png"
+                    src="/simplepay_logo.svg"
                     alt="SimplePay - Online Bankkártyás Fizetés"
-                    className="h-7 w-auto object-contain mx-auto"
+                    className="h-6 w-auto object-contain mx-auto"
                   />
                 </a>
                 <div className="text-[10px] text-slate-400 mt-1">

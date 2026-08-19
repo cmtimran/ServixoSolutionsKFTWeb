@@ -131,7 +131,7 @@ export default function Footer() {
               className="inline-block bg-white dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 transition-transform hover:scale-105 shadow-sm"
             >
               <img
-                src="/simple_logo.png"
+                src="/simplepay_logo.svg"
                 alt="SimplePay - Online Bankkártyás Fizetés"
                 className="h-8 w-auto object-contain"
               />
@@ -140,9 +140,12 @@ export default function Footer() {
               <p className="font-semibold text-slate-800 dark:text-slate-200">
                 Biztonságos online bankkártyás fizetés az OTP SimplePay rendszerén keresztül.
               </p>
-              <p className="text-[10px] text-slate-500 mt-0.5">
-                Elfogadott kártyák: Mastercard, Maestro, Visa, Visa Electron
-              </p>
+              <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">Mastercard</span>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">Maestro</span>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">Visa</span>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">Visa Electron</span>
+              </div>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs">
