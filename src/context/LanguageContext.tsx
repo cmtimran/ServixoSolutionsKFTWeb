@@ -79,6 +79,9 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.privacy_policy': 'Privacy Policy',
     'footer.terms': 'Terms & Policies',
     'footer.all_rights': 'All rights reserved.',
+    'footer.simplepay_secure': 'Secure online card payment provided by OTP SimplePay system.',
+    'footer.simplepay_cards': 'Accepted cards: Mastercard, Maestro, Visa, Visa Electron',
+    'footer.simplepay_info': 'Payment Information (PDF)',
   },
   HU: {
     'nav.home': 'Főoldal',
@@ -148,6 +151,9 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.privacy_policy': 'Adatvédelmi tájékoztató',
     'footer.terms': 'Általános Szerződési Feltételek',
     'footer.all_rights': 'Minden jog fenntartva.',
+    'footer.simplepay_secure': 'Biztonságos online bankkártyás fizetés az OTP SimplePay rendszerén keresztül.',
+    'footer.simplepay_cards': 'Elfogadott kártyák: Mastercard, Maestro, Visa, Visa Electron',
+    'footer.simplepay_info': 'Fizetési tájékoztató (PDF)',
   }
 };
 

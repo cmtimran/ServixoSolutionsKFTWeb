@@ -1,7 +1,11 @@
+'use client';
+
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Cpu, Share2, ExternalLink, ArrowRight } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Footer() {
+  const { language, t } = useLanguage();
   return (
     <footer style={{ background: 'var(--bg-surface)', borderTop: '1px solid var(--border)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
@@ -124,15 +128,15 @@ export default function Footer() {
         <div className="mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-6" style={{ borderTop: '1px solid var(--border)' }}>
           <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <a
-              href="https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf"
+              href={language === 'HU' ? "https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf" : "https://simplepartner.hu/PaymentService/Payment_information.pdf"}
               target="_blank"
               rel="noopener noreferrer"
-              title="SimplePay - Online Bankkártyás Fizetés"
+              title={language === 'HU' ? "SimplePay - Online Bankkártyás Fizetés" : "SimplePay - Online Card Payment"}
               className="inline-block bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm transition-transform hover:scale-105"
             >
               <img
                 src="/simplepay_logo_dark.svg"
-                alt="SimplePay - Online Bankkártyás Fizetés"
+                alt="SimplePay - Online Payment"
                 className="h-8 w-auto min-w-[140px] object-contain"
                 width={160}
                 height={32}
@@ -140,7 +144,7 @@ export default function Footer() {
             </a>
             <div className="text-[11px] leading-relaxed max-w-md" style={{ color: 'var(--text-muted)' }}>
               <p className="font-semibold text-slate-800 dark:text-slate-200">
-                Biztonságos online bankkártyás fizetés az OTP SimplePay rendszerén keresztül.
+                {t('footer.simplepay_secure')}
               </p>
               <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
                 <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">Mastercard</span>
@@ -151,23 +155,25 @@ export default function Footer() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs">
-            <a
-              href="https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-indigo-500 hover:underline inline-flex items-center gap-1"
-            >
-              Fizetési tájékoztató (HU) <ExternalLink className="w-3 h-3" />
-            </a>
-            <span className="text-slate-300 dark:text-slate-700">|</span>
-            <a
-              href="https://simplepartner.hu/PaymentService/Payment_information.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-indigo-500 hover:underline inline-flex items-center gap-1"
-            >
-              Payment Information (EN) <ExternalLink className="w-3 h-3" />
-            </a>
+            {language === 'HU' ? (
+              <a
+                href="https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-indigo-500 hover:underline inline-flex items-center gap-1 font-medium"
+              >
+                Fizetési tájékoztató (PDF) <ExternalLink className="w-3 h-3" />
+              </a>
+            ) : (
+              <a
+                href="https://simplepartner.hu/PaymentService/Payment_information.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-indigo-500 hover:underline inline-flex items-center gap-1 font-medium"
+              >
+                Payment Information (PDF) <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
           </div>
         </div>
 
