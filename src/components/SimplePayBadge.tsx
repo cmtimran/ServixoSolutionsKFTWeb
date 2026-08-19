@@ -1,10 +1,10 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 
 export default function SimplePayBadge({ className = '' }: { className?: string }) {
   return (
-    <div className={inline-flex flex-col sm:flex-row items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 shadow-sm }>
+    <div className={`inline-flex flex-col sm:flex-row items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 shadow-sm ${className}`}>
       <a
         href="https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf"
         target="_blank"
