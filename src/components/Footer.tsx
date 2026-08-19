@@ -120,8 +120,47 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* SimplePay Payment Information & Logos (Chapter 7 Compliance) */}
+        <div className="mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-6" style={{ borderTop: '1px solid var(--border)' }}>
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+            <a
+              href="https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="SimplePay - Online Bankkártyás Fizetés / Online Card Payment"
+              className="inline-block bg-white dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 transition-transform hover:scale-105 shadow-sm"
+            >
+              <img
+                src="https://simplepartner.hu/images/simple_logo.png"
+                alt="SimplePay - Online Bank Card Payment"
+                className="h-7 w-auto object-contain"
+                width={197}
+                height={27}
+              />
+            </a>
+            <div className="text-[11px] leading-relaxed max-w-md" style={{ color: 'var(--text-muted)' }}>
+              <p className="font-semibold text-slate-800 dark:text-slate-200">
+                Biztonságos online bankkártyás fizetés az OTP SimplePay rendszerén keresztül.
+              </p>
+              <p className="text-[10px] text-slate-500 mt-0.5">
+                Mastercard, Maestro, Visa, Visa Electron kártyák elfogadása.
+              </p>
+            </div>
+          </div>
+          <div className="text-right">
+            <a
+              href="https://simplepartner.hu/PaymentService/Payment_information.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-indigo-500 hover:underline inline-flex items-center gap-1"
+            >
+              SimplePay Payment Information (PDF) <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </div>
+
         {/* Bottom bar */}
-        <div className="mt-14 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style={{ borderTop: '1px solid var(--border)', color: 'var(--text-subtle)' }}>
+        <div className="mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style={{ borderTop: '1px solid var(--border)', color: 'var(--text-subtle)' }}>
           <p>&copy; {new Date().getFullYear()} Servixo Solutions KFT. All rights reserved. Budapest, Hungary.</p>
           <div className="flex gap-5">
             <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>

@@ -211,7 +211,7 @@ function SimplePayContent() {
               </div>
             </div>
 
-            <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 space-y-2 text-xs text-slate-500">
+            <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs text-slate-500">
               <div className="flex items-center gap-2">
                 <Lock className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                 <span>{t('checkout.ssl_badge')}</span>
@@ -219,6 +219,27 @@ function SimplePayContent() {
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                 <span>{t('checkout.instant_badge')}</span>
+              </div>
+              
+              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-800/60 text-center">
+                <a
+                  href="https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="SimplePay – Online Bankkártyás Fizetés / Online Card Payment"
+                  className="inline-block bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-200 dark:border-slate-800 transition-transform hover:scale-105"
+                >
+                  <img
+                    src="https://simplepartner.hu/images/simple_logo.png"
+                    alt="SimplePay - Online Bankkártyás Fizetés"
+                    className="h-6 w-auto object-contain mx-auto"
+                    width={197}
+                    height={27}
+                  />
+                </a>
+                <div className="text-[10px] text-slate-400 mt-1">
+                  Mastercard, Maestro, Visa, Visa Electron
+                </div>
               </div>
             </div>
           </div>
