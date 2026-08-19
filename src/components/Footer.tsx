@@ -128,12 +128,14 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               title="SimplePay - Online Bankkártyás Fizetés"
-              className="inline-block bg-white dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 transition-transform hover:scale-105 shadow-sm"
+              className="inline-block bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm transition-transform hover:scale-105"
             >
               <img
-                src="/simplepay_logo.svg"
+                src="/simplepay_logo_dark.svg"
                 alt="SimplePay - Online Bankkártyás Fizetés"
-                className="h-8 w-auto object-contain"
+                className="h-8 w-auto min-w-[140px] object-contain"
+                width={160}
+                height={32}
               />
             </a>
             <div className="text-[11px] leading-relaxed max-w-md" style={{ color: 'var(--text-muted)' }}>
