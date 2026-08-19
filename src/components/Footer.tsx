@@ -127,15 +127,13 @@ export default function Footer() {
               href="https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              title="SimplePay - Online Bankkártyás Fizetés / Online Card Payment"
+              title="SimplePay - Online Bankkártyás Fizetés"
               className="inline-block bg-white dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 transition-transform hover:scale-105 shadow-sm"
             >
               <img
-                src="https://simplepartner.hu/images/simple_logo.png"
-                alt="SimplePay - Online Bank Card Payment"
-                className="h-7 w-auto object-contain"
-                width={197}
-                height={27}
+                src="/simple_logo.png"
+                alt="SimplePay - Online Bankkártyás Fizetés"
+                className="h-8 w-auto object-contain"
               />
             </a>
             <div className="text-[11px] leading-relaxed max-w-md" style={{ color: 'var(--text-muted)' }}>
@@ -143,18 +141,27 @@ export default function Footer() {
                 Biztonságos online bankkártyás fizetés az OTP SimplePay rendszerén keresztül.
               </p>
               <p className="text-[10px] text-slate-500 mt-0.5">
-                Mastercard, Maestro, Visa, Visa Electron kártyák elfogadása.
+                Elfogadott kártyák: Mastercard, Maestro, Visa, Visa Electron
               </p>
             </div>
           </div>
-          <div className="text-right">
+          <div className="flex flex-wrap items-center gap-4 text-xs">
+            <a
+              href="https://simplepartner.hu/PaymentService/Fizetesi_tajekoztato.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-indigo-500 hover:underline inline-flex items-center gap-1"
+            >
+              Fizetési tájékoztató (HU) <ExternalLink className="w-3 h-3" />
+            </a>
+            <span className="text-slate-300 dark:text-slate-700">|</span>
             <a
               href="https://simplepartner.hu/PaymentService/Payment_information.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-indigo-500 hover:underline inline-flex items-center gap-1"
+              className="text-indigo-500 hover:underline inline-flex items-center gap-1"
             >
-              SimplePay Payment Information (PDF) <ExternalLink className="w-3 h-3" />
+              Payment Information (EN) <ExternalLink className="w-3 h-3" />
             </a>
           </div>
         </div>
