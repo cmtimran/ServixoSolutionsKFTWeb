@@ -113,6 +113,14 @@ export default async function SimplePayReturnPage({ searchParams }: { searchPara
           </div>
 
           <h1 className={`text-2xl font-bold ${cfg.color} mb-3`}>{cfg.title}</h1>
+          
+          {/* Specific documentation mandate (Chapter 3.13): Display transaction ID prominently for SUCCESS & FAIL */}
+          {(event === 'SUCCESS' || event === 'FAIL') && (data?.transactionId && data.transactionId !== 'N/A') && (
+            <div className="mb-4 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 inline-block font-mono">
+              SimplePay transaction ID: {data.transactionId}
+            </div>
+          )}
+
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-medium print:hidden">{cfg.subtitle}</p>
 
           {/* Transaction & Order details */}
@@ -137,7 +145,7 @@ export default async function SimplePayReturnPage({ searchParams }: { searchPara
                     </span>
                   </div>
                   <div className="flex justify-between gap-4 border-b border-slate-200 dark:border-slate-700/50 print:border-slate-200 pb-2">
-                    <span className="text-slate-500 font-semibold">Amount Paid</span>
+                    <span className="text-slate-500 font-semibold">Amount</span>
                     <span className="text-slate-900 dark:text-slate-200 font-bold">
                       {Math.round(paymentRecord.amount).toLocaleString('hu-HU')} {paymentRecord.currency === 'HUF' ? 'Ft' : paymentRecord.currency}
                     </span>
@@ -160,7 +168,7 @@ export default async function SimplePayReturnPage({ searchParams }: { searchPara
                   </div>
                   {data.transactionId !== 'N/A' && (
                     <div className="flex justify-between gap-4 border-b border-slate-200 dark:border-slate-700/50 print:border-slate-200 pb-2">
-                      <span className="text-slate-500 font-semibold">Transaction ID</span>
+                      <span className="text-slate-500 font-semibold">SimplePay ID</span>
                       <span className="text-slate-700 dark:text-slate-300 font-mono text-xs">{data.transactionId}</span>
                     </div>
                   )}
