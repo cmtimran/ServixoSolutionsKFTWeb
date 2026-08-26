@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Save, Loader2, Key } from 'lucide-react';
+import { Save, Loader2, Key, Eye, EyeOff } from 'lucide-react';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
@@ -13,6 +13,7 @@ export default function SettingsPage() {
     simplepaySecretKey: '',
     simplepayEnvironment: 'sandbox',
   });
+  const [showSecretKey, setShowSecretKey] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -184,13 +185,27 @@ export default function SettingsPage() {
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Secret Key</label>
-                <input
-                  type="password"
-                  value={settings.simplepaySecretKey}
-                  onChange={(e) => setSettings({ ...settings, simplepaySecretKey: e.target.value })}
-                  placeholder="••••••••••••••••••••••••"
-                  className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                />
+                <div className="relative">
+                  <input
+                    type={showSecretKey ? "text" : "password"}
+                    value={settings.simplepaySecretKey}
+                    onChange={(e) => setSettings({ ...settings, simplepaySecretKey: e.target.value })}
+                    placeholder="••••••••••••••••••••••••"
+                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl pl-4 pr-12 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSecretKey(!showSecretKey)}
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                    title={showSecretKey ? "Hide Secret Key" : "Show Secret Key"}
+                  >
+                    {showSecretKey ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
             
