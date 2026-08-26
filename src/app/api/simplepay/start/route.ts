@@ -120,7 +120,9 @@ export async function POST(req: Request) {
     if (!spRes.ok || spData.errorCodes?.length) {
       console.error('[SimplePay] Error response:', spData);
       return NextResponse.json(
-        { error: `SimplePay error: ${JSON.stringify(spData.errorCodes ?? spData)}` },
+        { 
+          error: `SimplePay error: ${JSON.stringify(spData.errorCodes ?? spData)} (Endpoint: ${spBase}, Merchant: ${merchantId})` 
+        },
         { status: 400 }
       );
     }
