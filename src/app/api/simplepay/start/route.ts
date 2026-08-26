@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     const numericPrice = Math.round(parseFloat(String(price)) || 120000);
     const totalAmount = numericPrice.toString();
 
-    const payload: SimplePayStartRequest = {
+    const payload: any = {
       salt:          generateSalt(),
       merchant:      merchantId,
       orderRef,
@@ -65,28 +65,17 @@ export async function POST(req: Request) {
       language:      'HU',
       sdkVersion:    SDK_VERSION,
       methods:       ['CARD'],
-      total:         totalAmount,
+      total:         numericPrice.toString(),
       timeout:       getTimeoutDate(30),
       url:           `${appUrl}/checkout/simplepay-return`,
       invoice: {
         name:    companyName || customerName || 'Servixo Customer',
-        company: companyName || undefined,
-        country: billingCountry || 'HU',
+        country: (billingCountry || 'HU').toUpperCase(),
         state:   billingCity || 'Budapest',
         city:    billingCity || 'Budapest',
         zip:     billingZip || '1081',
         address: billingAddress || 'Rákóczi út 63',
       },
-      items: [
-        {
-          ref:         orderRef,
-          title:       `${productName} — ${planTier}`,
-          description: `Előfizetés: ${productName} ${planTier} csomag`,
-          amount:      1,
-          price:       numericPrice,
-          tax:         0,
-        },
-      ],
     };
 
     // Convert payload to exact escaped JSON string once (single source of truth for HMAC and body)
