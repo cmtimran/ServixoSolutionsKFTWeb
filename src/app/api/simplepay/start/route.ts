@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 import { prisma } from '@/lib/prisma';
 import {
-  generateSignature,
   generateSalt,
   getTimeoutDate,
   getSimplePayBase,
@@ -89,7 +89,12 @@ export async function POST(req: Request) {
       ],
     };
 
-    const signature = generateSignature(payload, secretKey);
+    // Convert payload to exact escaped JSON string once (single source of truth for HMAC and body)
+    const jsonBody = JSON.stringify(payload).replace(/\//g, '\\/');
+    const signature = crypto
+      .createHmac('sha384', secretKey)
+      .update(jsonBody)
+      .digest('base64');
 
     const spBase = getSimplePayBase(isLive);
     const spRes = await fetch(`${spBase}/start`, {
@@ -99,7 +104,7 @@ export async function POST(req: Request) {
         'Signature':     signature,
         'Accept':        'application/json',
       },
-      body: JSON.stringify(payload).replace(/\//g, '\\/'),
+      body: jsonBody,
     });
 
     const spText = await spRes.text();
