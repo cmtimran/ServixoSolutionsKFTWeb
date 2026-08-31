@@ -93,6 +93,37 @@ const MOCK_SERVICES = [
       }
     ],
     imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop'
+  },
+  {
+    slug: 'gateway-threat-authority',
+    title: 'Gateway Threat Authority (GTA)',
+    description: 'Next-Gen Network Defense: Real-time network traffic monitoring and threat mitigation solution designed to detect and neutralize attacks before they impact your organization.',
+    content: 'In today\'s high-speed, always-connected world, protecting your network from cyber threats is critical. Gateway Threat Authority (GTA) is a powerful, real-time network traffic monitoring and threat mitigation solution engineered to detect and neutralize attacks before they impact your organization.\n\nOperating at multi-gigabit speeds with zero packet drop, GTA continuously inspects network flow telemetry (NetFlow, sFlow, IPFIX) and full packet captures (PCAP). When DDoS floods or protocol anomalies are detected, the system immediately dispatches real-time alerts and activates automated mitigation workflows—such as BGP blackholing and dynamic firewall filtering—to ensure uninterrupted business continuity.',
+    category: 'Cybersecurity',
+    benefits: [
+      'High-Speed Monitoring: Multi-gigabit traffic inspection without packet drop (NetFlow, sFlow, IPFIX, PCAP)',
+      'Real-Time Threat Detection: Instant DDoS attack & protocol anomaly detection with operator alerts',
+      'Automated Mitigation: Triggers BGP blackholing, dynamic firewall rules & custom scripts automatically',
+      'Flow-Based Analytics: Identifies top talkers, traffic destinations & patterns for audit compliance',
+      'Integration-Ready: Seamless API hooks for MikroTik RouterOS edge hardware, Grafana, Prometheus & SIEM',
+      'Flexible Deployment: Scalable architecture from edge routers to core network gateways'
+    ],
+    technologies: ['NetFlow', 'sFlow', 'IPFIX', 'PCAP', 'BGP Blackholing', 'MikroTik RouterOS', 'Grafana', 'Prometheus'],
+    faqs: [
+      {
+        question: 'What traffic flow protocols are supported by Gateway Threat Authority?',
+        answer: 'GTA supports NetFlow (v5/v9), sFlow, IPFIX, and full packet capture (PCAP), allowing multi-gigabit traffic monitoring without dropping packets.'
+      },
+      {
+        question: 'How does automated DDoS mitigation work?',
+        answer: 'When a DDoS attack or traffic anomaly is detected, GTA automatically triggers mitigation workflows such as BGP blackholing, dynamic firewall rules, or custom webhook scripts to isolate attack traffic while preserving legitimate service.'
+      },
+      {
+        question: 'Can GTA integrate with MikroTik RouterOS hardware?',
+        answer: 'Yes! GTA features native API integration with MikroTik RouterOS edge equipment, as well as export capabilities for Grafana, Prometheus, SIEM platforms, Slack, and custom webhooks.'
+      }
+    ],
+    imageUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=600&auto=format&fit=crop'
   }
 ];
 
@@ -144,6 +175,35 @@ const MOCK_PRODUCTS = [
     priceEnterprise: 300000,
     currency: 'HUF',
     images: [
+      'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=600&auto=format&fit=crop'
+    ]
+  },
+  {
+    slug: 'gateway-threat-authority',
+    title: 'Gateway Threat Authority (GTA)',
+    description: 'Next-Gen Network Defense System: Real-time multi-gigabit traffic monitoring, instant DDoS detection, BGP blackholing & automated mitigation.',
+    features: [
+      'Multi-gigabit traffic monitoring (NetFlow, sFlow, IPFIX, PCAP)',
+      'Instant DDoS attack & protocol anomaly detection',
+      'Automated BGP blackholing & dynamic firewall rules',
+      'MikroTik RouterOS API & SIEM Integration (Grafana, Prometheus)',
+      'Flow-based analytics & compliance auditing dashboards',
+      'Ultra-fast, lightweight edge router to core gateway deployment'
+    ],
+    specifications: {
+      'Deployment': 'Edge Routers, Core Network Gateways, Data Centers',
+      'Flow Protocols': 'NetFlow v5/v9, sFlow, IPFIX, PCAP',
+      'Mitigation Methods': 'BGP Blackholing, Firewall Rules, Custom Webhooks',
+      'Hardware Integration': 'MikroTik RouterOS, Cisco, Juniper, Linux Gateways',
+      'SIEM & Alerts': 'Grafana, Prometheus, Slack, Email, Custom Webhooks',
+      'Performance': 'Multi-gigabit throughput with 0 packet drops'
+    },
+    priceBasic: 180000,
+    pricePro: 280000,
+    priceEnterprise: 450000,
+    currency: 'HUF',
+    images: [
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=600&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=600&auto=format&fit=crop'
     ]
   }

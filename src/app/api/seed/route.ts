@@ -133,6 +133,35 @@ export async function GET() {
         images: [
           'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop'
         ]
+      },
+      {
+        slug: 'gateway-threat-authority',
+        title: 'Gateway Threat Authority (GTA)',
+        description: 'Next-Gen Network Defense System: Real-time multi-gigabit traffic monitoring, instant DDoS detection, BGP blackholing & automated mitigation.',
+        features: [
+          'Multi-gigabit traffic monitoring (NetFlow, sFlow, IPFIX, PCAP)',
+          'Instant DDoS attack & protocol anomaly detection',
+          'Automated BGP blackholing & dynamic firewall rules',
+          'MikroTik RouterOS API & SIEM Integration (Grafana, Prometheus)',
+          'Flow-based analytics & compliance auditing dashboards',
+          'Ultra-fast, lightweight edge router to core gateway deployment'
+        ],
+        specifications: {
+          'Deployment': 'Edge Routers, Core Network Gateways, Data Centers',
+          'Flow Protocols': 'NetFlow v5/v9, sFlow, IPFIX, PCAP',
+          'Mitigation Methods': 'BGP Blackholing, Firewall Rules, Custom Webhooks',
+          'Hardware Integration': 'MikroTik RouterOS, Cisco, Juniper, Linux Gateways',
+          'SIEM & Alerts': 'Grafana, Prometheus, Slack, Email, Custom Webhooks',
+          'Performance': 'Multi-gigabit throughput with 0 packet drops'
+        },
+        priceBasic: 180000,
+        pricePro: 280000,
+        priceEnterprise: 450000,
+        currency: 'HUF',
+        images: [
+          'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=600&auto=format&fit=crop'
+        ]
       }
     ];
 

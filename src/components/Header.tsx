@@ -170,6 +170,18 @@ export default function Header() {
                           <div className="text-[10px] text-slate-500">Lock down your core infrastructure</div>
                         </div>
                       </Link>
+                      <Link
+                        href="/services/gateway-threat-authority"
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
+                      >
+                        <div className="p-2 bg-blue-500/10 text-blue-500 rounded-lg">
+                          <Cpu className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold">Gateway Threat Authority</div>
+                          <div className="text-[10px] text-slate-500">Next-Gen Network Defense & DDoS</div>
+                        </div>
+                      </Link>
                     </div>
                   </motion.div>
                 )}
@@ -296,6 +308,12 @@ export default function Header() {
                   className="block px-6 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 text-sm"
                 >
                   Cyber Defense & Security
+                </Link>
+                <Link
+                  href="/services/gateway-threat-authority"
+                  className="block px-6 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 text-sm"
+                >
+                  Gateway Threat Authority (GTA)
                 </Link>
               </div>
 

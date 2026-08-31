@@ -7,6 +7,7 @@ import { ArrowRight, Zap } from 'lucide-react';
 import Link from 'next/link';
 import CheckoutButton from '@/components/CheckoutButton';
 import ProductDetailPricing from '@/components/ProductDetailPricing';
+import GtaArchitectureDiagram from '@/components/GtaArchitectureDiagram';
 import { Prisma } from '@prisma/client';
 
 import { dbFetchWithTimeout } from '@/lib/dbFetch';
@@ -150,6 +151,11 @@ export default async function ProductDetailPage({
                 </div>
               )}
             </div>
+
+            {/* Interactive Architecture & Threat Flow Diagram for GTA */}
+            {product.slug === 'gateway-threat-authority' && (
+              <GtaArchitectureDiagram />
+            )}
           </div>
         </section>
 

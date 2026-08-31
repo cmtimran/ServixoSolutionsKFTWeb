@@ -84,6 +84,7 @@ export default function Footer() {
                 { href: '/services/cloud-migration', label: 'Cloud Migration' },
                 { href: '/services/custom-software', label: 'Custom Software' },
                 { href: '/services/cybersecurity', label: 'Cybersecurity' },
+                { href: '/services/gateway-threat-authority', label: 'Gateway Threat Authority' },
                 { href: '/services/it-consulting', label: 'IT Consulting' },
               ].map((link) => (
                 <li key={link.href}>
@@ -103,6 +104,7 @@ export default function Footer() {
                 { href: '/products', label: 'All Products' },
                 { href: '/products/servixo-erp', label: 'Servixo CoreERP' },
                 { href: '/products/guardx-security', label: 'GuardX Sentinel' },
+                { href: '/products/gateway-threat-authority', label: 'Gateway Threat Authority (GTA)' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="transition-colors hover:underline" style={{ color: 'var(--text-secondary)' }}>
