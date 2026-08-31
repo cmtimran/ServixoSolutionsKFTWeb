@@ -108,9 +108,12 @@ export async function POST(req: Request) {
 
     if (!spRes.ok || spData.errorCodes?.length) {
       console.error('[SimplePay] Error response:', spData);
+      const maskedKey = secretKey.length > 8 
+        ? `${secretKey.slice(0, 4)}...${secretKey.slice(-4)} (len: ${secretKey.length})` 
+        : `len: ${secretKey.length}`;
       return NextResponse.json(
         { 
-          error: `SimplePay error: ${JSON.stringify(spData.errorCodes ?? spData)} (Endpoint: ${spBase}, Merchant: ${merchantId})` 
+          error: `SimplePay error: ${JSON.stringify(spData.errorCodes ?? spData)} (Endpoint: ${spBase}, Merchant: "${merchantId}", Key: ${maskedKey})` 
         },
         { status: 400 }
       );
