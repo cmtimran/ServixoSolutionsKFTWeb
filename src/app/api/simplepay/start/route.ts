@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       language:      'HU',
       sdkVersion:    SDK_VERSION,
       methods:       ['CARD'],
-      total:         numericPrice.toString(),
+      total:         numericPrice,
       timeout:       getTimeoutDate(30),
       url:           `${appUrl}/checkout/simplepay-return`,
       invoice: {
@@ -81,15 +81,15 @@ export async function POST(req: Request) {
     // Convert payload to exact escaped JSON string once (single source of truth for HMAC and body)
     const jsonBody = JSON.stringify(payload).replace(/\//g, '\\/');
     const signature = crypto
-      .createHmac('sha384', secretKey)
-      .update(jsonBody)
+      .createHmac('sha384', Buffer.from(secretKey, 'utf-8'))
+      .update(Buffer.from(jsonBody, 'utf-8'))
       .digest('base64');
 
     const spBase = getSimplePayBase(isLive);
     const spRes = await fetch(`${spBase}/start`, {
       method:  'POST',
       headers: {
-        'Content-Type':  'application/json',
+        'Content-Type':  'application/json; charset=utf-8',
         'Signature':     signature,
         'Accept':        'application/json',
       },
