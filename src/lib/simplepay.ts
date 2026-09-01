@@ -126,7 +126,7 @@ export class SimplePaySDK {
 
     this.environment = envConfig;
 
-    const isSandboxMerchant = this.merchantId === 'PUBLICTESTHUF' || this.merchantId.toUpperCase().startsWith('OMS');
+    const isSandboxMerchant = this.merchantId === 'PUBLICTESTHUF';
     if (this.environment === 'live' && !isSandboxMerchant) {
       this.baseUrl = SIMPLEPAY_LIVE_BASE;
     } else {

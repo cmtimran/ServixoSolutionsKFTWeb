@@ -34,7 +34,8 @@ export async function POST(req: Request) {
     });
     const settingsMap = dbSettings.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, string>);
 
-    const isLive = settingsMap.simplepayEnvironment === 'live';
+    const envVal = settingsMap.simplepayEnvironment || process.env.SIMPLEPAY_ENVIRONMENT || 'live';
+    const isLive = envVal === 'live';
 
     const rawMerchantId = settingsMap.simplepayMerchantId || process.env.SIMPLEPAY_MERCHANT_ID || '';
     const rawSecretKey  = settingsMap.simplepaySecretKey  || process.env.SIMPLEPAY_SECRET_KEY  || '';
@@ -66,7 +67,7 @@ export async function POST(req: Request) {
       pad(future.getSeconds()) + '+02:00';
 
     async function executeStart(mId: string, sKey: string) {
-      const isSandboxMerchant = mId === 'PUBLICTESTHUF' || mId.toUpperCase().startsWith('OMS');
+      const isSandboxMerchant = mId === 'PUBLICTESTHUF';
       const spBase = isSandboxMerchant ? SIMPLEPAY_SANDBOX_BASE : getSimplePayBase(isLive, mId);
 
       const payload: any = {
