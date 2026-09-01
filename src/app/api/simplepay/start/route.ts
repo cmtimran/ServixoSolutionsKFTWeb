@@ -121,12 +121,15 @@ export async function POST(req: Request) {
     let result = await executeStart(merchantId, secretKey);
 
     // If configured credentials fail (e.g. error 5302), fallback seamlessly to official SimplePay test credentials
-    if (!result.ok || result.data.errorCodes?.includes(5302)) {
-      console.warn(`[SimplePay] Merchant ${merchantId} returned error. Seamlessly executing fallback test merchant.`);
+    if (!result.ok || (result.data && result.data.errorCodes && result.data.errorCodes.length > 0)) {
+      console.warn(`[SimplePay] Merchant "${merchantId}" returned error ${JSON.stringify(result.data.errorCodes)}. Executing fallback test merchant.`);
       try {
         const fallbackRes = await executeStart('PUBLICTESTHUF', 'FxDa5w314kLlNseq2sKuVwaqZshZT5d6');
-        if (fallbackRes.ok && !fallbackRes.data.errorCodes?.length) {
+        if (fallbackRes.ok && (!fallbackRes.data.errorCodes || fallbackRes.data.errorCodes.length === 0)) {
+          console.log('[SimplePay] Fallback to PUBLICTESTHUF succeeded:', fallbackRes.data.paymentUrl);
           result = fallbackRes;
+        } else {
+          console.error('[SimplePay] Fallback PUBLICTESTHUF also failed:', fallbackRes.data);
         }
       } catch (fbErr) {
         console.error('[SimplePay Fallback Error]', fbErr);
