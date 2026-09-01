@@ -57,14 +57,7 @@ export async function POST(req: Request) {
     // SimplePay HUF requires integer amount (no decimals)
     const numericPrice = Math.round(parseFloat(String(price)) || 120000);
 
-    const future = new Date(Date.now() + 30 * 60 * 1000);
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const timeoutStr = future.getFullYear() + '-' +
-      pad(future.getMonth() + 1) + '-' +
-      pad(future.getDate()) + 'T' +
-      pad(future.getHours()) + ':' +
-      pad(future.getMinutes()) + ':' +
-      pad(future.getSeconds()) + '+02:00';
+    const timeoutStr = getTimeoutDate(30);
 
     async function executeStart(mId: string, sKey: string) {
       const isSandboxMerchant = mId === 'PUBLICTESTHUF';
