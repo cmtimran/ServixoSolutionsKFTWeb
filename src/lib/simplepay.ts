@@ -343,15 +343,7 @@ export function generateSalt(): string {
 
 export function getTimeoutDate(minutesFromNow = 30): string {
   const d = new Date(Date.now() + minutesFromNow * 60 * 1000);
-  const pad = (n: number) => n.toString().padStart(2, '0');
-  return (
-    d.getFullYear() + '-' +
-    pad(d.getMonth() + 1) + '-' +
-    pad(d.getDate()) + 'T' +
-    pad(d.getHours()) + ':' +
-    pad(d.getMinutes()) + ':' +
-    pad(d.getSeconds()) + '+02:00'
-  );
+  return d.toISOString().replace(/\.\d{3}Z$/, '+00:00');
 }
 
 export function getSimplePayBase(isLive: boolean = false, merchantId?: string): string {
