@@ -62,11 +62,12 @@ export async function POST(req: Request) {
     async function executeStart(mId: string, sKey: string) {
       const isSandboxMerchant = mId === 'PUBLICTESTHUF';
       const spBase = isSandboxMerchant ? SIMPLEPAY_SANDBOX_BASE : getSimplePayBase(isLive, mId);
+      const attemptOrderRef = `SRVX-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
       const payload: any = {
         salt:          generateSalt(),
         merchant:      mId,
-        orderRef,
+        orderRef:      attemptOrderRef,
         currency:      'HUF',
         customerEmail: customerEmail || 'customer@servixosolutionskft.com',
         language:      'HU',
@@ -162,11 +163,11 @@ export async function POST(req: Request) {
         amount:            numericPrice,
         currency:          'HUF',
         status:            'pending',
-        simplePayOrderRef: orderRef,
+        simplePayOrderRef: spData.orderRef,
       },
     });
 
-    return NextResponse.json({ paymentUrl: spData.paymentUrl, orderRef });
+    return NextResponse.json({ paymentUrl: spData.paymentUrl, orderRef: spData.orderRef });
   } catch (err: any) {
     console.error('[SimplePay /start] Error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
