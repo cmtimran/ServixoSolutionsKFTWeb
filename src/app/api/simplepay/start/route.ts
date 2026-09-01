@@ -14,8 +14,8 @@ import {
 export async function POST(req: Request) {
   try {
     const {
-      productName,
-      planTier,
+      productName = 'Servixo Solution',
+      planTier = 'Basic',
       price,
       customerName,
       customerEmail,
