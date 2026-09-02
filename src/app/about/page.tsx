@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageHero from '@/components/PageHero';
-import { Users, Award, Target, Zap, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Users, Award, Target, Zap, CheckCircle2, ArrowRight, Cloud, ShieldCheck, Code2, Leaf, Check } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about Servixo Solutions KFT — our story, values, and the expert team behind Budapest\'s premier IT services company.',
+  description: 'Learn about Servixo Solutions KFT — our story, core principles, technical domain expertise, and enterprise-grade software and cybersecurity solutions.',
 };
 
 const VALUES = [
@@ -37,38 +37,44 @@ const VALUES = [
   },
 ];
 
-const TEAM = [
+const WORK_DOMAINS = [
   {
-    name: 'Balázs Fekete',
-    title: 'Chief Executive Officer',
-    bio: '18 years in enterprise tech. Former VP Engineering at Deutsche Telekom Hungary. Led digital transformation for 3 Fortune 500 clients.',
-    initials: 'BF',
-    gradient: 'from-blue-600 to-indigo-600',
+    icon: Cloud,
+    badge: 'Cloud & Infrastructure',
+    title: 'Enterprise Cloud Transformation',
+    desc: 'We architect, migrate, and optimize resilient multi-cloud environments across AWS, Azure, and Google Cloud with 99.99% availability guarantees.',
+    highlights: ['Multi-Region Cloud Architecture', 'Automated DevOps & CI/CD Pipelines', 'Zero-Downtime Database Migration', 'Cost & Performance Optimization'],
+    gradient: 'from-blue-500/10 to-indigo-500/10 border-blue-500/20',
+    iconColor: 'text-blue-500 bg-blue-500/10',
   },
   {
-    name: 'Réka Horváth',
-    title: 'Chief Technology Officer',
-    bio: 'Cloud architecture specialist. Google Cloud Certified Professional. Built multi-region systems handling 50M+ daily transactions.',
-    initials: 'RH',
-    gradient: 'from-indigo-600 to-purple-600',
+    icon: Code2,
+    badge: 'Software Engineering',
+    title: 'Custom Web & Microservice Development',
+    desc: 'Engineering tailored enterprise platforms, microservices, and AI-assisted tools using modern frameworks built to handle high traffic and critical workloads.',
+    highlights: ['Next.js, Node.js & Go Systems', 'Custom ERP & Core Platform Solutions', 'Scalable REST & GraphQL APIs', 'Full IP & Code Base Ownership'],
+    gradient: 'from-indigo-500/10 to-purple-500/10 border-indigo-500/20',
+    iconColor: 'text-indigo-500 bg-indigo-500/10',
   },
   {
-    name: 'Dávid Molnár',
-    title: 'Head of Cybersecurity',
-    bio: 'OSCP & CEH certified ethical hacker. 12 years securing banking systems across Central Europe. ISO 27001 lead auditor.',
-    initials: 'DM',
-    gradient: 'from-emerald-600 to-teal-600',
+    icon: ShieldCheck,
+    badge: 'Cybersecurity',
+    title: 'Threat Mitigation & Defense Systems',
+    desc: 'Proactive cyber defense, penetration testing, compliance management, and proprietary products like Gateway Threat Authority (GTA) for real-time DDoS protection.',
+    highlights: ['Penetration Testing & Audits', 'Gateway Threat Authority (GTA)', 'GuardX Endpoint Protection', 'ISO 27001 & GDPR Compliance'],
+    gradient: 'from-emerald-500/10 to-teal-500/10 border-emerald-500/20',
+    iconColor: 'text-emerald-500 bg-emerald-500/10',
   },
   {
-    name: 'Zsófia Varga',
-    title: 'Head of Client Success',
-    bio: 'Former McKinsey IT consultant. Drives account growth and ensures SLA compliance across all enterprise partnerships.',
-    initials: 'ZV',
-    gradient: 'from-rose-600 to-pink-600',
+    icon: Leaf,
+    badge: 'Environmental Engineering',
+    title: 'ETP, EIA & Sustainable Solutions',
+    desc: 'Designing comprehensive Environmental Treatment Plants (ETP), conducting Environmental Impact Assessments (EIA), and implementing industrial waste management systems.',
+    highlights: ['Effluent Treatment Plant (ETP) Design', 'Environmental Impact Assessment (EIA)', 'Industrial Waste Recycling Systems', 'Sustainability & Regulatory Audits'],
+    gradient: 'from-amber-500/10 to-emerald-500/10 border-amber-500/20',
+    iconColor: 'text-emerald-500 bg-emerald-500/10',
   },
 ];
-
-
 
 export default function AboutPage() {
   return (
@@ -144,10 +150,10 @@ export default function AboutPage() {
               A Decade of Building the <span className="text-gradient">Digital Future</span>
             </h2>
             <p className="text-base leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>
-              Founded in 2014 by a small team of passionate engineers in Budapest, Servixo Solutions KFT was born from a simple belief: enterprises deserve IT partners who combine global technology expertise with local market understanding.
+              Founded in 2014 by passionate engineers in Budapest, Servixo Solutions KFT was born from a simple belief: enterprises deserve IT partners who combine global technology expertise with local market understanding.
             </p>
             <p className="text-base leading-relaxed mb-8" style={{ color: 'var(--text-secondary)' }}>
-              Over a decade, we've grown to a 45+ specialist team, serving clients across 8 European countries. Our proprietary products — CoreERP and GuardX — are trusted by companies from mid-size startups to multinational corporations.
+              Over a decade, we have expanded operations across 8 European countries. Our proprietary products — CoreERP, GuardX, and Gateway Threat Authority — are trusted by companies from mid-size startups to multinational corporations.
             </p>
             <div className="space-y-3">
               {['EU GDPR Compliant Operations', 'ISO 27001 Certified Security Practices', 'Microsoft & AWS Certified Partner Network'].map((item) => (
@@ -160,30 +166,69 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Team */}
+        {/* Our Work & Capabilities */}
         <section className="py-20 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--bg-muted)' }}>
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
-              <span className="badge mb-4 inline-block">The Team</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">Leadership You Can Trust</h2>
+              <span className="badge mb-4 inline-block">What We Do</span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">Our Work & Technical Capabilities</h2>
               <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
-                Senior specialists with decades of combined experience across cloud, software, and cybersecurity.
+                We engineer mission-critical systems, secure digital perimeters, and deliver end-to-end technology solutions tailored for enterprise scale.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {TEAM.map((member) => (
-                <div key={member.name} className="glass-card rounded-2xl p-6 text-center flex flex-col items-center gap-4">
-                  <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center text-white font-bold text-2xl shadow-lg`}>
-                    {member.initials}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
+              {WORK_DOMAINS.map((domain) => {
+                const Icon = domain.icon;
+                return (
+                  <div
+                    key={domain.title}
+                    className={`glass-card rounded-2xl p-8 border flex flex-col justify-between transition-all duration-300 hover:shadow-xl ${domain.gradient}`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-6">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${domain.iconColor}`}>
+                          <Icon className="w-6 h-6" />
+                        </div>
+                        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-secondary border border-white/10">
+                          {domain.badge}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl font-bold mb-3">{domain.title}</h3>
+                      <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>
+                        {domain.desc}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2.5 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
+                      {domain.highlights.map((item) => (
+                        <div key={item} className="flex items-center gap-2.5">
+                          <Check className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--brand-emerald)' }} />
+                          <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>
+                            {item}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-base mb-0.5">{member.name}</h3>
-                    <p className="text-xs font-semibold mb-3" style={{ color: 'var(--brand-blue)' }}>{member.title}</p>
-                    <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>{member.bio}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+
+            <div className="glass-card rounded-2xl p-8 text-center max-w-3xl mx-auto border" style={{ borderColor: 'var(--border)' }}>
+              <h3 className="text-lg font-bold mb-2">Looking for a custom solution or consultation?</h3>
+              <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
+                Explore our full suite of digital solutions, proprietary software products, and environmental engineering services.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <Link href="/services" className="btn-primary text-sm">
+                  View All Services <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link href="/products" className="btn-outline text-sm">
+                  Explore Products
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -197,7 +242,7 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/quote" className="btn-primary">Get a Free Quote <ArrowRight className="w-4 h-4" /></Link>
-              <Link href="/contact" className="btn-outline">Contact Our Team</Link>
+              <Link href="/contact" className="btn-outline">Contact Us</Link>
             </div>
           </div>
         </section>
@@ -206,3 +251,4 @@ export default function AboutPage() {
     </>
   );
 }
+
